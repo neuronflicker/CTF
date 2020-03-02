@@ -9,7 +9,7 @@ Hint: If only there were a good tool to list strings used by a program...
 
 > **Files:** conditional1
 
-**Write-up**
+## Write-up
 First I ran the downloaded executable:
 ```bash
 > ./conditional1

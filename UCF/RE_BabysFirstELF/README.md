@@ -10,7 +10,7 @@ Author: kablaa
 Do you even Linux?
 > **Files:** babys_first_elf
 
-**Write-up**
+## Write-up
 Simply run the downloaded executable:
 ```bash
 > ./babys_first_elf

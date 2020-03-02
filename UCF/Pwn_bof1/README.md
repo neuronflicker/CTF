@@ -13,7 +13,7 @@ Pwn that buffer!
 
 > **Files:** bof1, bof1.c, libpwnableharness64.so
 
-**Write-up**
+## Write-up
 This is a buffer overflow challenge, and the code file was provided.
 
 Looking at the code the important function seemed to be `handle_connection()` as it contains a `scanf()` call into a buffer of 32 chars:

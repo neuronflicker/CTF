@@ -9,7 +9,7 @@ Author: kablaa
 
 > **Files:** tay.jpg
 
-**Write-up**
+## Write-up
 When I first saw this, when I noticed it was a jpg, my first thought was steganography of some kind, so I Googled for some steganography tools.
 
 I found `stegsolve`, with install instructions here: https://github.com/zardus/ctf-tools/blob/master/stegsolve/install

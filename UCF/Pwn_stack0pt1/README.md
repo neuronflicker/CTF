@@ -13,7 +13,7 @@ nc ctf.hackucf.org 32101
 
 > **Files:** stack0, stack0.c, libpwnableharness32.so
 
-**Write-up**
+## Write-up
 This is a buffer overflow challenge, and the code file was provided.
 
 First I tried just running the program:

@@ -9,7 +9,7 @@ Author: kablaa
 
 > **Files:** not_found
 
-**Write-up**
+## Write-up
 Simply run the downloaded executable:
 ```bash
 > ./not_found
