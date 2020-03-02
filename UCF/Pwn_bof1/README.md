@@ -1,16 +1,17 @@
 # bof1
 **Category:** Pwn
+
 **Points:** 5
+
 **Description:**
+
 Author: kablaa
 
 Pwn that buffer!
 
 `nc ctf.hackucf.org 9000`
 
-> bof1
-> bof1.c
-> libpwnableharness64.so
+> **Files:** bof1, bof1.c, libpwnableharness64.so
 
 **Write-up**
 This is a buffer overflow challenge, and the code file was provided.
@@ -41,12 +42,12 @@ nope!
 
 This has no effect on the program and I decided to try overflowing until the program segmented as this can sometimes guide you as to where the function return address is. I created a script:
 ```bash
-	#!/bin/bash
-	for i in {33..100}
-	do
-	  output=$(python -c "print ('A' * $i)" | ./bof)
-	  echo "For $i output is $output"
-	done
+#!/bin/bash
+for i in {33..100}
+do
+  output=$(python -c "print ('A' * $i)" | ./bof)
+  echo "For $i output is $output"
+done
 ```
 
 I found that when the script hit 45 (and after), a different message was output:
