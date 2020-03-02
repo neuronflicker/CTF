@@ -1,16 +1,17 @@
 # stack0 pt1
 **Category:** Pwn
+
 **Points:** 5
+
 **Description:**
+
 Author: C0deH4cker
 
 Read the contents of flag1.txt.
 
 nc ctf.hackucf.org 32101
 
-> stack0
-> stack0.c
-> libpwnableharness32.so
+> **Files:** stack0, stack0.c, libpwnableharness32.so
 
 **Write-up**
 This is a buffer overflow challenge, and the code file was provided.
