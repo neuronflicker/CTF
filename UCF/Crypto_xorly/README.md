@@ -7,7 +7,7 @@
 
 Author: crowell
 
-> **Files: ** xorly.py
+> **Files:** xorly.py
 
 ## Write-up
 The Python code provided with this was:
