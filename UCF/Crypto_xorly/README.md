@@ -40,7 +40,7 @@ Flag: (encoded in hex, encrypted with the same key)
 
 Looking at the code (and based on the name) this encryption uses XOR to encode a string with a key. This means if we have the original text and the cipher, we should be able to XOR these to get the original key.
 
-I made an assumption that the items in the comment were the plaintext used, the cypher resulting from it, and the flag. If we can find the key, we can decode the flag (XOR'ing twice returns the original value).
+I made an assumption that the items in the comment were the plaintext used, the cypher resulting from it, and the flag. If we can find the key, we can decode the flag. This uses the principle that if A XOR B = C, then A XOR C = B and B XOR C = A.
 
 First I checked that the text in the comment was related to the Ciphertext in the comment:
 ```python
