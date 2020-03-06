@@ -4,6 +4,7 @@
 **Points:** 10
 
 **Description:**
+
 Simon says repeat after me
 
 nc ctf.hackucf.org 10101
