@@ -4,9 +4,6 @@
 **Points:** 10
 
 **Description:**
-
-Author: kablaa
-
 Simon says repeat after me
 
 nc ctf.hackucf.org 10101
