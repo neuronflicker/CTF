@@ -41,7 +41,9 @@ do
 done
 ```
 
-This just still paused at the input stage waiting for my input before entering the loop. After some Googling I came across `expect`, and installed and tried that:
+This just paused at the input stage waiting for my input before starting the next iteration of the loop contents. 
+
+After some Googling I came across `expect`, installed it and tried using that:
 ```bash
 #!/usr/bin/expect -f
 
@@ -141,6 +143,7 @@ get_value_and_send "$inp"
 # We've done the first one above, so do the rest...
 for i in {1..99}
 do
+  # Only get one line at a time now
   inp=$(head -1 <&3)
   get_value_and_send "$inp"
 done
