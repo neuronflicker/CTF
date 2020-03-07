@@ -56,7 +56,7 @@ So I can jump into the `giveFlag()` function without knowing the password.
 
 This worked and sent the flag to the `out.txt` file.
 
-Of course, this is unsatisfactory, as this can't be run at the command line, so instead I decided to see how to patch the executable to solve it better. However, this wasn't necessary. Opening the code in Ghidra and using its disassembler, I could see the main function was:
+Of course, this is unsatisfactory, as this can't be run at the command line, so instead I decided to see how to patch the executable to solve it better. However, this wasn't necessary. Opening the code in [Ghidra](https://ghidra-sre.org/) and using it's disassembler, I could see the main function was:
 
 ![Disassembly](disassemble1.png)
 
