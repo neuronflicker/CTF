@@ -10,7 +10,7 @@ Let me introduce you to my good friend, IDA Pro.
 > **Files:** conditional2
 
 ## Write-up
-After doing Conditional1, I used strings to look at the executable, but wasn't hopeful of getting anything useful I didn't.
+After doing Conditional1, I used strings to look at the executable, but wasn't hopeful of getting anything useful. I didn't.
 
 Running the executable gives similar output to Conditional1:
 ```bash
