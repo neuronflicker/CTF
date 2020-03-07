@@ -98,11 +98,11 @@ Here it can be seen that the string is referenced in the main function. Double c
 
 ![Graph View](graph1.png)
 
-We can see from this that the function is call goes back to the green coloured box. If we jump to Text View, we can see the code compares `eax` to 0x7A69:
+We can see from this that the function call goes back to the green coloured box, and if it doesn't go to the red box, it goes to the `Unknown choice` option. If we jump to Text View, we can see the code compares `eax` to 0x7A69:
 
 ![Code output](code1.png)
 
-If we look where the green code is called from, we can see it is above when `eax` is not 3. If `eax` is 3, then we get the `Goodbye!` message, so I assume `eax` contains the menu option selected.
+If we look where the green code is called from, we can see it is the lines above, when `eax` is not 3. If `eax` is 3, then we get the `Goodbye!` message, so I assume `eax` contains the menu option selected.
 
 I converted 0x7A69 to decimal, and tried entering it as a menu option:
 ```bash
