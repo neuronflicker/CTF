@@ -12,7 +12,7 @@ I learned how to write menus in C using loops!
 ## Write-up
 When running the program, you are presented with a menu and 3 choices:
 ```bash
-./loop1 
+> ./loop1 
 Menu:
 
 [1] Say hello
