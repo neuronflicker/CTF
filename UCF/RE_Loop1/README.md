@@ -98,7 +98,7 @@ Here it can be seen that the string is referenced in the main function. Double c
 
 ![Graph View](graph1.png)
 
-We can see from this that the function call goes back to the green coloured box, and if it doesn't go to the red box, it goes to the `Unknown choice` option. If we jump to Text View, we can see the code compares `eax` to 0x7A69:
+We can see from this that the function call goes back to the green coloured box. If the green box doesn't go to the red box, it goes to the `Unknown choice` option. If we jump to Text View, we can see the code compares `eax` to 0x7A69:
 
 ![Code output](code1.png)
 
