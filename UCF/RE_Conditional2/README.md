@@ -55,3 +55,17 @@ So I can jump into the `giveFlag()` function without knowing the password.
 > Note2: The program has to run to the end to flush the output buffer or the output file is empty!
 
 This worked and sent the flag to the `out.txt` file.
+
+Of course, this is unsatisfactory, as this can't be run at the command line, so instead I decided to see how to patch the executable to solve it better. However, this wasn't necessary. Opening the code in Ghidra and using its disassembler, I could see the main function was:
+
+![Disassembly](disassemble1.png)
+
+Here you can see the value represented as a negative number (which I should really have considered). Converting this to decimal and entering at the command line worked:
+```bash
+> ./conditional2 -889262067‬
+Access granted.
+```
+
+This also gave the flag.
+
+
