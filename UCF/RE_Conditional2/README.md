@@ -44,13 +44,14 @@ To test further, I just put 10 in as the password to see what happened. Sure eno
 
 So how was I to get a value that was too big for an `int` into the register?
 
-While looking about IDA Pro I suddenly noticed I can make the code jump anywhere, either by specifying the address, or right clicking where I want to be and selecting 'Set IP':
+While playing around with IDA Pro I suddenly noticed I can make the code jump anywhere, either by specifying the address, or right clicking where I want to be and selecting 'Set IP':
 
 ![Context Menu](menu1.png)
 
 So I can jump into the `giveFlag()` function without knowing the password.
 
-> Note: I couldn't see where the output from the program could be seen, so I redirected to a file in the Process Options | Parameters (e.g. `10 > out.txt`)
+> Note: I couldn't see where the output from the program could be seen inside IDA Pro, so I redirected to a file in the Process Options | Parameters (e.g. `10 > out.txt`)
+
 > Note2: The program has to run to the end to flush the output buffer or the output file is empty!
 
 This worked and sent the flag to the `out.txt` file.
