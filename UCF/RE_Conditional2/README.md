@@ -32,7 +32,7 @@ Debugging through, I found this section of critical code:
 
 ![Debugging output](debug1.png)
 
-Here we can see that our input ends up running through `atoi()` and is compared to the value `0CAFEF00Dh`. I need to end up with `0xcafef00d` in the `eax` register (shown as `RAX` in the rgister list of IDA Pro). I tried entering `0xcafefood` as the password, but that left 0 in the `eax`.
+Here we can see that our input ends up running through `atoi()` and is compared to the value `0CAFEF00Dh`. I need to end up with `0xcafef00d` in the `eax` register (shown as `RAX` in the register list of IDA Pro). I tried entering `0xcafefood` as the password, but that left 0 in the `eax`.
 
 I tried converting `0xcafef00d` into decimal (3,405,705,229) and passing that as the password. This seemed to overflow the value coming out of `atoi()`, setting `eax (RAX)`:
 
