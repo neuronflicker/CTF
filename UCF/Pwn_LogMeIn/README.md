@@ -97,9 +97,9 @@ I think I should write a script to:
 * Read the first line (user = &lt;address&gt;)
 * Strip out the address we need
 * Use bash's printf to create a string
-** Use \x to specify components of the address we want to write to
-** Maybe use %x if necessary
-** Use %n to write to the address (any value but 0)
+    * Use \x to specify components of the address we want to write to
+    * Maybe use %x if necessary
+    * Use %n to write to the address (any value but 0)
 * Write the constructed string to the socket
 * If we can't write to the heap address, see if we can locate and write to the place on the stack that the address is stored.
 
