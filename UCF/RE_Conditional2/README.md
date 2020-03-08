@@ -32,13 +32,13 @@ Debugging through, I found this section of critical code:
 
 ![Debugging output](debug1.png)
 
-Here we can see that our input ends up running through `atoi()` and is compared to the value `0CAFEF00Dh`. I need to end up with `0xcafef00d` in the `eax` register (shown as `RAX` in the register list of IDA Pro). I tried entering `0xcafefood` as the password, but that left 0 in the `eax`.
+Here we can see that our input ends up running through `atoi()` and is compared to the value `0CAFEF00Dh`. I need to end up with `0xcafef00d` in the `eax` register (shown in the LSBs of the 64-bit `RAX` in the register list of IDA Pro). I tried entering `0xcafefood` as the password, but that left 0 in the `eax`.
 
-I tried converting `0xcafef00d` into decimal (3,405,705,229) and passing that as the password. This seemed to overflow the value coming out of `atoi()`, setting `eax (RAX)`:
+I tried converting `0xcafef00d` into decimal (3,405,705,229) and passing that as the password. This seemed to overflow the value coming out of `atoi()`, setting `eax`:
 
 ![Register output](reg1.png)
 
-To test further, I just put 10 in as the password to see what happened. Sure enough, the `eax (RAX)` register contained `0x0A`:
+To test further, I just put 10 in as the password to see what happened. Sure enough, the `eax` register contained `0x0A`:
 
 ![Register output](reg2.png)
 
