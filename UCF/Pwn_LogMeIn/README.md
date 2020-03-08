@@ -49,13 +49,13 @@ test   eax, eax          ; Tests (ANDs) the contents of eax (the input)
 jz     short loc_400AB5  ; This jumps to the 'invalid' code if zero
 ```
 
-So `eax` is given the contents of `rax` and then essentially ANDed with itself. If this results in zero (meaning the value in eax has to be zero), then we jump into the `Invalid login information.` section of the code.
+So `eax` is given the contents of `rax` and then essentially ANDed with itself. If this results in zero (meaning the value in `eax` has to be zero), then we jump into the `Invalid login information.` section of the code.
 
 To see if it's any clearer, I also used Ghidra to disassemble to C:
 
 ![C version of the code](disassemble1.png)
 
-It seems that the variable I named `input_p` is initially created as an `int` pointer which pints to 1 chunk of array of 44 (0x2c) bytes in size.
+It seems that the variable I named `input_p` is initially created as an `int` pointer which points to 1 chunk of memory of 44 (0x2c) bytes in size.
 
 Up to 20 (0x14) characters are then read in for the username using `fgets`. These are stored at location `input_p + 1`.
 
@@ -69,11 +69,11 @@ As `input_p` is an int pointer (4 bytes per int), `input_p + 1` is actually 4 by
 
 ![Memory dump](memory1.png)
 
-As we approach the comparison, RAX holds the address of `input_p`, and the statement:
+As we approach the comparison, `rax` holds the address of `input_p`, and the statement:
 ```assembly
 mov    eax,[rax]
 ```
-moves the content of the address pointed to by RAX into eax. As eax is a 32-bit register, that only reads the first four bytes, which are always zero.
+moves the content of the address pointed to by `rax` into `eax`. As `eax` is a 32-bit register, that only reads the first four bytes, which are always zero.
 
 Can we change the area written to in heap memory through input through `fgets`? Is there another way to exploit this? 
 
