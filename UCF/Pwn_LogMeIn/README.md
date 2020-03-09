@@ -94,7 +94,7 @@ printf("Enter password for user: ");
 printf((char *)(input_p+1));
 ``` 
 
-The fact the buffer is printed out with `printf()` and it's on it's own line means we could use the format exploit, but I need to work out how.
+The fact the buffer is printed out with `printf()` and it's on it's own line means we could use the [format exploit](http://www.cis.syr.edu/~wedu/Teaching/cis643/LectureNotes_New/Format_String.pdf), but I need to work out how.
 
 I think I should write a script to:
 * Set up a bash socket to the server
