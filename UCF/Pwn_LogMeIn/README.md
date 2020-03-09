@@ -1,5 +1,7 @@
 # Log Me In!
-<span style="color:red">Still in progress...</span>
+```diff
+- Still in progress
+```
 
 **Category:** Pwn
 
