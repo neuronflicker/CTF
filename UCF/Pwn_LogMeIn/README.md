@@ -79,33 +79,33 @@ mov    eax,[rax]
 ```
 moves the content of the address pointed to by `rax` into `eax`. As `eax` is a 32-bit register, that only reads the first four bytes, which are always zero.
 
-Can we change the area written to in heap memory through input through `fgets`? Is there another way to exploit this? 
-
-Other information that may or may not be useful. The address of the data is also stored on the stack:
+It seems there is no exploit for `fgets()`, but there is some other information that may be useful. The address of the data is also stored on the stack (the local variable `input_p`):
 
 ![Memory dump](memory2.png)
 
-If we could change the first byte from 0x10 to 0x06, this would cause data to be written in the first four bytes of the address.
+If we could use the input to the username to manipulate this address (subtract 24 from it), then the password would end up being written starting at the original address rather than 24 bytes in as before. This would overwrite the first four bytes, later resulting in `eax` not being zero.
 
-Also, the code uses:
+It turns out there may be a way to do this, as the code uses:
 ```c
 fgets((char *)(input_p+1), x014, stdin);
 printf("Enter password for user: ");
 printf((char *)(input_p+1));
 ``` 
 
-The fact the buffer is printed out with `printf()` and it's on it's own line means we could use the [format exploit](http://www.cis.syr.edu/~wedu/Teaching/cis643/LectureNotes_New/Format_String.pdf), but I need to work out how.
+The fact the buffer is printed out with `printf()` and it's on it's own line means we could use the [format exploit](http://www.cis.syr.edu/~wedu/Teaching/cis643/LectureNotes_New/Format_String.pdf), but it needs some work to find out how.
 
-I think I should write a script to:
+First we need to find where the `input_p` variable sits on the stack in relation to the current stack pointer:
+
+We then need to create something that can:
 * Set up a bash socket to the server
-* Read the first line (user = &lt;address&gt;)
-* Strip out the address we need
-* Use bash's printf to create a string
-    * Use \x to specify components of the address we want to write to
-    * Maybe use %x if necessary
-    * Use %n to write to the address (any value but 0)
-* Write the constructed string to the socket
-* If we can't write to the heap address, see if we can locate and write to the place on the stack that the address is stored.
+* Read the initial input and extract the address (user = &lt;address&gt;)
+* Subtract 24 (0x18) from the address
+* Create a format string using some combination of %x, %p and %n to manupulate the `input_p` address to match the calculated one
+* Write the constructed string to the socket (as username)
+* Read the next line to consume it
+* Write anything to the password
+* Collect the flag!
+
 
 
 
