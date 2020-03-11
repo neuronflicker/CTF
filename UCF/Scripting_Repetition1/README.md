@@ -9,10 +9,7 @@ Simon says repeat after me
 
 nc ctf.hackucf.org 10101
 
-- [Write-up 1 - Bash](#write-up-1---bash)
-- [Write-up 2 - Python](#write-up-2---python)
-
-## Write-up 1 - Bash
+## Write-up 1
 Running the code on the server sets up a repetition challenge:
 ```bash
 > nc ctf.hackucf.org 10101
@@ -162,6 +159,3 @@ exec 3<&-
 > Note: I ran it with a count a couple of times to check the number of values needed
 
 This worked, and gave me the flag.
-
-## Additional notes - Python
-To Be Completed
