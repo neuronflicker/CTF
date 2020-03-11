@@ -92,9 +92,11 @@ printf("Enter password for user: ");
 printf((char *)(input_p+1));
 ``` 
 
-The fact the buffer is printed out with `printf()` and it's on it's own line means we could use the [format exploit](http://www.cis.syr.edu/~wedu/Teaching/cis643/LectureNotes_New/Format_String.pdf), but it needs some work to find out how.
+The fact the buffer is printed out with `printf()` and it's on it's own line means we could use the [format exploit](http://codearcana.com/posts/2013/05/02/introduction-to-format-string-exploits.html), but it needs some work to find out how.
 
-First we need to find where the `input_p` variable sits on the stack in relation to the current stack pointer:
+First we need to find where the `input_p` variable sits on the stack in relation to the current stack pointer. I've found it difficult to see a relationship between what comes out when using the format exploit, and what values are on the stack. Without this it's difficult to know what offset is needed to change the `input_p` address.
+
+I plan to write a small program to try out various things with the format exploit until I understand what's actually happening.
 
 We then need to create something that can:
 * Set up a bash socket to the server
