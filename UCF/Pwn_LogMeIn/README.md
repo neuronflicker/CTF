@@ -124,7 +124,7 @@ You entered: AAAA 1293020 86cb0780 d 86ebe700 d 2b638938 0 41414141 25207825 207
 
 > Note also: We actually get a warning about the format exploit.
 
-When we run it (passing in AAAA followed by 20 `%x` formatters (meaning "print hex values"), as there are no actual arguments to `printf()` in the code, it goes and gets its arguments from the stack to fill the formats. You can see that the 8th hex value returned is 0x41414141, which are the 4 'A's (0x41 in ASCII) we started the string with. This is followed by our %x characters, though they seem to be in an odd order and missing some bit. This is because `%x` is only showing the least-significant 32-bits. If we use `%p`, this shows the full 64-bit values and we see:
+When we run it (passing in AAAA followed by 20 `%x` formatters (meaning "print hex values"), as there are no actual arguments to `printf()` in the code, it goes and gets its arguments from the stack to fill the formats. You can see that the 8th hex value returned is 0x41414141, which are the 4 'A's (0x41 in ASCII) we started the string with. This is followed by our %x characters, though they seem to be in an odd order and missing some bits. This is because `%x` is only showing the least-significant 32-bits. If we use `%p`, this shows the full 64-bit values and we see:
 ```
 > python -c "print ('AAAA ' + '%p '*20)" | ./test_p 
 You entered: AAAA 0x1621020 0x7f9a67ab9780 0xd 0x7f9a67cc7700 0xd 0x7ffde8020238 0x100000000 0x2070252041414141 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0xa20 (nil) 0x400650 0x400500 0x7ffde8020230
