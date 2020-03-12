@@ -94,7 +94,7 @@ The fact the buffer is printed out with `printf()` and it's on it's own line mea
 Basically, the exploit uses formatters passed to `printf()` to manipulate memory:
 * `%x` - display an argument as hexadecimal
 * `%p` - display an argument as a pointer
-* `%n` - is passed a pointer argument - a pointer to a signed int - and sets that signed int to the number of character printed out so far.
+* `%n` - displays nothing, but is passed a pointer argument - a pointer to a signed int - and sets that signed int to the number of characters printed out so far.
 
 Examples:
 ```
