@@ -223,7 +223,9 @@ Enter password for user: 0x19bd010
 
 Invalid login information.
 ```
-Now, can I use `%n` to write to that location? If we move the `%n` to the 9th argument (address), the number of characters will be sent to the start of the input buffer, making `test eax, eax` pass. Therefore, `A%9$n` should send 1 (the letter A is the only character printed) to the address at 'argument' 9.
+Now, can I use `%n` to write to that location? A better understanding of how this exploit works also means I now realise that I don't need to manipulate the address on the stack at all (as I thought earlier), but I can use that address to put a value in the first four bytes of `input_p`.
+
+If we move the `%n` to the 9th argument (address), the number of characters will be sent to the start of the input buffer, making `test eax, eax` pass. Therefore, `A%9$n` should send 1 (the letter A is the only character printed) to the address at 'argument' 9.
 ```
 > ./logmein 
 user = 0x1c83010
