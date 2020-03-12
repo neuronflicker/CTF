@@ -98,7 +98,7 @@ Basically, the exploit uses formatters passed to `printf()` to manipulate memory
 
 Examples:
 ```
-printf("The number 180 in hex is: %x \n", 70);
+printf("The number 180 in hex is: %x \n", 180);
 The number 180 in hex is: b4
 
 printf("My pointer points at memory location: %p \n", my_pointer);
