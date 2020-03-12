@@ -109,7 +109,7 @@ I need to store the number of characters I've printed into my_pointer!
 // The memory at address my_pointer will now contain 70 (the number of characters in the sentence above)
 ```
 
-The fact that `%n` can send a number to a memory address means that we don't need to manipulate the pointer, as I thought above, just to get that pointer to be used as an argument for the `%n` value.
+The fact that `%n` can send a number to a memory address means that we don't need to manipulate the pointer, as I thought above, we just need to get that pointer to be used as an argument for the `%n` value.
 
 First we can use `%x` or `%p` to find where the `input_p` variable sits on the stack in relation to the current stack pointer. I've found it difficult to see a relationship between what comes out when using the format exploit, and what values are on the stack for the challenge code. Therefore, I decided to write a small program that could take more format specifiers (the challenge is limited to 20 charactes in the username), and use the results of those tests to try to understand what is actually happening.
 
