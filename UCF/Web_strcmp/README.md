@@ -5,7 +5,7 @@
 
 **Description:**
 
-[http://ctf.hackucf.org:4000/cmp/cmp.php]
+http://ctf.hackucf.org:4000/cmp/cmp.php
 
 ## Write-up
 This is a web exploit where you are shown a password box and given the PHP used for the web page:
