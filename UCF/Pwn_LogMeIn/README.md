@@ -121,12 +121,12 @@ You entered: AAAA 1293020 86cb0780 d 86ebe700 d 2b638938 0 41414141 25207825 207
 
 > Note also: We actually get a warning about the format exploit.
 
-When we run it (passing in AAAA followed by 20 `%x` formatters (meaning "print hex values"), as there are no actual arguments to `printf()` in the code, it goes and gets its arguments from the stack to fill the formats. You can see that the 8th hex value returned is 0x41414141, which are the 4 'A's (0x41 in ASCII) we started the string with. This is followed by our %x characters, though they seem to be in an odd order and missing some bits. This is because `%x` is only showing the least-significant 32-bits. If we use `%p`, this shows the full 64-bit values and we see:
+When we run it (passing in AAAA followed by 20 `%x` formatters (meaning "print hex values")), as there are no actual arguments to `printf()` in the code, it goes and gets its arguments from the stack to fill the formats. You can see that the 8th hex value returned is 0x41414141, which are the 4 'A's (0x41 in ASCII) we started the string with. This is followed by our %x characters, though they seem to be in an odd order and missing some bits. This is because `%x` is only showing the least-significant 32-bits. If we use `%p`, this shows the full 64-bit values and we see:
 ```
 > python -c "print ('AAAA ' + '%p '*20)" | ./test_p 
 You entered: AAAA 0x1621020 0x7f9a67ab9780 0xd 0x7f9a67cc7700 0xd 0x7ffde8020238 0x100000000 0x2070252041414141 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0xa20 (nil) 0x400650 0x400500 0x7ffde8020230
 ```
-Here you can see the bytes are reversed - our 0x41414141 is displayed in the least-significant bytes of the 8th value, and it has the first part of the `%x`s in the most-significant bytes. This is clearer is we use ABCD instead of AAAA:
+Here you can see the bytes are reversed - our 0x41414141 is displayed in the least-significant bytes of the 8th value, and it has the first part of the `%x`s in the most-significant bytes. This is clearer if we use ABCD instead of AAAA:
 ```
 > python -c "print ('ABCD ' + '%p '*20)" | ./test_p 
 You entered: ABCD 0x2514020 0x7f8e3e020780 0xd 0x7f8e3e22e700 0xd 0x7fff26cca578 0x100000000 0x2070252044434241 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0xa20 (nil) 0x400650 0x400500 0x7fff26cca570
@@ -189,6 +189,8 @@ And in the output is appears at location 9 in the list as before:
 buffer is: 0x1e06010
 You entered: ABCD 0x400770 0x7fb506f53780 0xd 0x7fb507161700 0xd 0x7ffc81f4c688 0x100400550 0x7ffc81f4c680 0x1e06010 0x4006d0 0x7fb506bad830 (nil) 0x7ffc81f4c688 0x100000000 0x400646 (nil) 0xce6ab2db357608f7 0x400550 0x7ffc81f4c680 (nil)
 ```
+Here we can see that the stack values around our address (in the image) can be seen to match the output, but other values don't. This must mean the stack values change during the `printf()` (the image was taken immediately before the call to `printf()`), which is why I struggled to find values when trying to analyse the challenge code.
+
 Writing the temp program let me look at more stack values than the challenge, because the challenge truncates at 20 characters (though I could have tested with moving the pointer to, say, the 5th and looking after that - `%5$p %p %p ...`).
 
 The programs were so similar, that I thought I could perhaps just try the 9th value in the challenge:
