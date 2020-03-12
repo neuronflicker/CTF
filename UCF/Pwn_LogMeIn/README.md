@@ -1,7 +1,4 @@
 # Log Me In!
-```diff
-- Still in progress
-```
 
 **Category:** Pwn
 
