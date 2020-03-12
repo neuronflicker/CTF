@@ -162,7 +162,7 @@ You entered: ABCD 44434241
 ABCD %8$p
 You entered: ABCD 0x2438252044434241
 ```
-This works because, with `printf()`, we are allowed to specify a particular argument in the argument list to use, rather than the next available one. Using the `%i$` (where `i` is an integer specifying the argument number) instead of just `%` in any of our formatters enables us to get that argument. In `%8$x`, we are getting the 8th argument (or stack memory location after the current position in this case) and passing that to a `%x` formatter.
+This works because, with `printf()`, we are allowed to specify a particular argument in the argument list to use, rather than the next available one. Using the sequence `%i$` (where `i` is an integer specifying the argument number) instead of just `%` in any of our formatters enables us to get that argument. In `%8$x`, we are getting the 8th argument (or stack memory location after the current position in this case) and passing that to a `%x` formatter.
 
 Let's now see how we get on if we put the address on the heap. The code was changed to:
 ```c
