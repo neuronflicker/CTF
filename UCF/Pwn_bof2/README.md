@@ -33,12 +33,12 @@ void handle_connection(int sock) {
 
 When the program runs it waits for input at this point, and overflowing the buffer may overflow into the `correct` variable.
 
-To test this I first created a file with 64 A characters in. This allows use to see how the stack is organised.
+To test this I first created a file with 64 A characters in. This allows us to see how the stack is organised.
 ```
 > python -c "print('A'*64)" > inp_file.txt
 ```
 
-First, for this run of the code, we can see that our `correct` variable ends up at 0xffbab10c:
+First, for this run of the code, we can see that our `correct` variable ends up at 0xffbab10c (I guessed this was the `correct` variable as it is set to 0):
 
 ![Location of 'correct' variable](correct_location.png)
 
@@ -50,7 +50,7 @@ If we move the debugger on one step, we can see this area get zeroed:
 
 !['Correct' variable set to zero](stack2.png)
 
-We can also see that our `bof` array is at 0xffbab0cc:
+We can also see that our `bof` array is at 0xffbab0cc (must be `bof` as it's being set up for use in the `scanf()`):
 
 ![Location of 'bof' array](bof_location.png)
 
