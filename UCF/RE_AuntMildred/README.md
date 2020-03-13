@@ -35,7 +35,7 @@ GCC: (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
 ...
 ```
 
-The long string `ZjByX3...W5nNQ==` looks like it may be a base64 string, so I raan it through base64:
+The long string `ZjByX3...W5nNQ==` looks like it may be a base64 string, so I ran it through base64:
 ```
 > echo ZjByX3kwdXJfNWVjMG5kX2xlNTVvbl91bmJhc2U2NF80bGxfN2gzXzdoMW5nNQ== | base64 -d 
 ```
@@ -44,4 +44,4 @@ This gave me the flag, but to double check, I ran it with the program:
 > ./mildred [Insert flag here]
 Correct password!
 ```
-So it was the flag!
+So it was the flag! That simple!

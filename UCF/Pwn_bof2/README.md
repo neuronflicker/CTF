@@ -6,6 +6,7 @@
 **Description:**
 
 Author: kablaa
+
 nc ctf.hackucf.org 9001
 
 > **Files:** bof2, bof2.c, libpwnableharness32.so
@@ -13,7 +14,7 @@ nc ctf.hackucf.org 9001
 ## Write-up
 This is a buffer overflow challenge, and the code file was provided.
 
-Looking at the code the important function seemed to be `handle_connection()` as it contains a `scanf()` call into a buffer of 32 chars:
+Looking at the code the important function seemed to be `handle_connection()` as it contains a `scanf()` call into a buffer of 64 chars:
 ```c
 void handle_connection(int sock) {
 	int correct = 0;
@@ -45,17 +46,17 @@ We can see this area on the stack (highlighted in yellow):
 
 !['Correct' variable on the stack](stack1.png)
 
-If we move it on one step, we can see this area get zeroed:
+If we move the debugger on one step, we can see this area get zeroed:
 
 !['Correct' variable set to zero](stack2.png)
 
-We can also see that our `flag` array is at 0xffbab0cc:
+We can also see that our `bof` array is at 0xffbab0cc:
 
-![Location of 'flag' variable](flag_location.png)
+![Location of 'bof' array](bof_location.png)
 
 If we send our 64 A characters in, we can clearly see this array on the stack:
 
-![Flag variable filled with As](stack3.png)
+![bof array filled with As](stack3.png)
 
 We can also see that it sits right up against our `correct` variable, so we should be able to set it to 0xdeadbeef by sending those characters after our 64 A characters (we need to reverse the order because - little endian). Our input file is now set with:
 ```
