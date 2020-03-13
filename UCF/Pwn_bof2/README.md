@@ -58,7 +58,7 @@ If we send our 64 A characters in, we can clearly see this array on the stack:
 
 ![bof array filled with As](stack3.png)
 
-We can also see that it sits right up against our `correct` variable, so we should be able to set it to 0xdeadbeef by sending those characters after our 64 A characters (we need to reverse the order because - little endian). Our input file is now set with:
+We can also see that it sits right up against our `correct` variable, so we should be able to set `correct` to 0xdeadbeef by sending those characters after our 64 A characters (we need to reverse the order because - little endian). Our input file is now set with:
 ```
 > python -c "print('A'*64 + '\xef\xbe\xad\xde')" > inp_file.txt
 ```
