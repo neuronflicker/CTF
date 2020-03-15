@@ -33,13 +33,13 @@ enter key:
 -32
 try again
 ```
-I next looked at the binary file in Ghidra. This allows me to look at its decompilation to C. First I looked at the `main` function:
+I looked at the binary file in Ghidra. This enables me to look at its decompilation to C. First I looked at the `main` function:
 
 ![Main function](main.png)
 
 Here we can see the comparison is with a negative number. However, we can also see that there is an `encrypt()` function called before the comparison.
 
-A look at that comparison in the assembly language shows us that the negative number is equal to `0xdeadbeef` in the 64-bit register:
+A look at that comparison in the assembly language shows us that the negative number is equal to `0xdeadbeef`:
 
 ![Main assembly](main_asm.png)
 
@@ -65,13 +65,13 @@ But the assembly language helps us out:
 
 ![Encrypt assembly](encrypt_asm.png)
 
-We can see that the code performs an `XOR` with the value `0x4d2`. As `XOR` behaves in such a way that if `A XOR B = C` the `A XOR C = B` and `B XOR C = A` we can find the value we need by using `XOR` with `0xdeadbeef` and `0x4d2`. We can do this is `bash` with:
+We can see that the code performs an `XOR` with the value `0x4d2`. As `XOR` behaves in such a way that if `A XOR B = C` then `A XOR C = B` and `B XOR C = A`, we can find the value we need by using `XOR` with `0xdeadbeef` and `0x4d2`. We can do this in `bash` with:
 ```
 > printf '%#x\n' "$((0xdeadbeef ^ 0x4d2))"
 0xdeadba3d
 ```
-Converting `0xdeadba3d` to decimal and entering in the `64bit` program gives us the `win :)` message, so that decimal value is the flag.
+Converting `0xdeadba3d` to decimal and entering that value in the `64bit` program gives us the `win :)` message, so that decimal value is the flag.
 
-> Note: An int in C can't always hold large decimal numbers, but in this case it worked. Out of curiosity, I converted the negative equivalent (`0xffffffffdeadba3d`) to decimal and used that negative value. This also gave me the `win :)` message. I don't know if entering it as the flag for the challenge will accept it as a correct answer, though. However, there are two answers to this challenge.
+> Note: An int in C can't always hold large decimal numbers, but in this case it worked. Out of curiosity, I converted the negative equivalent (`0xffffffffdeadba3d`) to decimal and used that negative value. This also gave me the `win :)` message. I don't know if entering it as the flag for the challenge will accept it as a correct answer, though. However, it does mean that there are two answers to this challenge.
 
 
