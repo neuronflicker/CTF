@@ -159,3 +159,50 @@ exec 3<&-
 > Note: I ran it with a count a couple of times to check the number of values needed
 
 This worked, and gave me the flag.
+
+## Write-up 2
+
+This can also be done in python:
+
+```
+python rep1.py
+```
+
+Where rep1.py contains:
+
+```
+import subprocess
+
+process = subprocess.Popen(
+        ["nc", "ctf.hackucf.org", "10101"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+
+print(process.stdout.readline().decode("utf-8").strip())
+print(process.stdout.readline().decode("utf-8").strip())
+line=process.stdout.readline().decode("utf-8").strip()
+print(line)
+var=line.split()[1]
+var+="\n"
+var=bytes(var,encoding="utf-8")
+print(var)
+
+process.stdin.write(var)
+process.stdin.flush()
+
+N=500
+while(N>0):
+  line=process.stdout.readline().decode("utf-8").strip()
+  print(line)
+  var = line.split()[2]
+  var+="\n"
+  var=bytes(var,encoding="utf-8")
+  print(var)
+  process.stdin.write(var)
+  process.stdin.flush()
+  N-=1
+
+```
+
