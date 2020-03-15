@@ -164,13 +164,13 @@ This worked, and gave me the flag.
 
 This can also be done in python:
 
-'''
+```
 python rep1.py
-'''
+```
 
 Where rep1.py contains:
 
-'''
+```
 import subprocess
 
 process = subprocess.Popen(
@@ -204,5 +204,5 @@ while(N>0):
   process.stdin.flush()
   N-=1
 
+```
 
-'''
