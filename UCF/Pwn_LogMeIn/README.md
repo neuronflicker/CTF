@@ -246,3 +246,8 @@ Successfully logged in!
 ```
 
 This gave me the flag!
+
+> Note: in hindsight, we could have just tried to see as far back in the stack as the input limit allowed by entering %x%x%x%x%x%x%x%x%x. This would have shown us the same address at the very end as that displayed as the user address. Another solution is then to use %x%x%x%x%x%x%x%x%n.
+
+
+
