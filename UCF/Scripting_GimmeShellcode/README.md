@@ -430,7 +430,8 @@ First we need bytes for the strings `/bin/cat` and `flag.txt`
 ```
 Both are the right length, so we don't need padding. `/bin/cat` will need `0x6e69622f` and `0x7461632f`, and `flag.txt` will need `0x67616c66` and `0x7478742e`.
 > **Note:** The above commands work in Python2. To get the hex values in Python3, use:  
-  `python3 -c "import binascii; print(binascii.b2a_hex(b'/bin/cat'))"`
+  `python3 -c "import binascii; print(binascii.b2a_hex(b'/bin/cat'))"`  
+  `python3 -c "import binascii; print(binascii.b2a_hex(b'flag.txt'))"`
 
 Here's the assembly I wrote to do the `cat`:
 ```asm

