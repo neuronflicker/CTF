@@ -67,13 +67,13 @@ If we look at the code, we can confirm this is the location of the `lose()` func
 
 ![Lose function location](lose_function.png)
 
-And if we continue the program, our A characters appear right up to our function pointer:
+And if we continue the program, our `A` characters appear right up to our function pointer:
 
 ![Stack showing As](stack3.png)
 
 > **Note:** the function pointer address is changed slightly as the `NULL` terminator from the string has leaked into the address.
 
-So if we follow our A characters with the address of the `win()` function, we should get our flag. So let's look at the `win()` function:
+So if we follow our A characters with the address of the `win()` function, we should get our flag. Let's look at the `win()` function:
 
 ![Win function location](win_function.png)
 
