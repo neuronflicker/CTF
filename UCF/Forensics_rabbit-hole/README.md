@@ -16,9 +16,9 @@ The downloaded file is an image of Alice playing croquet:
 
 I first ran `strings` in the image to see what it brought up, but there was nothing obvious.
 
-Next I used `stegsolve.jar` to look at the image, but it didn't help, either.
+Next I used `stegsolve` to look at the image, but it didn't help, either.
 
-Because the image was a `png` file, I ran `pngcheck` to see if it gave me any information. It did:
+Because the image was a `png` file, I ran `pngcheck` to see if that gave me any information. It did:
 ```
 > pngcheck -v rabbit-hole.png 
 File: rabbit-hole.png (69202 bytes)
@@ -147,7 +147,7 @@ So again I renamed the file. This time to `data4.bz2` and ran `bzip2` over it:
 ```
 This gave me the file `data4` which I checked the type of yet again:
 ```
-file data4
+> file data4
 data4: gzip compressed data, was "flag.bin", last modified: Fri Mar 25 20:28:48 2016, from Unix
 ```
 OK. At least now I can see the name `flag.bin`, so, hopefully, were really nearing the end now. Lets rename and `gunzip` this:
