@@ -117,7 +117,7 @@ This is a `zip` file, so I renamed it `data2.zip` and ran `unzip` on it:
 ```
 > unzip data2.zip
 ```
-That gave us a file named `falg.txt`. We must be getting close, right! I ran `cat` on that file, but it wasn't text. so again I ran `file` to find out it's type:
+That gave us a file named `falg.txt`. We must be getting close, right! I ran `cat` on that file, but it wasn't text, so again I ran `file` to find out it's type:
 ```
 > file falg.txt
 falg.txt: gzip compressed data, last modified: Fri Mar 25 20:33:36 2016, from Unix
