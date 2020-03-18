@@ -14,7 +14,7 @@ The downloaded file is an image of Alice playing croquet:
 
 ![The image](rabbit-hole.png)
 
-I first ran `strings` in the image to see what it brought up, but there was nothing obvious.
+I first ran `strings` on the image to see what it brought up, but there was nothing obvious.
 
 Next I used `stegsolve` to look at the image, but it didn't help, either.
 
@@ -113,7 +113,7 @@ This created the file `data2`, so again I needed to check the type of that file:
 > file data2 
 data2: Zip archive data, at least v2.0 to extract
 ```
-This is a `zip` file, do I renamed it `data2.zip` and ran `unzip` on it:
+This is a `zip` file, so I renamed it `data2.zip` and ran `unzip` on it:
 ```
 > unzip data2.zip
 ```
@@ -136,12 +136,12 @@ I renamed it `falg.tar` and ran `tar` over it:
 > tar -xvf falg.tar
 data4.exe
 ```
-This gave me `data4.exe`. This time I checked the file first:
+This gave me `data4.exe`. Again I checked the type:
 ```
 > file data4.exe 
 data4.exe: bzip2 compressed data, block size = 900k
 ```
-So again I renamed the file. This time to `data4.bz2` and ran `bzip2` over it:
+I renamed the file, this time to `data4.bz2`, and ran `bzip2` over it:
 ```
 > bzip2 -d data4.bz2
 ```
@@ -150,7 +150,7 @@ This gave me the file `data4` which I checked the type of yet again:
 > file data4
 data4: gzip compressed data, was "flag.bin", last modified: Fri Mar 25 20:28:48 2016, from Unix
 ```
-OK. At least now I can see the name `flag.bin`, so, hopefully, were really nearing the end now. Lets rename and `gunzip` this:
+OK. At least now I can see the name `flag.bin`, so, hopefully, were really nearing the end. Lets rename and `gunzip` this:
 ```
 > gunzip data4.gz
 ```
