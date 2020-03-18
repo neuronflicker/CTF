@@ -9,6 +9,9 @@ Simon says repeat after me
 
 nc ctf.hackucf.org 10101
 
+- [Write-up 1: Bash](#write-up-1)
+- [Write-up 2: Python](#write-up-2)
+
 ## Write-up 1
 Running the code on the server sets up a repetition challenge:
 ```bash
