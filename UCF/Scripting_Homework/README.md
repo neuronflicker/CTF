@@ -47,7 +47,7 @@ Hey, so I just realized my math homework is due in 30 seconds. If you complete i
 0: Thanks to you I just failed my math exam. No flag for you!
 ```
 The problem is that the sum we have to calculate is the prompt for the input. If I try to read the next line, the code will hang waiting for the answer. We have to read the sum one character at a time until we hit the `=` sign.
-Also, we have to replace the `head` command from above because it reads everything up to the input in one command. Instead we use `read` to read a line at a time:
+Also, we have to replace the `head` command from above because it reads everything up to the input in one command and then gives us the first two lines from all the input. Instead we use `read` to read a line at a time:
 ```bash
 #!/bin/bash
 
