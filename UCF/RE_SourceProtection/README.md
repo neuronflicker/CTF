@@ -55,7 +55,7 @@ What's the magic phrase?: fred
 Wrong!
 Press enter to exit...
 ```
-Looking back at the strings on Linux, I couldn't find anythng that may be a magic phrase, but it did see:
+Looking back at the strings on Linux, I couldn't find anything that may be a magic phrase, but it did see:
 ```
 pyi-windows-manifest-filename
 ...
@@ -156,6 +156,6 @@ Site: Facebook, Password: Zuck3rb3rg_is_dr34my
 Site: School, Password: I_Before_E_Except_After_C
 Press enter to exit...
 ```
-> Note: The `s` on the end of the Kanye West quote denotes it's a string, so I cut that off when entering copying the phrase
+> Note: The `s` on the end of the Kanye West quote denotes it's a string, so I cut that off when copying the phrase
 
 This worked and also gave me the same flag.
