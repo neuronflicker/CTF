@@ -42,7 +42,7 @@ opyi-windows-manifest-filename passwords.exe.manifest
 zout00-PYZ.pyz
 python27.dll
 ```
-Note that there is a Python DLL and some `pyd` files. Also note that `msvc90` is referenced as a DLL and `Microsoft.VC90.CRT.manifest`, which are from Visual Studio 2005. Plus, there is a reference to a `pyi.windows.manifest-filename` which is set to passwords.exe.manifest. This looks like it's some sort of Python build into a Windows EXE. Therfore, I moved the analysis to Windows.
+Note that there is a Python DLL and some `pyd` files. Also note that `msvc90` is referenced as a DLL and `Microsoft.VC90.CRT.manifest`, which are from Visual Studio 2005. Plus, there is a reference to a `pyi.windows.manifest-filename` which is set to `passwords.exe.manifest`. This looks like it's some sort of Python built into a Windows EXE. Therfore, I moved the analysis to Windows.
 
 Looking at the icon on Windows, it looks like this is definitely Python inside a Windows EXE:
 
@@ -63,7 +63,7 @@ pyi-runtime-tmpdir
 ...
 inflate 1.2.8 Copyright 1995-2013 Mark Adler
 ```
-The `inflate` message comes form the `zlib` compression library. I did a search for `pyi-windows-manifest-filename` and found it belongs to PyInstaller. This rolls Python code into a Windows (or Linux) executable. I also found that someting created with PyInstaller can be reversed with [python-exe-unpacker](https://github.com/countercept/python-exe-unpacker).
+The `inflate` message comes form the `zlib` compression library. I did a search for `pyi-windows-manifest-filename` and found it belongs to PyInstaller. This rolls Python code into a Windows (or Linux) executable. I also found that something created with PyInstaller can be reversed with [python-exe-unpacker](https://github.com/countercept/python-exe-unpacker).
 
 I installed the code on Linux:
 ```
@@ -145,7 +145,7 @@ __name__(
 passwords.pyt
 <module>
 ```
-The flag appeared in the `strings` output, but out of interest I copied the Kanye West phrase and tried it in the program:
+A flag appeared in the `strings` output, but at the time I wasn't sure it was the right one, so I copied the Kanye West phrase and tried it in the program:
 ```
 Welcome to my super secret password vault!
 What's the magic phrase?: I hate when I'm on a flight and I wake up with a water bottle next to me like oh great now I gotta be responsible for this water bottle - Kanye West
