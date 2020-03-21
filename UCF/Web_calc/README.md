@@ -88,7 +88,7 @@ Expression is: 6003<br/>-<br/>2309<br/>/<br/>2793<br/>*<br/>5611<br/>+<br/>4799
 Calc is: 6003-2309/2793*5611+4799
 Answer is: 10802
 ```
-Good so far. Now, however, we need to `POST` our answer back to the server. I tried just sending the answer to the server, using `curl -d <field-name>=<field-value>` to fill the form:
+Good so far. However, we now need to `POST` our answer back to the server. I tried just sending the answer to the server, using `curl -d <field-name>=<field-value>` to fill the form:
 ```bash
 ...
 # Get the answer
@@ -110,7 +110,7 @@ Calc is: 5697/2442-1976*1032+1004
 Answer is: -2038226
 the answer: <br/>your answer: -2038226<br/>too slow
 ```
-You can see that it doesn't show what the correct answer is like it does on the website. It doesn't know what sum we were solving. I suspect there's a session cookie somewhere that contains the correct answer and the time of the request so it can check whether it took longer than a second. I looked in my browser and founf this:
+You can see that it doesn't show what the correct answer is like it does on the website. It doesn't know what calculation we were solving. I suspect there's a session cookie somewhere that contains the correct answer and the time of the request so it can check whether it took longer than a second. I looked in my browser and found this:
 
 ![Session cookie](session.png)
 
@@ -151,5 +151,5 @@ the answer: 7838203<br/>your answer: 7838203<br/>flag{<flag here>}<br/><br/>
 ```
 That also gave me the flag.
 
-> Note: During testing, and very occasionally, my script sometimes gave a different answer to the webpage. Sometimes off by 1, and sometimes completely different. I never got to the bottom of why. However, it works most of the time. It may just need running a couple of times.
+> Note: Very occasionally during testing my script gave a different answer to the webpage. Sometimes off by 1, and sometimes completely different. I never got to the bottom of why. However, it works most of the time. It may just need running a couple of times.
 
