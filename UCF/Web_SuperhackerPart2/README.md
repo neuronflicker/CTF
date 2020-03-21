@@ -17,7 +17,7 @@ This is the second part of [Superhacker Part1](../Web_SuperhackerPart1/README.md
 
 ![Opening page](opening_page.png)
 
-For this challenge we need to get the code to give us `$flag2`. This means we need to get into the same part as for `Superhacker Part1`, but also need to ensure that the `SELECT` command retruns at least one row from the `users` table. This is because the condition to get to `$flag2` is:
+For this challenge we need to get the code to give us `$flag2`. This means we need to get into the same part as for `Superhacker Part1`, but also need to ensure that the `SELECT` command returns at least one row from the `users` table. This is because the condition to get to `$flag2` is:
 ```php
 if(mysqli_num_rows($res) > 0) {
     echo "$flag2" ;
@@ -27,7 +27,7 @@ This is going to require some SQL intection. We could get all rows from the tabl
 ```sql
 SELECT * FROM users WHERE username LIKE '%'
 ```
-However, to inject code into the current statement, we need to put the code into the `username` or `password`. We can use `OR` in an SQL statement to add our `LIKE` clause to the existing `SELECT` by having `username` start with a closing quote (`'`), and then our `OR username LIKE '%'` clause, followed by the single line comment symbol `--`, which will exclude all the `password` part of the line. The SQL statement we will be creating is:
+However, to inject code into the current statement, we need to put the code into the `username` or `password`. We can use `OR` in an SQL statement to add our `LIKE` clause to the existing `SELECT` by having `username` start with a closing quote (`'`), and then our `OR username LIKE '%'` clause, followed by the single line comment symbol `--`. The single-line-comment marker will exclude the original closing quote from the username and all the `password` part of the line. The SQL statement we will be creating is:
 ```sql
 SELECT * FROM users WHERE username = '' OR username LIKE '%' --' AND password = 'pass'
 ```
