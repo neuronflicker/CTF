@@ -114,7 +114,7 @@ You can see that it doesn't show what the correct answer is like it does on the 
 
 ![Session cookie](session.png)
 
-So we can add cookie handling to our `curl` commands. With `curl`, `-c <file-name>` enables us to save cookies to a file, and `-b <file-name>` lets up send that cookie back. Therefore, our final script is:
+So we can add cookie handling to our `curl` commands. `-c <file-name>` enables us to save cookies to a file, and `-b <file-name>` lets us send that cookie back. Therefore, our final script is:
 ```bash
 #!/bin/bash
 
