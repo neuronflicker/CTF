@@ -150,3 +150,6 @@ Answer is: 7838203
 the answer: 7838203<br/>your answer: 7838203<br/>flag{<flag here>}<br/><br/>
 ```
 That also gave me the flag.
+
+> Note: During testing, and very occasionally, my script sometimes gave a different answer to the webpage. Sometimes off by 1, and sometimes completely different. I never got to the bottom of why. However, it works most of the time. It may just need running a couple of times.
+
