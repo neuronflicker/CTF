@@ -10,9 +10,6 @@ http://ctf.hackucf.org:4001/
 Author: kablaa
 
 ## Write-up
-```diff
-- This is still in progress
-```
 This is the second part of [Superhacker Part1](../Web_SuperhackerPart1/README.md). Therefore, the opening page is the same:
 
 ![Opening page](opening_page.png)
