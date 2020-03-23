@@ -12,7 +12,7 @@ nc ctf.hackucf.org 9003
 > **Files:** ret, libpwnableharness32.so
 
 ## Write-up
-When run the code waits for user input, then prints a message:
+When run, the code waits for user input, then prints a message:
 ```
 > nc ctf.hackucf.org 9003
 hello
@@ -67,13 +67,13 @@ So I looked at the `func` function:
 
 ![Func function](func.png)
 
-Looking at the `func` function we can see a 4-byte (integer) variable set to 0 (`ebp+var_C`), a call to `scanf()` and a comparison of the variable `ebp+var_C` to `0xdeadbeef`. This means we need to overwrite the interger variable with the value for `oxdeadbeef`. However, this won't be enough. The jump after the comparison doesn't jump to the `win()` function, but instead just returns. This means we also need to overwrite the return pointer on the stack to point to the `win()` function:
+Looking at the `func` function we can see a 4-byte (integer) variable set to 0 (`ebp+var_C`), a call to `scanf()` and a comparison of the variable `ebp+var_C` to `0xdeadbeef`. This means we need to overwrite the integer variable with the value for `0xdeadbeef`. However, this won't be enough. The jump after the comparison doesn't jump to the `win()` function, but instead just returns. This means we also need to overwrite the return pointer on the stack to point to the `win()` function.
 
 I had a look at the decompiled code in Ghidra to confirm what I saw in IDA Pro:
 
 ![Decompiled func function](func_c.png)
 
-Now we can see we have a 64-byte `buffer`, and our integer `value`. Lets start debuging and look at the stack.
+Now we can see we have a 64-byte `buffer`, and our integer `value`. Lets start debugging and look at the stack.
 
 First I create a file containing just 64 `A` characters to help us see our stack layout:
 ```
@@ -134,7 +134,7 @@ This works in the debugger, so now we can test it on the server:
 > Note: The above works in Python2. As Python3 uses Unicode for the basic string, and print() expects Unicode, for Python3 use:
 python3 -c "import sys; sys.stdout.buffer.write(b'A'*64 + b'\xef\xbe\xad\xde' + b'A'*12 + b'\x1B\x86\x04\x08')" | nc ctf.hackucf.org 9003
 
-This didn't work beacuse I forgot to use `cat` to ensure we get chance to interact with the shell. I now tried:
+This didn't work because I forgot to use `cat` to ensure we get chance to interact with the shell (see [Gimme Shellcode](../Scripting_GimmeShellcode/README.txt)). I now tried:
 ```
 > (python -c "print('A'*64 + '\xef\xbe\xad\xde' + 'A'*12 + '\x1B\x86\x04\x08')" ; cat) | nc ctf.hackucf.org 9003
 you Win!
