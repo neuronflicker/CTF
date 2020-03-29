@@ -144,7 +144,7 @@ dog1->speak = &dog1_speak;
 Dog* dog2 = calloc(1, sizeof(*dog2));
 dog2->speak = &dog2_speak;
 ```
-However, there are 3 functione:
+However, there are 3 functions:
 ```c
 void dog1_speak(Dog* dog) {
 	say("%s says Woof! %s is a good boy.\n", dog->name, dog->name);
@@ -200,7 +200,7 @@ If we move on in the debugger, after the first dog name input (100 A's), those A
 
 ![Dog 1 name](stack1.png)
 
-We can also see the address of this name (0xffd6a4e4) is is written into our Dog1 memory on the heap, right before the speak function address as we expected:
+We can also see the address of this name (0xffd6a4e4) is written into our Dog1 memory on the heap, right before the speak function address as we expected:
 
 ![Dog1 Heap](dog1_heap2.png)
 
@@ -224,7 +224,7 @@ If we go on and get the flea details (in location 1, 2 fleas), we can see that r
 
 The problem is how do we use this information to change one of the speak functions to point to `dog3_speak()` and run a command?
 
-It took a while of me staring at the code to get the answer - there is no upper bounds check on the menu option, and that menu options decides exactly where to write to in the `fleas` array. If we make the menu option 6, it should write 1 location past the end of that array:
+It took a while of me staring at the code to get the answer - there is no upper bounds check on the menu option, and that menu option decides exactly where to write to in the `fleas` array. If we make the menu option 6, it should write 1 location past the end of that array:
 ```
 > python -c "print('A'*100 + 'B'*100 + '6 2')" > input.txt
 ```
@@ -234,7 +234,7 @@ Looking at the heap after trying this, it does write to the address directly bef
 
 We can see by this that if we enter 7 as the menu option we will be overwriting the Dog2 name pointer, and if we enter 8, we can overwrite the speak function pointer!
 
-The location of the `dog3_speak` function is 0x080488b0. In decimal this is 134514864‬. If we change our input file to enter 8 for the menu, and this number as the number of fleas, we should be able to make the speak function for Dog2 to point at `dog3_speak`:
+The location of the `dog3_speak` function is 0x080488b0. In decimal this is 134514864‬. If we change our input file to enter 8 for the menu, and this number as the number of fleas, we should be able to make the speak function for Dog2 point at `dog3_speak`:
 ```
 > python -c "print('A'*100 + 'B'*100 + '8 134514864')" > input.txt
 ```
