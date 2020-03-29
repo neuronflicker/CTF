@@ -50,7 +50,7 @@ You can come by my office and pick up your dogs today or tomorrow.
 The invoice will be $1337 including tax.
 Have a nice day!
 ```
-You select your two dogs' names, where the first dog has fleas, and how many and the program prints the rest.
+You select your two dogs' names, where the first dog has fleas and how many, and the program prints the rest.
 
 I ran `strings` over the executable, but didn't see anything obvious. Next I looked at the code. There is the `handle_connection()` function that is the main code:
 ```c
@@ -127,7 +127,7 @@ void handle_connection(int sock) {
 	printf("Have a nice day!\n");
 }
 ```
-`Dog` is a `struct` that contains the dog's name, a pointer to a function that that print's the phrase that the dog says, and an array, one elemnt per body part, that holds the number of fleas for each body part:
+`Dog` is a `struct` that contains the dog's name, a pointer to a function that that print's the phrase that the dog says, and an array, one element per body part, that holds the number of fleas for each body part:
 ```c
 struct Dog {
 	char* name;
@@ -168,7 +168,7 @@ First I set up a text file containing the inputs:
 ```
 python -c "print('A'*100 + 'B'*100 + '1 2')" > input.txt
 ```
-We need 100 characters for each name otherwise the `read()` statement in the code will read everything from the file, and the name arrays are set up as 100 `char` arrays:
+We need 100 characters for each name otherwise the `read()` statement in the code will greedily read everything from the file, as the name arrays are set up as 100 `char` arrays:
 ```c
 void read_line(char* buf, size_t bufsize) {
 	if(read(STDIN_FILENO, buf, bufsize) == -1) {
@@ -186,17 +186,17 @@ void handle_connection(int sock) {
 	char name1[100], name2[100];
 ```
 
-Now we can use this file in the **Process Options** in IDA to get the data in and examine the heap.
+Now we can use the input.txt file in the **Process Options** in IDA to get the data in and examine the heap.
 
-During the trace we can see, after the `calloc()` and once `dog1->speak = &dog1_speak;` has been executed, the address of the function (0x08048866) is on the heap:
+During the trace we can see, after the `calloc()` and once `dog1->speak = &dog1_speak;` has been executed, the address of the speak function (0x08048866) is on the heap:
 
 ![Dog speak 1](dog_speak1_location.png)
 
 ![Dog1 Heap](dog1_heap1.png)
 
-From the Dog `struct`, we also know that there is a `char *` (4-bytes) to point to the dog's name and that comes before the function address, and an array of `int` for the number of fleas that comes after the address. That address is of size `DOG_NUMPARTS` which is 5. An `int` is 4-bytes, so this array will take up 20 bytes after the function address.
+From the Dog `struct`, we also know that there is a `char *` (4-bytes) to point to the dog's name and that comes before the function address, and an array of `int`s for the number of fleas, which comes after the address. That array is of size `DOG_NUMPARTS` which is 5. An `int` is 4-bytes, so this array will take up 20 bytes after the function address.
 
-If we move on, after the first dog name input (100 A's), those A's can be seen on the stack:
+If we move on in the debugger, after the first dog name input (100 A's), those A's can be seen on the stack:
 
 ![Dog 1 name](stack1.png)
 
@@ -204,7 +204,7 @@ We can also see the address of this name (0xffd6a4e4) is is written into our Dog
 
 ![Dog1 Heap](dog1_heap2.png)
 
-When we `calloc()` the second Dog `struct` and set the speak function address for that (0x0804888b), we can see that set on the heap:
+When we `calloc()` the second Dog `struct` and set the speak function address for that (0x0804888b), we can also see it on the heap:
 
 ![Dog speak 2](dog_speak2_location.png)
 
