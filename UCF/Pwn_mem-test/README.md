@@ -148,8 +148,8 @@ The stack for a `call` is organised as follows:
 |------------|
 |Address of function to call   |
 |Return address after call|
-|Argument1|
-|Argument2|
+|Argument1 address|
+|Argument2 address|
 
 So we need to set up the stack like that for our call to `win_func()`. We can set the return address to the original return address we've overwritten, and the argument can be the address of `hint`. Therefore our stack should be:
 | Stack frame | Description |
