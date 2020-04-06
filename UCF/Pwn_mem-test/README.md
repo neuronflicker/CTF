@@ -123,7 +123,7 @@ We can see the return address on the stack at 0xff843a3c. Now lets step over the
 
 ![Stack with input](input_stack.png)
 
-The input is placed on the stack at 0xff843a28. There are our 10 A characters and the null terminator. To affect the return address, we're going to have to add another 13 A characters (to eat up the null terminator and then 12 bytes on the next line), and then put the address we want to jump to. Looking at the code, the function we want to call is at 0x08048866:
+The input is placed on the stack at 0xff843a25 (I've missed highlighting a few in the image). There are our 10 A characters and the null terminator. To affect the return address, we're going to have to add another 13 A characters (to eat up the null terminator and then 12 bytes on the next line), and then put the address we want to jump to. Looking at the code, the function we want to call is at 0x08048866:
 
 ![Win_func() location](win_func_location.png)
 
@@ -143,7 +143,7 @@ Once we write our input to the stack the return address has changed to the `win_
 
 When stepping on through the code, this does get us into the `win_func()` function! Now we need to work out how to pass the address of `hint` to this function call.
 
-The stack for a call is organised as follows:
+The stack for a `call` is organised as follows:
 |Stack frame |
 |------------|
 |Address of function to call   |
@@ -151,7 +151,7 @@ The stack for a call is organised as follows:
 |Argument1|
 |Argument2|
 
-So we need to set up the stack like this. We can set the return address to the original return address we've overwritten, and the argument can be the address of `hint`. Therefore our stack should be:
+So we need to set up the stack like that for our call to `win_func()`. We can set the return address to the original return address we've overwritten, and the argument can be the address of `hint`. Therefore our stack should be:
 | Stack frame | Description |
 |-------------|-------------|
 |AAAAAAAA...| Overflowed buffer|
@@ -159,7 +159,7 @@ So we need to set up the stack like this. We can set the return address to the o
 |0x08048860 | Original return address set as return address for our call|
 |0x08048980 | Address of `hint`|
 
-Therefore, we now set up out `input.txt` file to be:
+Therefore, we now set up our `input.txt` file to be:
 ```
 > python -c "print('A'*23 + '\x66\x88\x04\x08\x60\x88\x04\x08\x80\x89\x04\x08')" > input.txt
 ```
