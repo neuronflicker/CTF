@@ -66,7 +66,7 @@ This section of code seems to convert the numbers entered by the user into an ar
   undefined8 local_48;
   undefined4 local_40;
 ```
-However, the conversion code above shows we write to each 4-byte part of these variables (`local_c * 4` is used for addressing and added to `local_78` - the start of the 'array'). Each character of the passwd is accessed with `passwd[local_10]` and `passwd[local_10 + 1]`, the first accessing the tens column of the number, and the second the units. Each character then has `0x30` subtracted from it. This is the ASCII value for the '0' character. The while loop runs while `local_c < 0xf`. As it starts at 0, this will process our 15 2-digit values. Therefore, when this section of code is finished, all of the entered password values will be in the 'array' as `int` values.
+However, the conversion code above shows we write to each 4-byte part of these variables (`local_c * 4` is used for addressing and added to the address of `local_78` - the start of the 'array'). Each character of the password is accessed with `passwd[local_10]` and `passwd[local_10 + 1]`, the first accessing the tens column of the number, and then, second, the units. Each character then has `0x30` subtracted from it. This is the ASCII value for the '0' character. The `while` loop runs as long as `local_c < 0xf`. As it starts at 0, this will process our 15 2-digit values. Therefore, when this section of code is finished, all of the entered password values will be in the 'array' as `int` values.
 
 Now we can look at the rest of the `main()` function which interprets our password and tests it's valid:
 ```c
@@ -147,9 +147,9 @@ This loops through our 'array' (15 `int` values) and checks each value in a `swi
 
 From the `switch` statement we can determine what the unique numbers in the password should be, as we can see each comparison. Here we can see each value is compared to a number from 1 to 0xf (01 to 15). These numbers must be what makes up our password. As we know they should be unique, we know we have to use each of the numbers, and, as we tried them in the correct order earlier, and that didn't work, we also know we have to find the correct order (hence the name of the CTF!).
 
-Looking at the `switch` we can see that the `local_14` is updated with each `case` statement. A different function is called (`p1()` to `p15()`) in each `case`, and the return value of that function is applied to the `local_14` variable through various mathematical operations (the different mathematicall operators mean the result will differ if the are not applied in the correct order). Hopefully, the functions will give us some sort of clue as to the order we need to apply them - trying to work backwards from the expected result will be difficult!
+Looking at the `switch` we can see that the `local_14` is updated with each `case` statement. A different function is called (`p1()` to `p15()`) in each `case`, and the return value of that function is applied to the `local_14` variable through various mathematical operations (the different mathematical operators mean the result will differ if the are not applied in the correct order). Hopefully, the functions will give us some sort of clue as to the order we need to apply them - trying to work backwards from the expected result will be difficult!
 
-So each of the `p1()` to `p15()` functions are very similar:
+Each of the `p1()` to `p15()` functions are very similar:
 ```c
 void p01(void)
 {
@@ -210,7 +210,7 @@ After staring at this for a while, I notice that the numbers (if we take each to
 |   14     |  5831526f | 1,479,627,375 | X1Ro
 |   15     |  556a4675 | 1,433,028,213 | UjFu
 
-There is no obvious pattern to these ASCII conversions, but it should be noted that all characters are alpha-numeric, the only exceptions being the two equals signs. This suggests that these strings could be base64 encoded.
+There is no obvious pattern to these ASCII conversions, but it should be noted that all characters are alpha-numeric, the only exceptions being the two equals signs. This suggests that these strings could be base64 encoded, as equals signs are padding for that encoding.
 
 Let's extend the table again with the base64 decoded versions of these strings. I did this in Linux using the line:
 ```
@@ -243,7 +243,7 @@ Looking on the UCF website, the information about this challenge shows that it w
 sun{mY...}
 0413...08
 ```
-This is now just a case of trying some rearrangements of the parts of the flags until we get the final answer. This took a bit of time to do, but I finally got there:
+This is now just a case of trying some rearrangements of the parts of the flag until we get the final answer. This took a bit of time to do, but I finally got there:
 ```
 > ./order
 Enter password: 041302061503101411120501090708
