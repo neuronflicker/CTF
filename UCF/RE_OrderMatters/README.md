@@ -37,7 +37,7 @@ The password length is tested against the value `0x1e`, which is 30 in decimal. 
 Enter password: 123456789012345678901234567890
 Access Denied.
 ```
-So we can move forward by passing 30 digits. As the hint suggests the password consists of 2-digit numbers, that means we're going to end up with 15 numbers making up the password. The hint also says the numbers are unique, so we can try passing 15 unique numbers to the password:
+So we can move forward by passing 30 digits. As the hint suggests the password consists of 2-digit numbers. That means we're going to end up with 15 numbers making up the password. The hint also says the numbers are unique, so we can try passing 15 unique numbers to the password:
 ```
 > ./order 
 Enter password: 010203040506070809101112131415
@@ -55,7 +55,7 @@ OK. So now we need to find out what the actual numbers we need are. Let's look a
     local_c = local_c + 1;
   }
 ```
-This section of code seems to convert the numbers entered by the user into an array of `int`. In the Ghidra decompile, the 'array' is shown as a series of 8-byte variables and a 4-byte variable:
+This section of code seems to convert the numbers entered by the user into an array of `int` values. In the Ghidra decompile, the 'array' is shown as a series of 8-byte variables and a 4-byte variable:
 ```c
   undefined8 local_78;
   undefined8 local_70;
