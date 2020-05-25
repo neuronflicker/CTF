@@ -385,7 +385,7 @@ Average time for all characters: .010341890360179
 ```
 This looked promising, so I updated the code to automatically add the letter that took the longest to the end of the `start_of_pass` variable. The code now tests if passing `start_of_pass` as `passwd` returns a different result to the "WRONG" page. If so, it assumes we found the password. 
 
-As the results seemed consistent, I also removed the repeating of the tests, both the 20 calls and 10 runs. These were only there in case the difference in times was small, so it would try and handle small errors by averaging them out. The differences are easily noticable, though. 
+As the results seemed consistent, I also removed the repeating of the tests, both the 20 calls and 10 runs. These were only there in case the difference in times was small - it would try and handle small errors by averaging them out. The differences are easily noticable, though. 
 
 Finally, I removed some of the information output and final script was:
 ```bash
