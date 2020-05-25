@@ -26,7 +26,7 @@ dref
 ```
 The buffers can also be overflowed by passing more than 25 characters to them (`scanf()` will keep on reading!).
 
-However, with `read()` it will read until it has read the 25 characters:
+However, with `read()` it will read until it has read up to 25 characters:
 ```c
 // my_prog.c
 int main()
