@@ -181,7 +181,7 @@ done
 ``` 
 This script performs 10 runs so we can see if there's any consistency. It creates passwords of 1 to 100 characters long, and sends those passwords to the server 20 times to take an average of the length of time taken. For each run, I output the one that took longest, the one that took the shortest and the average time.
 
-On running this, the results showed that a different length of password took the longest time on each of the 10 runs. As there is no consistent answer, the password makes no difference to the code executed:
+On running this, the results showed that a different length of password took the longest time on each of the 10 runs. As there is no consistent answer, we can say the password length makes no difference to the code executed:
 ```
 Timing results
 ==============
@@ -247,7 +247,7 @@ Shortest time was 14 characters: .010105884075164
 Average time for all characters: .010123458385467
 ```
 
-Another timing to look at may incolve the `str_split()` we saw earlier. If it splits the password into individual letters, we could also use the outputted time to see if we could find each letter in the password by checking the one that took longest (i.e. moved on to check the second letter, taking slightly longer). I created a script to do this:
+Another timing to look at may involve the `str_split()` we saw earlier. If it splits the password into individual letters to check each one is correct before moving onto the next, we could also use the outputted time to see if we could find each letter in the password. We can do this by checking the one that took longest (i.e. moved on to check the next letter, taking slightly longer). I created a script to do this for the first letter:
 ```bash
 #!/bin/bash
 
@@ -318,7 +318,7 @@ do
   echo "Average time for all characters: $final_avg" >> average_timings.txt
 done
 ```
-Running this consistently gave me `A` as the letter taking the longest time for all 10 runs:
+Running this gave me `A` as the letter taking the longest time for all 10 runs:
 ```
 Average timings
 ===============
@@ -383,7 +383,7 @@ Longest time was for 65 (A): .030266976356506
 Shortest time was for 89 (Y): .010108685493469
 Average time for all characters: .010341890360179
 ```
-This looked promising, so I updated the code to automatically add the letter that took the longest to the end of the `start_of_pass` variable. The code now tests if passing `start_of_pass` as `passwd` returned a different result to the "WRONG" page. If so, it assumes we found the password. 
+This looked promising, so I updated the code to automatically add the letter that took the longest to the end of the `start_of_pass` variable. The code now tests if passing `start_of_pass` as `passwd` returns a different result to the "WRONG" page. If so, it assumes we found the password. 
 
 As the results seemed consistent, I also removed the repeating of the tests, both the 20 calls and 10 runs. These were only there in case the difference in times was small, so it would try and handle small errors by averaging them out. The differences are easily noticable, though. 
 
