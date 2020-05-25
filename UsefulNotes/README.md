@@ -1,7 +1,7 @@
 # Useful Notes for CTF
 This area is intended to give a list of useful notes, tool, hints and tips that we have come across while learning about and doing Capture the Flag challenges.
 
-These will be split into sections by type of challenge, and may be split further into sub-pages about specifics if the category pages get too long, or a separate section seems sensible.
+These will be split into sections by type of challenge. The top level pages have general notes, and these may be split further into sub-pages about specifics if the category pages get too long, or a separate section seems sensible.
 
 # Table of contents
 - [Pwn](pwn.md)
