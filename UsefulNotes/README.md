@@ -13,4 +13,8 @@ These will be split into sections by type of challenge. The top level pages have
 - [Scripting](scripting.md)
   * [bash](bash.md)
   * [Python](python.md)
+- [Tools](tools.md)
+  * [IDA](ida.md)
+  * [Ghidra](ghidra.md)
+
 
