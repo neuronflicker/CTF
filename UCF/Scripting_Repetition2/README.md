@@ -9,7 +9,7 @@ Simon is mean
 
 nc ctf.hackucf.org 10102
 
-## Write-up
+## Write-up 01
 I started this challenge with the script from [Repetition1](../Scripting_Repetition1/README.md), as the initial prompts were the same. I just edited the port number: 
 ```bash
 #!/bin/bash
@@ -94,3 +94,110 @@ exec 3<&-
 ```
 
 Running this script worked, and gave me the flag.
+
+## Write-up 02
+
+Slightly different bash script using coproc:
+
+```
+#!/bin/bash
+coproc nc ctf.hackucf.org 10102
+#exec bash <&${COPROC[0]} >&${COPROC[1]} 2>&1
+read var <&"${COPROC[0]}"
+echo $var
+read var <&"${COPROC[0]}"
+echo $var
+
+read var <&"${COPROC[0]}"
+echo $var
+NUMBER=$(echo $var | cut -d " " -f 2)
+echo $NUMBER
+echo $NUMBER >&"${COPROC[1]}"
+
+NUMBERONE=$(echo $NUMBER)
+
+for i in {2..100}
+do
+  read var <&"${COPROC[0]}"
+  #echo $var
+  NUMBER=$(echo $var | cut -d " " -f 3)
+  #echo $NUMBER
+  echo $NUMBER >&"${COPROC[1]}"
+done
+
+read var <&"${COPROC[0]}" # Repeat: Good job!
+echo $var
+read var <&"${COPROC[0]}" # Now, I hope you were paying attention...
+echo $var
+read var <&"${COPROC[0]}" # What was the first value I told you?
+echo $var
+
+echo $NUMBERONE
+echo $NUMBERONE"\n" >&"${COPROC[1]}"
+
+cat <&${COPROC[0]} | cat # line 36: ${COPROC[0]}: Bad file descriptor
+
+read var <&"${COPROC[0]}" # First: Great job!
+echo $var
+read var <&"${COPROC[0]}" # flag{xxx}
+echo $var
+read var <&"${COPROC[0]}" # line 43: "${COPROC[0]}": Bad file descriptor
+echo $var
+```
+
+
+## Write-up 03
+
+Python solution:
+
+```
+import subprocess
+import time
+
+process = subprocess.Popen(
+        ["nc", "ctf.hackucf.org", "10102"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+
+print(process.stdout.readline().decode("utf-8").strip())
+print(process.stdout.readline().decode("utf-8").strip())
+line=process.stdout.readline().decode("utf-8").strip()
+print(line)
+var=line.split()[1]
+var+="\n"
+var=bytes(var,encoding="utf-8")
+print(var)
+var1=var
+
+process.stdin.write(var)
+process.stdin.flush()
+
+N=100
+while(N>0):
+  #print(N)
+  line=process.stdout.readline().decode("utf-8").strip()
+  #print(line)
+  var = line.split()[2]
+  var+="\n"
+  var=bytes(var,encoding="utf-8")
+  #print(var)
+  process.stdin.write(var)
+  process.stdin.flush()
+  N-=1
+
+print(process.stdout.readline().decode("utf-8").strip())
+print("a")
+print(process.stdout.readline().decode("utf-8").strip())
+print("b")
+print(var1)
+print(int(var1))
+process.stdin.write(var1)
+process.stdin.flush()
+
+
+print(process.stdout.readline().decode("utf-8").strip())
+print(process.stdout.readline().decode("utf-8").strip())
+
+```

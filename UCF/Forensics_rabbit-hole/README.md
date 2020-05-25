@@ -9,7 +9,7 @@ Author: wil0la
 
 > **Files:** rabbit-hole.png
 
-## Write-up
+## Write-up 01
 The downloaded file is an image of Alice playing croquet:
 
 ![The image](rabbit-hole.png)
@@ -160,3 +160,10 @@ This gives us a file named `data4`. Lets check the type:
 data4: ASCII text
 ```
 This final file contained the flag!
+
+
+## Write-up 02
+
+One other solution is to use GCHQ's CyberChef. This allows you to upload files and create a "recipe" of actions to perform on it.
+
+[https://gchq.github.io/CyberChef/] 
