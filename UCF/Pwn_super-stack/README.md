@@ -32,7 +32,7 @@ void handle_connection(void)
   return;
 }
 ```
-This creates a buffer of 108 characters (I assumed char for the `undefined` type). Then it prints out the address of this buffer, gets something into the buffer from the user, prints `returning NOW`, and returns.
+This creates a buffer of 108 characters (I assumed `char` for the `undefined` type). Then it prints out the address of this buffer, gets something into the buffer from the user, prints `returning NOW`, and returns.
 
 It seems we may need to manipulate the buffer to overwrite the return address to something else as we did in the [Pwn ret challenge](https://github.com/neuronflicker/CTF/tree/master/UCF/Pwn_ret). However, unlike that earlier challenge, there didn't seem to be any other function we could call to get the flag.
 
