@@ -12,14 +12,14 @@ nc ctf.hackucf.org 9005
 > **Files:** super_stack, libpwnableharness32.so
 
 ## Write-up
-Running the executable shows you the buffer address and then pauses, waiting for input. When you enter some input, it displays "returning NOW" and ends:
+Running the executable shows a buffer address and then pauses, waiting for user input. When you enter something, it displays "returning NOW" and ends:
 ```
 > ./super_stack 
 buf: 0xffb5773c
 aaaa
 returning NOW
 ```
-The binary was loaded into Ghidra and decompiled. As is usual with the UCF framework the function we need to look at for is the `handle_connection()` function (I renamed the local variable to `buff`):
+The binary was loaded into Ghidra and decompiled. As is usual with the UCF framework the function we need to look for is the `handle_connection()` function:
 ```c
 void handle_connection(void)
 
@@ -32,7 +32,7 @@ void handle_connection(void)
   return;
 }
 ```
-So this creates a buffer of 108 characters (I assumed char for the `undefined` type). Then it prints out the address of this buffer, gets something into the buffer from the user, prints `returning NOW`, and returns.
+This creates a buffer of 108 characters (I assumed char for the `undefined` type). Then it prints out the address of this buffer, gets something into the buffer from the user, prints `returning NOW`, and returns.
 
 It seems we may need to manipulate the buffer to overwrite the return address to something else as we did in the [Pwn ret challenge](https://github.com/neuronflicker/CTF/tree/master/UCF/Pwn_ret). However, unlike that earlier challenge, there didn't seem to be any other function we could call to get the flag.
 
