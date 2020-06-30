@@ -14,6 +14,9 @@ This is the same program as stack0 part 1. Now, read the contents of flag2.txt.
 > **Files:** stack0, stack0.c and libpwnableharness32.so
 
 ## Write-up
+>Note: The scripts in this solution work with Python2. As Python3 uses Unicode for the basic string, and print() expects Unicode, for Python3, the line in the script that sets the the byte values of the code should be changed to (for example):
+ send_str=$(python3 -c 'import sys; sys.stdout.buffer.write(b"\x31\xc0\x50\x68\x2f\x2f\x6c\x73\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\xb0\x08\xfe\xc0\xfe\xc0\xfe\xc0\xcd\x80\xb0\x01\x31\xdb\xcd\x80" + b"A"*26)')
+
 This is a buffer overflow challenge, building on [Pwn_stack0pt1](https://github.com/neuronflicker/CTF/tree/master/UCF/Pwn_stack0pt1), and the code file was provided.
 
 I ran the program to remind myself of how it worked:
@@ -321,7 +324,7 @@ I then checked the number of bytes with:
 ```
 So we have 56 characters, which fits nicely in our buffer. We just need to pad by 7 characters to make our necessary 63. I put this in the previous script and ran it, but there is a problem with this code. When performing the pushes in the code, the buffer gets overwritten as the stack fills into it. This means the code is corrupted and doesn't work. The `ls` from earlier works because the code is small enough.
 
-Maybe we can put the code further down the stack and call it there. This will mean using 63 `A` characters to fill the buffer, followed by the address of where we are going to put our code, which will be immediately after the return address. Our new return address needs to be the buffer start + 67 (0x43). The 67 is the length of the buffer plus the length of the return address. To do this, our final script becomes:
+Maybe we can put the code further down the stack and call it there. This will mean using 63 `A` characters to fill the buffer, followed by the address of where we are going to put our code, which will be immediately after the return address. Our new return address needs to be the buffer start + 67 (0x43) bytes. The 67 is the length of the buffer plus the length of the return address. To do this, our final script becomes:
 ```bash
 #!/bin/bash
 
