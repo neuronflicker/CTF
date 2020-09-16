@@ -6,7 +6,6 @@ Link: https://tryhackme.com/room/introtoresearch
 No questions to answer - just click-to-confirm
 
 ## [Task 2] Example Research Question
-
 Includes a general explanation of how to use Google to conduct reasearch on tools, techniques and general information.
 
 ### Questions
@@ -26,6 +25,39 @@ Includes a general explanation of how to use Google to conduct reasearch on tool
 > sha512crypt
 
 ## [Task 3] Vulnerability Searching
+How to search for known vulnerabilities using various websites such as:
+* [ExploitDB](https://www.exploit-db.com/)
+* [NVD](https://nvd.nist.gov/vuln/search)
+* [CVE Mitre](https://cve.mitre.org/)
 
-How to search for known vulnerabilities using various websites
+### Questions
+1. What is the CVE for the 2020 Cross-Site Scripting (XSS) vulnerability found in WPForms
+> CVE-2020-10385
 
+2. There was a Local Privilege Escalation vulnerability found in the Debian version of Apache Tomcat, back in 2016. What's the CVE for this vulnerability?
+> CVE-2016-1240
+
+3. What is the very first CVE found in the VLC media player?
+> CVE-2007-0017
+
+4. If I wanted to exploit a 2020 buffer overflow in the sudo program, which CVE would I use?
+> CVE-2019-18634
+
+## [Task 4] Manual Pages
+Describes how to use man pages to search for details about how to use Linux tools
+
+### Questions
+1. SCP is a tool used to copy files from one computer to another. What switch would you use to copy an entire directory?
+> -r
+
+2. fdisk is a command used to view and alter the partitioning scheme used on your hard drive. What switch would you use to list the current partitions?
+> -l
+
+3. nano is an easy-to-use text editor for Linux. There are arguably better editors (Vim, being the obvious choice); however, nano is a great one to start with. What switch would you use to make a backup when opening a file with nano?
+> -B
+
+4. Netcat is a basic tool used to manually send and receive network requests. What command would you use to start netcat in listen mode, using port 12345?
+> nc -l -p 12345
+
+## [Task 5] Final Thoughts
+No questions to answer - just click-to-confirm
