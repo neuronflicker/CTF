@@ -13,3 +13,7 @@ Link: https://tryhackme.com/room/introtoresearch
 
 Write-up: [Introductory Research](LearningPaths/CompleteBeginner/IntroductoryResearch/README.md)
 
+## Learn Linux
+Link: https://tryhackme.com/room/zthlinux
+
+Write-up: [Learn Linux](LearningPaths/CompleteBeginner/LearnLinux/README.md)
