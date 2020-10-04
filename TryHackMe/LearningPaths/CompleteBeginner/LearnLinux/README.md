@@ -4,7 +4,26 @@ Link: https://tryhackme.com/room/zthlinux
 ## Tasks
 * [Intro](#intro)
 * [Methodology](#methodology)
-* [Section 1: SSH - Intro](#section-1:-ssh---intro)
+* [Section 1: SSH - Intro](#section-1-ssh---intro)
+* [Section 1: SSH - Putty and SSH](#section-1-ssh---putty-and-ssh)
+* [Section 2: Running Commands - Basic Command Execution](#section-2-running-commands---basic-command-execution)
+* [Section 2: Running Commands - Manual Pages and Flags](#section-2-running-commands---manual-pages-and-flags)
+* [Section 3: Basic File Operations - ls](#section-3-basic-file-operations---ls)
+* [Section 3: Basic File Operations - cat](#section-3-basic-file-operations---cat)
+* [Section 3: Basic File Operations - touch](#section-3-basic-file-operations---touch)
+* [Section 3: Basic File Operations - Running a Binary](#section-3-basic-file-operations---running-a-binary)
+* [Binary - Shiba1](#binary---shiba1)
+* [su](#su)
+* [Section 4: Linux Operators - Intro](#section-4-linux-operators-intro)
+* [Section 4: Linux Operators - ">"](#section-4-linux-operators---)
+* [Section 4: Linux Operators - ">>"](#section-4-linux-operators----1)
+* [Section 4: Linux Operators - "&&"](#section-4-linux-operators----2)
+* [Section 4: Linux Operators - "&"](#section-4-linux-operators----3)
+* [Section 4: Linux Operators - "$"](#section-4-linux-operators----4)
+* [Section 4: Linux Operators - "|"](#section-4-linux-operators----5)
+* [Section 4: Linux Operators - ";"](#section-4-linux-operators----6)
+* [Binary - shiba2](#binary---shiba2)
+* [Section 5: Advanced File Operations - Intro](#section-5-advanced-file-operations---intro)
 
 ## Intro
 No questions to answer - just click to confirm and deploy the machine
