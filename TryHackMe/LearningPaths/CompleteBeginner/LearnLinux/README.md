@@ -347,4 +347,33 @@ shiba3@nootnoot:~$ cat shiba_out.txt
 shiba3@nootnoot:~$
 ```
 This shows two places of interest - `/opt/secret/shiba4` and `/etc/shiba/shiba4`. 
+```bash
+shiba3@nootnoot:~$ ls -l /opt/secret/shiba4
+-rwsrwxrwx 1 root root 8456 Feb 22  2020 /opt/secret/shiba4
+shiba3@nootnoot:~$ ls -l /etc/shiba/shiba4
+-rw-r--r-- 1 shiba4 shiba4 9 Feb 22  2020 /etc/shiba/shiba4
+```
+We can see that the `/opt/secret/shiba4` is executable, and `/etc/shiba/shiba4` is not, so `/opt/secret/shiba4` is probably what we want.
 
+#### Create the test directory and test1234 file
+> *Author's note: The machine seems to already have the `test` directory and `test1234` file, so I didn't need to create them. However, here's how you would do it if you need to*
+```bash
+shiba3@nootnoot:~$ mkdir test
+shiba3@nootnoot:~$ touch test/test1234
+shiba3@nootnoot:~$ ls
+shiba_out.txt  test
+shiba3@nootnoot:~$ ls test/
+test1234
+shiba3@nootnoot:~$
+```
+
+#### Run the executable
+```bash
+shiba3@nootnoot:~$ /opt/secret/shiba4
+test1234
+shiba3@nootnoot:~$
+```
+
+### Questions
+1. What is shiba4's password
+> test1234
