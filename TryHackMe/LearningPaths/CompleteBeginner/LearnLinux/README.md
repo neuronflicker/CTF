@@ -264,7 +264,7 @@ Explains how to use `rm` to remove files
 2. How do you suppress all warning prompts
 > -f
 
-> *Author's note: The answer to question 1 is very wrong. Using `-R` with `rm` is a very dangerous thing to do and you should know that this will recurse through subdirectories, deleting everything that matches! It's especially dangerous if you take into account question 2, and think you'll hide prompts - `rm -Rf` is one of the most dangerous combinations in Linux! The correct way to delete every file in the directory is to use `rm *`. or `rm -f *`*
+> *Author's note: The answer to question 1 isn't strictly correct. This also removes file recursively, rather than just in the directory. The answer should possibly be `rm *`, but using `rm` with either `*` or `-R` is dangerous and you should always make sure it's really what you want!*
 
 ## [Section 5: Advanced File Operations] - mv
 Describes how files can be renamed and moved around using `mv`.
@@ -377,3 +377,4 @@ shiba3@nootnoot:~$
 ### Questions
 1. What is shiba4's password
 > test1234
+
