@@ -35,6 +35,9 @@ Link: https://tryhackme.com/room/zthlinux
 * [Section 5 - Advanced File Operations - find](#section-5-advanced-file-operations---find)
 * [Section 5: Advanced File Operations - grep](#section-5-advanced-file-operations---grep)
 * [Binary - Shiba3](#binary---shiba3)
+* [Section 6: Miscellaneous - Intro](#section-6-miscellaneous---intro)
+* [Section 6: Miscellaneous - sudo](#section-6-miscellaneous---sudo)
+* [Section 6: Miscellaneous - Adding users and groups](#section-6-miscellaneous---adding-users-and-groups)
 
 ## Intro
 No questions to answer - just click to confirm and deploy the machine
@@ -114,13 +117,13 @@ shiba1@nootnoot:~$
 #### Run the executable:
 ```bash
 shiba1@nootnoot:~$ ./shiba1
-pinguftw
+<password shown here>
 shiba1@nootnoot:~$
 ```
 
 ### Questions
 1. What's the password for shiba2
-> pinguftw
+> &lt;password from above&gt;
 
 ## su
 Describes how to use `su` to change users. We use the above password to log in as *shiba2*
@@ -209,13 +212,13 @@ shiba2@nootnoot:~$
 #### Run the 'shiba2' executable:
 ```bash
 shiba2@nootnoot:~$ ./shiba2
-happynootnoises
+<password shown here>
 shiba2@nootnoot:~$
 ```
 
 ### Questions
 1. What is shiba3's password
-> happynootnoises
+> &lt;password from above&gt;
 
 ## [Section 5: Advanced File Operations] - Intro
 Explains what is in the next section - file permissions
@@ -229,8 +232,6 @@ No questions to answer - just click to confirm.
 
 ## [Section 5: Advanced File Operations] - chmod
 Describes how to use `chmod` to change file permissions.
-
-> *Author's note: Personally, I'm not keen on the "these numbers mean this, add numbers to get others" explanation as it's a little inconsistent (what do you add to get 4?). I prefer to think of the permissions as a 3-bit binary number (4's column as read, 2's column as write and 1's column as execute).*
 
 ### Questions
 1. What permissions mean the user can read the file, the group can read and write to the file, and no one else can read, write or execute the file?
@@ -264,7 +265,7 @@ Explains how to use `rm` to remove files
 2. How do you suppress all warning prompts
 > -f
 
-> *Author's note: The answer to question 1 isn't strictly correct. This also removes file recursively, rather than just in the directory. The answer should possibly be `rm *`, but using `rm` with either `*` or `-R` is dangerous and you should always make sure it's really what you want!*
+> *Author's note: The answer to question 1 isn't strictly correct. This also removes file recursively, rather than just in the directory. The answer should possibly be `rm *`, but using `rm` with either `*` or `-R` is dangerous and you should always make sure it's really what you want to do!*
 
 ## [Section 5: Advanced File Operations] - mv
 Describes how files can be renamed and moved around using `mv`.
@@ -370,11 +371,30 @@ shiba3@nootnoot:~$
 #### Run the executable
 ```bash
 shiba3@nootnoot:~$ /opt/secret/shiba4
-test1234
+<password shown here>
 shiba3@nootnoot:~$
 ```
 
 ### Questions
 1. What is shiba4's password
-> test1234
+> &lt;password from above&gt;
 
+## [Section 6: Miscellaneous] - Intro
+Intro to the miscellaneous commands section
+
+No questions to answer - just click to confirm.
+
+## [Section 6: Miscellaneous] - sudo
+Explains how to use `sudo` to run commands as a root or other user.
+
+### Questions
+1. How do you specify which user you want to run a command as.
+> -u
+
+2. How would I run whoami as user jen?
+> sudo -u jen whoami
+
+3. How do you list your current sudo privileges(what commands you can run, who you can run them as etc.)
+> -l
+
+## [Section 6: Miscellaneous] - Adding users and groups
