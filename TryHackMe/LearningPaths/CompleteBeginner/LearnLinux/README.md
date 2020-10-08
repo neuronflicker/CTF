@@ -38,6 +38,11 @@ Link: https://tryhackme.com/room/zthlinux
 * [Section 6: Miscellaneous - Intro](#section-6-miscellaneous---intro)
 * [Section 6: Miscellaneous - sudo](#section-6-miscellaneous---sudo)
 * [Section 6: Miscellaneous - Adding users and groups](#section-6-miscellaneous---adding-users-and-groups)
+* [Section 6: Miscellaneous - nano](#section-6-miscellaneous---nano)
+* [Section 6: Miscellaneous - Basic shell scripting](#section-6-miscellaneous---basic-shell-scripting)
+* [Section 6: Miscellaneous - Important Files and Directories](#section-6-miscellaneous---important-files-and-directories)
+* [Section 6: Miscellaneous - Installing packages(apt)](#section-6-miscellaneous---installing-packages-apt)
+* [Section 6: Miscellaneous - Processes](#section-6-miscellaneous---processes)
 
 ## Intro
 No questions to answer - just click to confirm and deploy the machine
@@ -398,3 +403,43 @@ Explains how to use `sudo` to run commands as a root or other user.
 > -l
 
 ## [Section 6: Miscellaneous] - Adding users and groups
+Describes how to create new users using `adduser` and groups using `addgroup`. It also explains the `usermod` command that enables you to add users to groups.
+
+### Questions
+1. How would I add the user test to the group test
+> sudo usermod -a -G test test
+
+## [Section 6: Miscellaneous] - nano
+Gives a brief introduction to `nano` for creating/editing text files.
+
+No questions to answer - just click to confirm.
+
+## [Section 6: Miscellaneous] - Basic shell scripting
+Describes how to create a shell script to run multiple commands.
+
+No questions to answer - just click to confirm.
+
+## [Section 6: Miscellaneous] - Important Files and Directories
+This section describes a set of linux system files and directories, covering:
+* /etc/passwd
+* /etc/shadow
+* /tmp
+* /etc/sudoers
+* /home
+* /root
+* /usr
+* /bin and /sbin
+* /var
+* $PATH
+
+No questions to answer - just click to confirm.
+
+## [Section 6: Miscellaneous] - Installing packages(apt)
+Describes how to use `apt` to install new packages (software) into Linux
+
+No questions to answer - just click to confirm.
+
+## [Section 6: Miscellaneous] - Processes
+Describes how to use `ps` and `top` to look at running processes, and `kill` to stop one.
+
+No questions to answer - just click to confirm.
