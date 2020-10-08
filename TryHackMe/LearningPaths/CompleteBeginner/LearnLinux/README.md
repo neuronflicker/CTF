@@ -41,7 +41,7 @@ Link: https://tryhackme.com/room/zthlinux
 * [Section 6: Miscellaneous - nano](#section-6-miscellaneous---nano)
 * [Section 6: Miscellaneous - Basic shell scripting](#section-6-miscellaneous---basic-shell-scripting)
 * [Section 6: Miscellaneous - Important Files and Directories](#section-6-miscellaneous---important-files-and-directories)
-* [Section 6: Miscellaneous - Installing packages(apt)](#section-6-miscellaneous---installing-packages-apt)
+* [Section 6: Miscellaneous - Installing packages(apt)](#section-6-miscellaneous---installing-packagesapt)
 * [Section 6: Miscellaneous - Processes](#section-6-miscellaneous---processes)
 
 ## Intro
