@@ -43,7 +43,7 @@ Link: https://tryhackme.com/room/zthlinux
 * [Section 6: Miscellaneous - Important Files and Directories](#section-6-miscellaneous---important-files-and-directories)
 * [Section 6: Miscellaneous - Installing packages(apt)](#section-6-miscellaneous---installing-packagesapt)
 * [Section 6: Miscellaneous - Processes](#section-6-miscellaneous---processes)
-* [Fin ~](#fin--)
+* [Fin ~](#fin-)
 * [Bonus Challenge - The True Ending](#bonus-challenge---the-true-ending)
 
 ## Intro
