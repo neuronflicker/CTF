@@ -43,6 +43,8 @@ Link: https://tryhackme.com/room/zthlinux
 * [Section 6: Miscellaneous - Important Files and Directories](#section-6-miscellaneous---important-files-and-directories)
 * [Section 6: Miscellaneous - Installing packages(apt)](#section-6-miscellaneous---installing-packagesapt)
 * [Section 6: Miscellaneous - Processes](#section-6-miscellaneous---processes)
+* [Fin ~](#fin--)
+* [Bonus Challenge - The True Ending](#bonus-challenge---the-true-ending)
 
 ## Intro
 No questions to answer - just click to confirm and deploy the machine
@@ -443,3 +445,184 @@ No questions to answer - just click to confirm.
 Describes how to use `ps` and `top` to look at running processes, and `kill` to stop one.
 
 No questions to answer - just click to confirm.
+
+## Fin ~
+Closing statement
+
+No questions to answer - just click to confirm.
+
+## Bonus Challenge - The True Ending
+Get the flag contained in `/root/root.txt`.
+
+### Steps
+To see the named file, we could log into the server with a user with `sudo` privileges. This may allow us to `cat` the *root.txt* file, but we may need to do more with permissions. Let's try this approach.
+
+#### Log into the server
+Deploy the machine, and then start Putty. 
+
+We can log in as any user, as we're going to find out who has sudo, so just use *shiba1*.
+
+Enter *shiba1@<IP-address-for-the-deployed-machine>* into the *Host Name* box and click *Open*.
+
+When prompted for the password, enter *shiba1* (this was given in the text of [Section 1: SSH - Putty and SSH](#section-1-ssh---putty-and-ssh)).
+
+Alternatively, use:
+```
+tc@hostcomputer:~$ ssh shiba1@<deployed-machine-IP>
+shiba1@<deployed-machine-IP>'s password:
+```
+
+#### Check the file permissions
+First we can check that a normal user can't just access the file - we don't want to waste time looking for a `sudo` user if we don't need one!
+```
+shiba1@nootnoot:~$ ls -la /root
+ls: cannot open directory '/root': Permission denied
+shiba1@nootnoot:~$ cat /root/root.txt
+cat: /root/root.txt: Permission denied
+shiba1@nootnoot:~$
+```
+It could be that one of the other *shiba* users has explicit permissions, but we may as well assume that they won't, and we need `sudo`
+
+#### Find out which users have sudo
+Although not given in the tasks, a quick [Google](https://www.google.com) (see [Google Dorking](https://tryhackme.com/room/googledorking) on [THM](https://tryhackme.com) for some advanced [Google](http://www.google.com) serching) shows there is an important file - `/etc/group` - that lists the members of groups. We can use this to find `sudo` members
+```
+shiba4@nootnoot:~$ grep sudo /etc/group
+sudo:x:27:nootnoot
+shiba1@nootnoot:~$
+```
+That was a little surprising - none of our `shiba` users have `sudo` permissions - only a user named `nootnoot` that we haven't come across before!
+
+#### Find a password for the nootnoot user
+We need to find a password for the nootnoot user so we can log in and use their `sudo` privileges.
+
+First we can try with no password, just in case:
+```
+shiba1@nootnoot:~$ su - nootnoot
+Password:
+su: Authentication failure
+shiba1@nootnoot:~$
+```
+No luck there. Let's have a look in the user's home directory:
+```
+shiba1@nootnoot:~$ ls -la /home/nootnoot/
+total 40
+drwxr-xr-x 5 nootnoot nootnoot 4096 Feb 22  2020 .
+drwxr-xr-x 8 root     root     4096 Feb 22  2020 ..
+-rw------- 1 nootnoot nootnoot 1113 Feb 22  2020 .bash_history
+-rw-r--r-- 1 nootnoot nootnoot  220 Apr  4  2018 .bash_logout
+-rw-r--r-- 1 nootnoot nootnoot 3771 Apr  4  2018 .bashrc
+drwx------ 2 nootnoot nootnoot 4096 Feb 13  2020 .cache
+drwx------ 3 nootnoot nootnoot 4096 Feb 13  2020 .gnupg
+-rw-r--r-- 1 root     root     3893 Feb 22  2020 ll
+drwxrwxr-x 3 nootnoot nootnoot 4096 Feb 22  2020 .local
+-rw-r--r-- 1 nootnoot nootnoot  807 Apr  4  2018 .profile
+-rw-r--r-- 1 nootnoot nootnoot    0 Feb 13  2020 .sudo_as_admin_successful
+shiba1@nootnoot:~$
+```
+There doesn't seem much of interest here, but the `ll` file. let's take a look at that:
+```
+shiba1@nootnoot:~$ cat /home/nootnoot/ll
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+...
+991
+992
+993
+994
+995
+996
+997
+998
+999
+1000
+shiba1@nootnoot:~$
+```
+This file just contains the numbers 1-1000, so no use to us.
+
+In previous examples, we've had binaries to execute to find the next password. Let's see if there is an executable named `nootnoot` on the system:
+```
+shiba1@nootnoot:~$ find / * | grep nootnoot > nootnoot-out.txt
+<lots of permission denied messages here>
+shiba1@nootnoot:~$ cat nootnoot-out.txt
+/home/shiba1/nootnoot-out.txt
+/home/nootnoot/.sudo_as_admin_successful
+/home/nootnoot/.profile
+/home/nootnoot/.bashrc
+/home/nootnoot/.bash_history
+/home/nootnoot/.bash_logout
+/home/nootnoot/ll
+nootnoot-out.txt
+shiba1@nootnoot:~$
+```
+So there don't seem to be any files with that name.
+
+When we did [Binary - Shiba3](#binary---shiba3), along with the executable we wanted, there was a file named `/etc/shiba/shiba4`. When I looked in this file (and others in that directory) I found it contained the password for each user. We already know there isn't a file named *nootnoot*, so let's look for anything containing *nootnoot*. Let's start by searching only small files - searching every file would take a long time! We can use `find` to find only small files, and pass `grep` as an executable to it, according to the man page for `find` and some [Googling](https://www.google.com):
+```
+shiba1@nootnoot:~$ find / -type f -size 1k -exec grep -Il "nootnoot" {} \; > nootnoot-out.txt
+<lots of permission denied messages here>
+shiba1@nootnoot:~$ cat nootnoot-out.txt
+/etc/hosts
+/etc/hostname
+/etc/subuid-
+/etc/subgid-
+/etc/group
+/etc/ssh/ssh_host_ed25519_key.pub
+/etc/ssh/ssh_host_ecdsa_key.pub
+/etc/ssh/ssh_host_dsa_key.pub
+/etc/ssh/ssh_host_rsa_key.pub
+/etc/group-
+/etc/subgid
+/etc/subuid
+/run/cloud-init/instance-data.json
+shiba1@nootnoot:~$
+```
+There's nothing of interest here. These are places where you'd expect *nootnoot* to exists, as it's also the hostname of the computer.
+
+Permissions may differ for other users, so let's try our other *shiba* users and see if we get any different results.
+
+We `su` as each user and run the above commands again.
+
+We didn't have to look far - running the grep on small files for *shiba2* gave us a new file:
+```
+shiba2@nootnoot:~$ cat nootnoot-out.txt
+/var/log/test1234
+/etc/hosts
+/etc/hostname
+/etc/subuid-
+/etc/subgid-
+/etc/group
+/etc/ssh/ssh_host_ed25519_key.pub
+/etc/ssh/ssh_host_ecdsa_key.pub
+/etc/ssh/ssh_host_dsa_key.pub
+/etc/ssh/ssh_host_rsa_key.pub
+/etc/group-
+/etc/subgid
+/etc/subuid
+/run/cloud-init/instance-data.json
+shiba2@nootnoot:~$ cat /var/log/test1234
+nootnoot:<nootnoot's password was here>
+shiba2@nootnoot:~$
+```
+
+#### Log in as nootnoot and view the root file
+```
+shiba2@nootnoot:~$ su - nootnoot
+Password:
+nootnoot@nootnoot:~$ sudo cat /root/root.txt
+[sudo] password for nootnoot:
+<final flag was here>
+nootnoot@nootnoot:~$
+```
+
+### Questions
+1. Finish this room off! What is the root.txt flag
+> &lt;flag from above&gt;
+
