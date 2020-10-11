@@ -493,7 +493,7 @@ shiba1@nootnoot:~$
 That was a little surprising - none of our *shiba* users have `sudo` permissions - only a user named *nootnoot* that we haven't come across before!
 
 #### Find a password for the nootnoot user
-We need to find a password for the nootnoot user so we can log in and use their `sudo` privileges.
+We need to find a password for the *nootnoot* user so we can log in and use their `sudo` privileges.
 
 First we can try with no password, just in case:
 ```
@@ -564,7 +564,7 @@ shiba1@nootnoot:~$
 ```
 So there don't seem to be any files with that name.
 
-When we did [Binary - Shiba3](#binary---shiba3), along with the executable we wanted, there was a file named `/etc/shiba/shiba4`. When I looked in this file (and others in that directory) I found it contained the password for that user. We already know there isn't a file named *nootnoot*, so let's look for anything containing *nootnoot*. Let's start by searching only small files - searching every file would take a long time! We can use `find` to find only small files with the `-size` flag, and pass `grep` as an executable to it, according to the man page for `find` and some [Googling](https://www.google.com):
+When we did [Binary - Shiba3](#binary---shiba3), along with the executable we wanted, there was a file named `/etc/shiba/shiba4`. When I looked in this file (and others in that directory) I found it contained the password for that user. We already know there isn't a file named *nootnoot*, so let's look for any file containing *nootnoot*. Let's start by searching only small files - searching every file would take a long time! We can use `find` to find only small files with the `-size` flag, and pass `grep` as an executable to it, according to the man page for `find` and some [Googling](https://www.google.com):
 ```
 shiba1@nootnoot:~$ find / -type f -size 1k -exec grep -Il "nootnoot" {} \; > nootnoot-out.txt
 <lots of permission denied messages here>
@@ -584,7 +584,7 @@ shiba1@nootnoot:~$ cat nootnoot-out.txt
 /run/cloud-init/instance-data.json
 shiba1@nootnoot:~$
 ```
-The `-type f` passed to `find` will find only files and not directories, and the `-exec` flag allows us to run a command on every file found. Here we run `grep`. The `-I` flag to grep stops it from searching in binary files, and the `-l` flag lists only filenames, not the lines found. This will allow us to look at the list of files found containing `nootnoot` to see if any need further investigation. The `{}` will be replaced with each file found for the `grep`, and the `\;` just terminated the `grep` command. We then redirect the output to a file, and `cat` that file once the `find` is complete.
+The `-type f` passed to `find` will find only files and not directories, and the `-exec` flag allows us to run a command on every file found. Here we run `grep`. The `-I` flag to `grep` stops it from searching in binary files, and the `-l` flag lists only filenames, not the lines found. This will allow us to look at the list of files found containing `nootnoot` to see if any need further investigation. The `{}` will be replaced with each file found, and therefore, passed to the `grep`, and the `\;` just terminates the `grep` command. We then redirect the output to a file, and `cat` that file once the `find` is complete.
 
 There's nothing of interest here. These are places where you'd expect *nootnoot* to exists, as it's also the hostname of the computer.
 
@@ -594,6 +594,8 @@ We `su` as each user and run the above commands again.
 
 We didn't have to look far - running the `find` and `grep` on small files for *shiba2* gave us a new file, and using `cat` on that file gave us the password for *nootnoot*:
 ```
+shiba2@nootnoot:~$ find / -type f -size 1k -exec grep -Il "nootnoot" {} \; > nootnoot-out.txt
+<lots of permission denied messages here>
 shiba2@nootnoot:~$ cat nootnoot-out.txt
 /var/log/test1234
 /etc/hosts
