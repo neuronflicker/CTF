@@ -14,7 +14,7 @@ Link: https://tryhackme.com/room/zthlinux
 * [Section 3: Basic File Operations - Running a Binary](#section-3-basic-file-operations---running-a-binary)
 * [Binary - Shiba1](#binary---shiba1)
 * [su](#su)
-* [Section 4: Linux Operators - Intro](#section-4-linux-operators-intro)
+* [Section 4: Linux Operators - Intro](#section-4-linux-operators---intro)
 * [Section 4: Linux Operators - ">"](#section-4-linux-operators---)
 * [Section 4: Linux Operators - ">>"](#section-4-linux-operators----1)
 * [Section 4: Linux Operators - "&&"](#section-4-linux-operators----2)
@@ -32,7 +32,7 @@ Link: https://tryhackme.com/room/zthlinux
 * [Section 5: Advanced File Operations - cp](#section-5-advanced-file-operations---cp)
 * [Section 5: Advanced file Operations - cd && mkdir](#section-5-advanced-file-operations---cd--mkdir)
 * [Section 5: Advanced File Operations - ln](#section-5-advanced-file-operations---ln)
-* [Section 5 - Advanced File Operations - find](#section-5-advanced-file-operations---find)
+* [Section 5: Advanced File Operations - find](#section-5-advanced-file-operations---find)
 * [Section 5: Advanced File Operations - grep](#section-5-advanced-file-operations---grep)
 * [Binary - Shiba3](#binary---shiba3)
 * [Section 6: Miscellaneous - Intro](#section-6-miscellaneous---intro)
@@ -60,24 +60,24 @@ A brief intro to what SSH is.
 No questions to answer - just click to confirm.
 
 ## [Section 1: SSH] - Putty and ssh
-Describes how to use Putty or a command line ssh to access the Linux machine.
+Describes how to use Putty or a command line `ssh` to access the Linux machine.
 
 No questions to answer - just follow the instructions and click to confirm.
 
 ## [Section 2: Running Commands] - Basic Command Execution
-Explains how to run a command (in this case `echo`) from the SSH shell
+Explains how to run a command (in this case `echo`) from the SSH shell.
 
 No questions to answer - just follow the instructions and click to confirm.
 
 ## [Section 2: Running Commands] - Manual Pages and Flags
-Describes how to access the man pages and apply flags/switches to a command
+Describes how to access the man pages and apply flags/switches to a command.
 
 ### Questions
 1. How would you output hello without a newline
 > echo -n hello
 
 ## [Section 3: Basic File Operations] - ls
-Describes how to use `ls` to list files in a directory
+Describes how to use `ls` to list files in a directory.
 
 ### Questions
 1. What flag outputs all entries
@@ -87,7 +87,7 @@ Describes how to use `ls` to list files in a directory
 > -l
 
 ## [Section 3: Basic File Operations] - cat
-Explains the `cat` command for outputting the contents of files to the console
+Explains the `cat` command for outputting the contents of text files to the console.
 
 ### Questions
 1. What flag numbers all output lines?
@@ -99,7 +99,7 @@ Describes the `touch` command when used for creating files.
 No questions to answer - just click to confirm.
 
 ## [Section 3: Basic File Operations] - Running a Binary
-Explains relative paths and how to run downloaded/created binaries
+Explains relative paths and how to run downloaded/created binaries.
 
 ### Questions
 1. How would you run a binary called hello using the directory shortcut . ?
@@ -112,7 +112,7 @@ Explains relative paths and how to run downloaded/created binaries
 > ../hello
 
 ## Binary - Shiba1
-This is the first challenge - run a binary to get the password for *shiba2*
+This is the first challenge - run a binary to get the password for *shiba2*.
 
 ### Steps
 #### Create a text file called noot.txt:
@@ -133,18 +133,18 @@ shiba1@nootnoot:~$
 > &lt;password from above&gt;
 
 ## su
-Describes how to use `su` to change users. We use the above password to log in as *shiba2*
+Describes how to use `su` to change users. We use the above password to log in as *shiba2*.
 
 Use this to switch to the *shiba2* user for the following tasks. 
 
-I also changed to the home directory of *shiba2* otherwise you don't have permissions for subsequent tasks. This can be done by using the `cd` command after switching users:
+> *Author's note: I also changed to the home directory of *shiba2* otherwise you don't have permissions for subsequent tasks. This can be done by using the `cd` command after switching users:*
 ```bash
 shiba1@nootnoot:~$ su shiba2
 Password:
 shiba2@nootnoot:/home/shiba1$ cd ~
 shiba2@nootnoot:~$
 ```
-or by using the `su` command by supplying the `-` flag:
+> *or by using the `su` command and using the `-` flag:*
 ```bash
 shiba1@nootnoot:~$ su - shiba2
 Password:
@@ -156,29 +156,29 @@ shiba2@nootnoot:~$
 > -s
 
 ## [Section 4: Linux Operators] - Intro
-Introduction to command line operators
+Introduction to command line operators.
 
 No questions to answer - just click to confirm.
 
 ## [Section 4: Linux Operators] - ">"
-Describes the redirection operator, `>`, and how to redirect the output of a command to a file
+Describes the redirection operator, `>`, and how to redirect the output of a command to a file.
 
 ### Questions
 1. How would you output twenty to a file called test
 > echo twenty > test
 
 ## [Section 4: Linux Operators] - ">>"
-Describes how to append text to a file in Linux, rather than erasing any existing contets as happened with `>`
+Describes how to append text to a file in Linux, rather than erasing any existing contets as happened with `>`.
 
 No questions to answer - just click to confirm.
 
 ## [Section 4: Linux Operators] - "&&"
-Describes how to run a second command if the first is successful
+Describes how to run a second command if the first is successful by using the `&&` operator.
 
 No questions to answer - just click to confirm.
 
 ## [Section 4: Linux Operators] - "&"
-Explains how `&` can run a command that takes a long time in the background, allowing you to still interact with the shell.
+Explains how `&` can run a command in the background, allowing you to still interact with the shell while it's running.
 
 No questions to answer - just click to confirm.
 
@@ -205,7 +205,7 @@ No questions to answer - just click to confirm.
 ## Binary - shiba2
 This is the next challenge, running a binary that checks that the environment variable `test1234` is set to the same as `$USER`.
 
-The output if successful is the password for *shiba3*.
+The output, if successful, is the password for *shiba3*.
 
 ### Steps
 #### Create the 'test1234' environment variable and set it equal to '$USER'
@@ -228,12 +228,12 @@ shiba2@nootnoot:~$
 > &lt;password from above&gt;
 
 ## [Section 5: Advanced File Operations] - Intro
-Explains what is in the next section - file permissions
+Explains what is in the next section - file permissions.
 
 No questions to answer - just click to confirm.
 
 ## [Section 5: Advanced File Operations] - A bit of background
-Explains where to see file permissions with `ls -al`
+Explains how to view file permissions with `ls -l` and all files (including those starting with `.`) with `ls -a`.
 
 No questions to answer - just click to confirm.
 
@@ -260,10 +260,10 @@ Explains how to use the `chown` command to change the user and group for a file.
 3. What flag allows you to operate on every file in the directory at once?
 > -R
 
-> *Author's note: The answer to question 3 isn't strictly correct, as it would change the permissions for all files within subsirectories, too. For 'every file in the directory' you should use `chown paradox *`*
+> *Author's note: The answer to question 3 isn't strictly correct, as it would change the permissions for all files within subsirectories, too. For 'every file in the directory' you should use, for example, `chown paradox *`*.
 
 ## [Section 5: Advanced File Operations] - rm
-Explains how to use `rm` to remove files
+Explains how to use `rm` to remove files.
 
 ### Questions
 1. What flag deletes every file in a directory
@@ -272,7 +272,7 @@ Explains how to use `rm` to remove files
 2. How do you suppress all warning prompts
 > -f
 
-> *Author's note: The answer to question 1 isn't strictly correct. This also removes file recursively, rather than just in the directory. The answer should possibly be `rm *`, but using `rm` with either `*` or `-R` is dangerous and you should always make sure it's really what you want to do!*
+> *Author's note: The answer to question 1 isn't strictly correct. This also removes files recursively, rather than just in the directory. The answer should possibly be `rm *`, but using `rm` with either `*` or `-R`, or both is dangerous and you should always make sure it's really what you want to do!*
 
 ## [Section 5: Advanced File Operations] - mv
 Describes how files can be renamed and moved around using `mv`.
@@ -297,13 +297,13 @@ Explains how to use `cd` to change to a different directory, and `mkdir` to crea
 > mkdir /tmp/test
 
 ## [Section 5: Advanced File Operations] - ln
-Describe how `ln` can be used to create links to reference other files/directories. It also explains the difference between hard and symbolic links.
+Describes how `ln` can be used to create links to reference other files/directories. It also explains the difference between hard and symbolic links.
 
 ### Questions
 1. How would I link /home/test/testfile to /tmp/test
 > ln /home/test/testfile /tmp/test
 
-## [Section 5 - Advanced File Operations] - find
+## [Section 5: Advanced File Operations] - find
 Describes how to use `find` to locate files on the system.
 
 ### Questions
@@ -317,7 +317,7 @@ Describes how to use `find` to locate files on the system.
 > find / -user paradox
 
 ## [Section 5: Advanced File Operations] - grep
-Describes how to use `grep` to parse data for strings
+Describes how to use `grep` to parse data for strings.
 
 ### Questions
 1. What flag lists line numbers for every string found?
@@ -327,7 +327,7 @@ Describes how to use `grep` to parse data for strings
 > grep boop /tmp/aaaa
 
 ## Binary - Shiba3
-This is the next challenge. We need to run an executable named `shiba4` that will check for a directory named `test` in the user's home directory, that contains a file named `test1234`.
+This is the next challenge. We need to run an executable named `shiba4` that will check for a directory named `test` in the user's home directory, that should contain a file named `test1234`.
 
 ### Steps
 #### Find the shiba4 executable
@@ -364,7 +364,7 @@ shiba3@nootnoot:~$ ls -l /etc/shiba/shiba4
 We can see that the `/opt/secret/shiba4` is executable, and `/etc/shiba/shiba4` is not, so `/opt/secret/shiba4` is probably what we want.
 
 #### Create the test directory and test1234 file
-> *Author's note: The machine seems to already have the `test` directory and `test1234` file, so I didn't need to create them. However, here's how you would do it if you need to*
+> *Author's note: The machine seems to already have the `test` directory and `test1234` file, so I didn't need to create them. However, here's how you would do it if you need to.*
 ```bash
 shiba3@nootnoot:~$ mkdir test
 shiba3@nootnoot:~$ touch test/test1234
@@ -387,12 +387,12 @@ shiba3@nootnoot:~$
 > &lt;password from above&gt;
 
 ## [Section 6: Miscellaneous] - Intro
-Intro to the miscellaneous commands section
+Intro to the miscellaneous commands section.
 
 No questions to answer - just click to confirm.
 
 ## [Section 6: Miscellaneous] - sudo
-Explains how to use `sudo` to run commands as a root or other user.
+Explains how to use `sudo` to run commands as a *root* or other user.
 
 ### Questions
 1. How do you specify which user you want to run a command as.
@@ -437,7 +437,7 @@ This section describes a set of linux system files and directories, covering:
 No questions to answer - just click to confirm.
 
 ## [Section 6: Miscellaneous] - Installing packages(apt)
-Describes how to use `apt` to install new packages (software) into Linux
+Describes how to use `apt` to install new packages (software) in Linux.
 
 No questions to answer - just click to confirm.
 
@@ -447,7 +447,7 @@ Describes how to use `ps` and `top` to look at running processes, and `kill` to 
 No questions to answer - just click to confirm.
 
 ## Fin ~
-Closing statement
+Closing statement.
 
 No questions to answer - just click to confirm.
 
@@ -481,16 +481,16 @@ shiba1@nootnoot:~$ cat /root/root.txt
 cat: /root/root.txt: Permission denied
 shiba1@nootnoot:~$
 ```
-It could be that one of the other *shiba* users has explicit permissions, but we may as well assume that they won't, and we need `sudo`
+It could be that one of the other *shiba* users has explicit permissions, but we may as well assume that they won't, and we need `sudo`.
 
 #### Find out which users have sudo
-Although not given in the tasks, a quick [Google](https://www.google.com) (see [Google Dorking](https://tryhackme.com/room/googledorking) on [THM](https://tryhackme.com) for some advanced [Google](http://www.google.com) serching) shows there is an important file - `/etc/group` - that lists the members of groups. We can use this to find `sudo` members
+Although not mentioned in the tasks, a quick [Google](https://www.google.com) (see [Google Dorking](https://tryhackme.com/room/googledorking) on [THM](https://tryhackme.com) for some advanced [Google](http://www.google.com) searching techniques) shows there is an important file - `/etc/group` - that lists the members of groups. We can use this to find `sudo` members
 ```
 shiba4@nootnoot:~$ grep sudo /etc/group
 sudo:x:27:nootnoot
 shiba1@nootnoot:~$
 ```
-That was a little surprising - none of our `shiba` users have `sudo` permissions - only a user named `nootnoot` that we haven't come across before!
+That was a little surprising - none of our *shiba* users have `sudo` permissions - only a user named *nootnoot* that we haven't come across before!
 
 #### Find a password for the nootnoot user
 We need to find a password for the nootnoot user so we can log in and use their `sudo` privileges.
@@ -519,7 +519,7 @@ drwxrwxr-x 3 nootnoot nootnoot 4096 Feb 22  2020 .local
 -rw-r--r-- 1 nootnoot nootnoot    0 Feb 13  2020 .sudo_as_admin_successful
 shiba1@nootnoot:~$
 ```
-There doesn't seem much of interest here, but the `ll` file. let's take a look at that:
+There doesn't seem much of interest here, except the `ll` file. let's take a look at that:
 ```
 shiba1@nootnoot:~$ cat /home/nootnoot/ll
 1
@@ -545,7 +545,7 @@ shiba1@nootnoot:~$ cat /home/nootnoot/ll
 1000
 shiba1@nootnoot:~$
 ```
-This file just contains the numbers 1-1000, so no use to us.
+This file just contains the numbers 1-1000, so it's of no use to us.
 
 In previous examples, we've had binaries to execute to find the next password. Let's see if there is an executable named `nootnoot` on the system:
 ```
@@ -564,7 +564,7 @@ shiba1@nootnoot:~$
 ```
 So there don't seem to be any files with that name.
 
-When we did [Binary - Shiba3](#binary---shiba3), along with the executable we wanted, there was a file named `/etc/shiba/shiba4`. When I looked in this file (and others in that directory) I found it contained the password for each user. We already know there isn't a file named *nootnoot*, so let's look for anything containing *nootnoot*. Let's start by searching only small files - searching every file would take a long time! We can use `find` to find only small files, and pass `grep` as an executable to it, according to the man page for `find` and some [Googling](https://www.google.com):
+When we did [Binary - Shiba3](#binary---shiba3), along with the executable we wanted, there was a file named `/etc/shiba/shiba4`. When I looked in this file (and others in that directory) I found it contained the password for that user. We already know there isn't a file named *nootnoot*, so let's look for anything containing *nootnoot*. Let's start by searching only small files - searching every file would take a long time! We can use `find` to find only small files with the `-size` flag, and pass `grep` as an executable to it, according to the man page for `find` and some [Googling](https://www.google.com):
 ```
 shiba1@nootnoot:~$ find / -type f -size 1k -exec grep -Il "nootnoot" {} \; > nootnoot-out.txt
 <lots of permission denied messages here>
@@ -584,13 +584,15 @@ shiba1@nootnoot:~$ cat nootnoot-out.txt
 /run/cloud-init/instance-data.json
 shiba1@nootnoot:~$
 ```
+The `-type f` passed to `find` will find only files and not directories, and the `-exec` flag allows us to run a command on every file found. Here we run `grep`. The `-I` flag to grep stops it from searching in binary files, and the `-l` flag lists only filenames, not the lines found. This will allow us to look at the list of files found containing `nootnoot` to see if any need further investigation. The `{}` will be replaced with each file found for the `grep`, and the `\;` just terminated the `grep` command. We then redirect the output to a file, and `cat` that file once the `find` is complete.
+
 There's nothing of interest here. These are places where you'd expect *nootnoot* to exists, as it's also the hostname of the computer.
 
 Permissions may differ for other users, so let's try our other *shiba* users and see if we get any different results.
 
 We `su` as each user and run the above commands again.
 
-We didn't have to look far - running the grep on small files for *shiba2* gave us a new file:
+We didn't have to look far - running the `find` and `grep` on small files for *shiba2* gave us a new file, and using `cat` on that file gave us the password for *nootnoot*:
 ```
 shiba2@nootnoot:~$ cat nootnoot-out.txt
 /var/log/test1234
