@@ -17,3 +17,8 @@ Write-up: [Introductory Research](LearningPaths/CompleteBeginner/IntroductoryRes
 Link: https://tryhackme.com/room/zthlinux
 
 Write-up: [Learn Linux](LearningPaths/CompleteBeginner/LearnLinux/README.md)
+
+## Linux Challenges
+Link: https://tryhackme.com/room/linuxctf
+
+Write-up: [Linux Challenges](LearningPaths/CompleteBeginner/LinuxChallenges/README.md)
