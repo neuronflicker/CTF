@@ -62,7 +62,7 @@ bob@ip-10-10-132-59:~$
 Flag 3 is located where bob's bash history gets stored.
 
 #### Steps
-We can use `ls -a` to see what history files are available (ending with *_history*) and then `cat` those we see to find which contain the flag. As the shell is *bash*, it's likely to be *.bash_history*:
+We can use `ls -a` to see what history files are available (ending with *_history*) and then `cat` those we see to find which contains the flag. As the shell is *bash*, it's likely to be *.bash_history*:
 ```
 bob@ip-10-10-132-59:~$ ls -a
 .              .cache     Downloads     .gconf         Music           Public            .viminfo     .xsession-errors
@@ -152,13 +152,13 @@ bob@ip-10-10-132-59:~$
 
 #### Steps
 First we need to use `find` to locate *flag6.txt*, then we can use `grep` to locate the flag within the file.
-```
+<pre>
 bob@ip-10-10-132-59:~$ find / -name flag6.txt 2>/dev/null
 /home/flag6.txt
 bob@ip-10-10-132-59:~$ grep c9 ../flag6.txt
-Sed sollicitudin eros quis vulputate rutrum. Curabitur mauris elit, elementum quis sapien sed, ullamcorper pellentesque neque. Aliquam erat volutpat. Cras vehicula mauris vel lectus hendrerit, sed malesuada ipsum consectetur. Donec in enim id erat condimentum vestibulum <flag 6 was here> vitae eget nisi. Suspendisse eget commodo libero. Mauris eget gravida quam, a interdum orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque eu nisi non ligula tempor efficitur. Etiam eleifend, odio vel bibendum mattis, purus metus consectetur turpis, eu dignissim elit nunc at tortor. Mauris sapien enim, elementum faucibus magna at, rutrum venenatis ipsum.
+Sed sollicitudin eros quis vulputate rutrum. Curabitur mauris elit, elementum quis sapien sed, ullamcorper pellentesque neque. Aliquam erat volutpat. Cras vehicula mauris vel lectus hendrerit, sed malesuada ipsum consectetur. Donec in enim id erat condimentum vestibulum <b>&lt;flag 6 was here&gt;</b> vitae eget nisi. Suspendisse eget commodo libero. Mauris eget gravida quam, a interdum orci. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque eu nisi non ligula tempor efficitur. Etiam eleifend, odio vel bibendum mattis, purus metus consectetur turpis, eu dignissim elit nunc at tortor. Mauris sapien enim, elementum faucibus magna at, rutrum venenatis ipsum.
 bob@ip-10-10-132-59:~$
-```
+</pre>
 #### Answer
 > &lt;flag 6 from above&gt;
 
