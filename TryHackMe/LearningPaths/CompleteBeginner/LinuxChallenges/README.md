@@ -4,6 +4,7 @@ Link: https://tryhackme.com/room/linuxctf
 ## Tasks
 * [Task 1: Linux Challenges Intro](#task-1-linux-challenges-intro)
 * [Task 2: The Basics](#task-2-the-basics)
+* [Task 3: Linux Functionality](#task-3-linux-functionality)
 
 ## Task 1: Linux Challenges Intro
 Explains the purpose of this room, some of the commands and techniques you'll be expected to use, and how to deploy the machine
@@ -19,7 +20,9 @@ How many visible files can you see in garrys home directory?
 > *Author's note: Initially I did `ls -la` which shows 7 files and 1 directory, but you should just use `ls` for this task.*
 
 ## Task 2: The Basics
-A set of tasks to perform using the basic Linux commands.
+This set of tasks will go over the basic linux commands.
+
+Each question might require you to switch between another user to find the answer!
 
 ### Question 1
 What is flag 1?
@@ -298,3 +301,274 @@ bob@ip-10-10-132-59:~$
 #### Answer
 > &lt;flag 10 was a username&gt;
 
+## Task 3: Linux Functionality
+Now we have used the basic Linux commands to find the first 10 flags, we will move onto using more functions that Linux has to offer.
+
+### Question 1
+Run the command flag11. Locate where your command alias are stored and get flag 11.
+
+#### Steps
+We should run the `flag11` command and see what it does. Aliases in *bash* are usually created in the *~/.bashrc* file.
+```
+bob@ip-10-10-197-121:~$ flag11
+You need to look where the alias are created...
+bob@ip-10-10-197-121:~$ cat ~/.bashrc
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+<--snipped here-->
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+#custom alias
+alias flag11='echo "You need to look where the alias are created..."' #<flag 11 was here>
+...
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+bob@ip-10-10-197-121:~$
+```
+#### Answer
+> &lt;flag 11 from above&gt;
+
+### Question 2
+Flag12 is located were MOTD's are usually found on an Ubuntu OS. What is flag12?
+
+#### Steps
+On Ubuntu, the Message of The Day (MOTD) is stored in */etc/update-motd.d/*, though it can sometimes be in */etc/motd* if there is a custom directory. These directories often store a set of files that go together to make the final message. Let's see what we have on the system:
+```
+ob@ip-10-10-197-121:~$ ls /etc/update-motd.d/
+00-header     51-cloudguest         91-release-upgrade  98-fsck-at-reboot   99-esm
+10-help-text  90-updates-available  97-overlayroot      98-reboot-required  logo.txt
+bob@ip-10-10-197-121:~$ grep -i flag /etc/update-motd.d/*
+/etc/update-motd.d/00-header:# Flag12: <flag 12 was here>
+bob@ip-10-10-197-121:~$
+```
+#### Answer
+> &lt;flag 12 from above&gt;
+
+### Question 3
+Find the difference between two script files to find flag 13.
+
+#### Steps
+There is a directory in the home directory that probably contains the script files we need to find the difference between. We can use `diff` to show the differences between two files.
+```
+bob@ip-10-10-197-121:~$ ls
+Desktop  Documents  Downloads  flag13  flag21.php  flag2.txt  flag8.tar.gz  Music  Pictures  Public  Templates  Videos
+bob@ip-10-10-197-121:~$ cd flag13/
+bob@ip-10-10-197-121:~/flag13$ ls
+script1  script2
+bob@ip-10-10-197-121:~/flag13$ diff script1 script2
+2437c2437
+< Lightoller sees Smith walking stiffly toward him and quickly goes to him. He yells into the Captain's ear, through cupped hands, over the roar of the steam...
+---
+> Lightoller sees <flag 13 was here> Smith walking stiffly toward him and quickly goes to him. He yells into the Captain's ear, through cupped hands, over the roar of the steam...
+bob@ip-10-10-197-121:~/flag13$
+```
+
+#### Answer
+> &lt;flag 13 from above&gt;
+
+### Question 4
+Where on the file system are logs typically stored? Find flag 14.
+
+#### Steps
+Logs on linux are stored in */var/log/*. Let's look in there and see if we can find the flag.
+```
+bob@ip-10-10-197-121:~/flag13$ ls /var/log/
+alternatives.log    auth.log.2.gz          dpkg.log          hp             speech-dispatcher    wtmp.1
+alternatives.log.1  btmp                   dpkg.log.1        kern.log       syslog               Xorg.0.log
+amazon              btmp.1                 flagtourteen.txt  kern.log.1     syslog.1             Xorg.0.log.old
+apache2             cloud-init.log         fontconfig.log    kern.log.2.gz  syslog.2.gz          xrdp-sesman.log
+apt                 cloud-init-output.log  fsck              lastlog        syslog.3.gz
+auth.log            cups                   gdm3              lxd            unattended-upgrades
+auth.log.1          dist-upgrade           gpu-manager.log   mysql          wtmp
+bob@ip-10-10-197-121:~/flag13$ cat /var/log/flagtourteen.txt
+<-- snipped here -->
+Boy desirous families prepared gay reserved add ecstatic say. Replied joy age visitor nothing cottage. Mrs door paid led loud sure easy read. Hastily at perhaps as neither or ye fertile tedious visitor. Use fine bed none call busy dull when. Quiet ought match my right by table means. Principles up do in me favourable affronting. Twenty mother denied effect we to do on.
+
+Situation admitting promotion at or to perceived be. Mr acuteness we as estimable enjoyment up. An held late as felt know. Learn do allow solid to grave. Middleton suspicion age her attention. Chiefly several bed its wishing. Is so moments on chamber pressed to. Doubtful yet way properly answered humanity its desirous. Minuter believe service arrived civilly add all. Acuteness allowance an at eagerness favourite in extensive exquisite ye.
+
+May indulgence difficulty ham can put especially. Bringing remember for supplied her why was confined. Middleton principle did she procuring extensive believing add. Weather adapted prepare oh is calling. These wrong of he which there smile to my front. He fruit oh enjoy it of whose table. Cultivated occasional old her unpleasing unpleasant. At as do be against pasture covered viewing started. Enjoyed me settled mr respect no spirits civilly.
+
+Affronting everything discretion men now own did. Still round match we to. Frankness pronounce daughters remainder extensive has but. Happiness cordially one determine concluded fat. Plenty season beyond by hardly giving of. Consulted or acuteness dejection an smallness if. Outward general passage another as it. Very his are come man walk one next. Delighted prevailed supported too not remainder perpetual who furnished. Nay affronting bed projection compliment instrument.
+
+<flag 14 was here>
+bob@ip-10-10-197-121:~/flag13$
+```
+#### Answer
+> &lt;flag 14 from above&gt;
+
+### Question 5
+Can you find information about the system, such as the kernel version etc.
+
+Find flag 15.
+
+#### Steps
+First we can try `uname -r` which displays the kernel version. Other information is usually given with `uname -a`.
+```
+bob@ip-10-10-197-121:~$ uname -r
+4.4.0-1075-aws
+bob@ip-10-10-197-121:~$ uname -a
+Linux ip-10-10-197-121 4.4.0-1075-aws #85-Ubuntu SMP Thu Jan 17 17:15:12 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+bob@ip-10-10-197-121:~$
+```
+Neither of these gave us anything that looked like a flag.
+
+Maybe we need to look at the files in */proc* which is where this information is usually stored.
+```
+bob@ip-10-10-197-121:~$ grep -iI flag /proc/* 2>/dev/null
+/proc/cpuinfo:flags             : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm invpcid_single kaiser fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt
+/proc/kallsyms:0000000000000000 A xen_mc_irq_flags
+/proc/kallsyms:0000000000000000 A nop_txn_flags
+/proc/kallsyms:0000000000000000 T perf_misc_flags
+/proc/kallsyms:0000000000000000 t __uncore_set_flag_sel_show
+<-- snipped here -->
+/proc/kallsyms:0000000000000000 t btrfs_ioctl_subvol_setflags   [btrfs]
+/proc/kallsyms:0000000000000000 t btrfs_update_iflags   [btrfs]
+/proc/kallsyms:0000000000000000 t btrfs_inherit_iflags  [btrfs]
+/proc/kallsyms:0000000000000000 t reada_tree_block_flagged      [btrfs]
+/proc/kallsyms:0000000000000000 t btrfs_set_disk_extent_flags   [btrfs]
+bob@ip-10-10-197-121:~$
+```
+This gave lots of lines with *flag* in them, but none is what we want.
+
+Another couple of places to look are */etc/os-release* and */etc/lsb-release* which have similar information to the previous locations.
+```
+bob@ip-10-10-197-121:~$ cat /etc/os-release
+NAME="Ubuntu"
+VERSION="16.04.5 LTS (Xenial Xerus)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 16.04.5 LTS"
+VERSION_ID="16.04"
+HOME_URL="http://www.ubuntu.com/"
+SUPPORT_URL="http://help.ubuntu.com/"
+BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
+VERSION_CODENAME=xenial
+UBUNTU_CODENAME=xenial
+bob@ip-10-10-197-121:~$ cat /etc/lsb-release
+FLAG_15=<flag 15 was here>
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=16.04
+DISTRIB_CODENAME=xenial
+DISTRIB_DESCRIPTION="Ubuntu 16.04.5 LTS"
+bob@ip-10-10-197-121:~$
+```
+Found it!
+
+#### Answer
+> &lt;flag 15 from above&gt;
+
+### Question 6
+Flag 16 lies within another system mount.
+
+#### Steps
+In Linux, other mounts are ususally found at */mnt* or */media*. Let's take a look.
+```
+bob@ip-10-10-197-121:~$ ls /mnt/
+bob@ip-10-10-197-121:~$ ls /media/
+f
+bob@ip-10-10-197-121:~$ ls /media/f
+l
+bob@ip-10-10-197-121:~$ ls /media/f/l
+a
+bob@ip-10-10-197-121:~$ ls /media/f/l/a
+g
+bob@ip-10-10-197-121:~$ ls /media/f/l/a/g
+1
+bob@ip-10-10-197-121:~$ ls /media/f/l/a/g/1
+6
+bob@ip-10-10-197-121:~$ ls /media/f/l/a/g/1/6
+is
+bob@ip-10-10-197-121:~$ ls /media/f/l/a/g/1/6/is
+<flag 16 was here>
+bob@ip-10-10-197-121:~$
+```
+#### Answer
+> &lt;flag 16 from above&gt;
+
+### Question 7
+Login to alice's account and get flag 17. Her password is TryHackMe123
+
+#### Steps
+```
+bob@ip-10-10-197-121:~$ su - alice
+Password:
+alice@ip-10-10-197-121:~$ ls
+flag17  flag19  flag20  flag22  flag23  flag32.mp3
+alice@ip-10-10-197-121:~$ cat flag17
+<flag 17 was here>
+alice@ip-10-10-197-121:~$
+```
+
+#### Answer
+> &lt;flag 17 from above&gt;
+
+### Question 8
+Find the hidden flag 18.
+
+#### Steps
+```
+alice@ip-10-10-197-121:~$ ls -la
+total 172
+drwxr-xr-x 4 alice alice  4096 Feb 20  2019 .
+drwxr-xr-x 6 root  root   4096 Feb 20  2019 ..
+-rw------- 1 alice alice   518 Mar  7  2019 .bash_history
+-rw-r--r-- 1 alice alice   220 Feb 18  2019 .bash_logout
+-rw-r--r-- 1 alice alice  3771 Feb 18  2019 .bashrc
+drwx------ 2 alice alice  4096 Feb 18  2019 .cache
+-rw-rw-r-- 1 alice alice    33 Feb 18  2019 flag17
+-rw-rw-r-- 1 alice alice    33 Feb 18  2019 .flag18
+-rw-rw-r-- 1 alice alice 99001 Feb 19  2019 flag19
+-rw-rw-r-- 1 alice alice    45 Feb 19  2019 flag20
+-rw-rw-r-- 1 alice alice    96 Feb 19  2019 flag22
+-rw-rw-r-- 1 alice alice    33 Feb 19  2019 flag23
+-rw-rw-r-- 1 alice alice 10560 Feb 19  2019 flag32.mp3
+-rw------- 1 alice alice    32 Feb 19  2019 .lesshst
+-rw-r--r-- 1 alice alice   655 Feb 18  2019 .profile
+drw-r--r-- 2 alice alice  4096 Mar  7  2019 .ssh
+-rw------- 1 alice alice  3075 Feb 19  2019 .viminfo
+alice@ip-10-10-197-121:~$ cat .flag18
+<flag 18 was here>
+alice@ip-10-10-197-121:~$
+```
+#### Answer
+> &lt;flag 18 from above&gt;
+
+### Question 19
+Read the 2345th line of the file that contains flag 19.
+
+#### Steps
+We can use the `sed` Stream EDitor command with the `-n` flag to suppress the output of every line not matching the pattern, with `'2345p'` being used to match and output the specified line number(s).
+```
+alice@ip-10-10-197-121:~$ sed -n '2345p' flag19
+<flag 19 was here>
+alice@ip-10-10-197-121:~$
+```
+#### Answer
+> &lt;flag 19 from above&gt;
