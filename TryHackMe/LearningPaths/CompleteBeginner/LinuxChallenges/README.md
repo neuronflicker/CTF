@@ -6,6 +6,7 @@ Link: https://tryhackme.com/room/linuxctf
 * [Task 2: The Basics](#task-2-the-basics)
 * [Task 3: Linux Functionality](#task-3-linux-functionality)
 * [Task 4: Data Representation, Strings and Permissions](#task-4-data-representation-strings-and-permissions)
+* [Task 5: SQL, FTP, Groups and RDP](#task-5-sql-ftp-groups-and-rdp)
 
 ## Task 1: Linux Challenges Intro
 Explains the purpose of this room, some of the commands and techniques you'll be expected to use, and how to deploy the machine
@@ -816,3 +817,254 @@ alice@ip-10-10-207-54:~$
 ```
 #### Answer
 > &lt;flag 29 from above&gt;
+
+## Task 5: SQL, FTP, Groups and RDP
+This task will have you finding flags in an SQL database, downloading files from the file system to your local system and more!
+
+### Question 1
+Use curl to find flag 30.
+
+#### Steps
+We can use `curl` to transfer data across a network using URLs. Let's try using `curl` with the machine IP.
+```
+alice@ip-10-10-38-204:~$ curl 10.10.38.204
+flag30:<flag 30 was here>
+alice@ip-10-10-38-204:~$
+```
+#### Answer
+> &lt;flag 30 from above&gt;
+
+### Question 2
+Flag 31 is a MySQL database name.
+
+MySQL username: root
+MySQL password: hello
+
+#### Steps
+We can use the `mysql` command to log into the database server. We can pass the username (*root*) using the `-u` flag, and tell it to request a password with the `-p` flag. Once were at the `mysql` command prompt, we can use `show databases;` to display all the database names
+```
+alice@ip-10-10-38-204:~$ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.7.25-0ubuntu0.16.04.2 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++-------------------------------------------+
+| Database                                  |
++-------------------------------------------+
+| information_schema                        |
+| database_<flag 31 was here>               |
+| mysql                                     |
+| performance_schema                        |
+| sys                                       |
++-------------------------------------------+
+5 rows in set (0.01 sec)
+
+mysql>
+```
+#### Answer
+> &lt;flag 31 from above&gt;
+
+### Question 3
+Bonus flag question, get data out of the table from the database you found above!
+
+#### Steps
+We can use a database in `mysql` with the command `use <database name>`, and then we can see what tables it has with `show tables;`. Finally, we can display the data from a table with `select * from flags`.
+```
+mysql> use database_<flag 31 from above>
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-----------------------------------------------------+
+| Tables_in_database_<flag 31 from above>             |
++-----------------------------------------------------+
+| flags                                               |
++-----------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from flags;
++----+----------------------------------+
+| id | flag                             |
++----+----------------------------------+
+|  1 | <bonus flag was here>            |
++----+----------------------------------+
+1 row in set (0.00 sec)
+
+mysql>
+```
+#### Answer
+> &lt;bonus flag from above&gt;
+
+### Question 4
+Using SCP, FileZilla or another FTP client download flag32.mp3 to reveal flag 32.
+
+#### Steps
+The *flag32.mp3* file is in the home directory of *alice*.
+```
+alice@ip-10-10-38-204:~$ ls
+flag17  flag19  flag20  flag22  flag23  flag32.mp3
+alice@ip-10-10-38-204:~$
+```
+I used [*FileZilla*](https://filezilla-project.org/) for this questions as I already had it installed. I just used the quick connect feature at the top, entered the IP of the TryHackMe and the details for *alice*.
+
+![Quick connect](quick_connect.png)
+
+Once I clicked the *Quick connect* button, I could see the home directory of *alice* in the browse area.
+
+![Browse directories](browse_alice.png)
+
+It's just a case of dragging and dropping the file into a local directory, and then listening to the MP3 file. This will tell you the flag value.
+
+#### Answer
+> &lt;What you hear in the MP3 file&gt;
+
+### Question 5
+Flag 33 is located where your personal $PATH's are stored.
+
+#### Steps
+In Linux it's usual to set the user's `$PATH` locations using the *.profile* file. We can use `cat` on the *.profile* file belonging to *alice*, but that had no flags in it. *garry* also had no flags in his *.profile*. However, the *.profile* file for *bob* contained the flag:
+```
+bob@ip-10-10-38-204:~$ cat .profile | grep -i flag
+#Flag 33: <flag 33 was here>
+bob@ip-10-10-38-204:~$
+```
+#### Answer
+> &lt;flag 33 from above&gt;
+
+### Question 6
+Switch your account back to bob. Using system variables, what is flag34?
+
+#### Steps
+You can view all system variables using the `set` command. Let's try to see if any of them contain the word *flag*.
+```
+bob@ip-10-10-38-204:~$ set | grep -i flag
+flag34=<flag 34 was here>
+    local flags_color="$c_lblue";
+        s="$flags_color$s";
+    local exclude flag i OPTIND=1;
+    while getopts "c:i:n:p:w:" flag "$@"; do
+        case $flag in
+    local exclude= flag outx errx inx OPTIND=1;
+    while getopts "n:e:o:i:s" flag "$@"; do
+        case $flag in
+    local configfile flag prefix;
+    while getopts "acF:p:" flag "$@"; do
+        case $flag in
+bob@ip-10-10-38-204:~$
+```
+The *flag34* variable is what we want. We could also `echo` this variable.
+```
+bob@ip-10-10-38-204:~$ echo $flag34
+<flag 34 was here>
+bob@ip-10-10-38-204:~$
+```
+
+#### Answer
+> &lt;flag 34 from above&gt;
+
+### Question 7
+Look at all groups created on the system. What is flag 35?
+
+#### Steps
+We can look at all the groups by using `cat` on the file */etc/group*. Look through the groups and we can see one that looks like a flag.
+```
+bob@ip-10-10-38-204:~$ cat /etc/group | grep -i flag
+flag35_<flag 35 was here>:x:1005:
+bob@ip-10-10-38-204:~$
+```
+#### Answer
+> &lt;flag 35 from above&gt;
+
+### Question 8
+Find the user which is apart of the "hacker" group and read flag 36.
+
+#### Steps
+We can find out who is part of the *hacker* group by looking in the */etc/group* file.
+```
+bob@ip-10-10-38-204:~$ cat /etc/group | grep -i hacker
+hacker:x:1004:bob
+bob@ip-10-10-38-204:~$
+```
+The *bob* user is part of the *hacker* group. So where is *flag36*? 
+
+Looking in the home directory for *bob*, it's not there.
+```
+bob@ip-10-10-38-204:~$ ls -la
+total 204
+drwxr-xr-x 21 bob  bob   4096 Feb 20  2019 .
+drwxr-xr-x  6 root root  4096 Feb 20  2019 ..
+-rw-rw-r--  1 bob  bob    273 Feb 20  2019 .bash_history
+-rw-r--r--  1 bob  bob    220 Feb 18  2019 .bash_logout
+-rw-r--r--  1 bob  bob   3890 Feb 19  2019 .bashrc
+drwx------ 11 bob  bob   4096 Feb 20  2019 .cache
+drwx------ 12 bob  bob   4096 Feb 20  2019 .config
+drwx------  3 bob  bob   4096 Feb 19  2019 .dbus
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Desktop
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Documents
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Downloads
+drwxrwxr-x  2 bob  bob   4096 Feb 18  2019 flag13
+-rw-rw-r--  1 bob  bob     65 Feb 20  2019 flag21.php
+-rw-rw-r--  1 bob  bob     41 Feb 18  2019 flag2.txt
+-rw-rw-r--  1 bob  bob    149 Feb 18  2019 flag8.tar.gz
+drwx------  2 bob  bob   4096 Feb 19  2019 .gconf
+drwx------  3 bob  bob   4096 Feb 20  2019 .gnupg
+-rw-------  1 bob  bob   1388 Feb 20  2019 .ICEauthority
+drwxrwxr-x  3 bob  bob   4096 Feb 19  2019 .local
+drwx------  5 bob  bob   4096 Feb 20  2019 .mozilla
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Music
+-rw-------  1 bob  bob     18 Feb 19  2019 .mysql_history
+drwxrwxr-x  2 bob  bob   4096 Feb 18  2019 .nano
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Pictures
+-rw-r--r--  1 bob  bob    699 Feb 19  2019 .profile
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Public
+-rw-rw-r--  1 bob  bob     66 Feb 18  2019 .selected_editor
+drwx------  2 bob  bob   4096 Feb 18  2019 .ssh
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Templates
+drwxr-xr-x  2 bob  bob   4096 Feb 19  2019 Videos
+-rw-------  1 bob  bob   4595 Feb 20  2019 .viminfo
+drwx------  2 bob  bob   4096 Feb 19  2019 .vnc
+-rw-------  1 bob  bob    214 Feb 19  2019 .Xauthority
+-rwxrwxr-x  1 bob  bob     14 Feb 19  2019 .Xclients
+-rw-rw-r--  1 bob  bob     14 Feb 19  2019 .xsession
+-rw-------  1 bob  bob  55891 Feb 20  2019 .xsession-errors
+bob@ip-10-10-38-204:~$
+```
+So let's try and find it with `find`.
+```
+bob@ip-10-10-38-204:~$ find / -name "flag*" 2>/dev/null
+/var/log/flagtourteen.txt
+/lib/terminfo/E/flag5.txt
+/home/flag27
+...
+/etc/flag36
+/sys/devices/pnp0/00:06/tty/ttyS0/flags
+/sys/devices/vif-0/net/eth0/flags
+/sys/devices/virtual/net/lo/flags
+...
+/usr/src/linux-headers-4.4.0-1075-aws/include/config/zone/dma/flag.h
+/usr/lib/python3/dist-packages/reportlab/graphics/widgets/flags.py
+/usr/lib/python3/dist-packages/reportlab/graphics/widgets/__pycache__/flags.cpython-35.pyc
+bob@ip-10-10-38-204:~$
+```
+We've found it in */etc/flag36*. Let's take a look.
+```
+ls -la /etc/flag36
+-rw-r----- 1 root hacker 33 Feb 19  2019 /etc/flag36
+bob@ip-10-10-38-204:~$ cat /etc/flag36
+<flag 36 was here>
+bob@ip-10-10-38-204:~$
+```
+
+#### Answer
+> &lt;flag 36 fom above&gt;
