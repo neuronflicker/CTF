@@ -26,7 +26,7 @@ The flag is the plaintext password.
 > TL;DR: The steps will describe the way we got to the answer for our own learning records. If you just want to know what the answer was, jump to the [solution](#solution)
 
 ### Steps
-From the description, we can see that we need to work out a password of 5 lowercase characters that when the salt is added to the end, the MD5 sum of the string give the hash 2bafea54caf6f8d718be0f234793a9be. For example, the passoword could be `passw`, with the salt it becomes `passw04532@#!!`, and then the MD5 sum should be calculated and tested for a match to the given MD5. In a bash scripts we could write:
+From the description, we can see that we need to work out a password of 5 lowercase characters. When the salt is added to the end of that password, the MD5 sum of the string should give the hash 2bafea54caf6f8d718be0f234793a9be. For example, the passoword could be `passw`, with the salt it becomes `passw04532@#!!`, and then the MD5 sum should be calculated and tested for a match to the given MD5. In a bash script we could write:
 ```bash
 pass="passw04532@#!!"
 expected=2bafea54caf6f8d718be0f234793a9be
@@ -67,7 +67,7 @@ std::string exec(const std::string &cmd)
 ```
 This function was taken from [here](https://stackoverflow.com/a/478960).
 
-Which was passed a command similar to the one from the bash script above, but for each combination of the 5 characters. However, this was still slow, so we went the whole hog, and did the MD5 calculation in C++ as well.
+The `exec` function was passed a command similar to the one from the bash script above, but for each combination of the 5 characters. However, this was still slow, so we went the whole hog, and did the MD5 calculation in C++ as well.
 
 # Solution
 After finding the *bash* script and the C++ program calling into *bash* too slow, we decided to write a fully C++ program to calculate the result. This used MD5 code taken from [here](http://www.zedwood.com/article/cpp-md5-function).
@@ -171,4 +171,4 @@ Current password: yaaaa
 Current password: zaaaa
 Current password: {aaaa
 ```
-This gave us the flag.
+This ran quickly and gave us the flag.
