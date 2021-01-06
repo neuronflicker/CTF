@@ -14,4 +14,10 @@ Upon torturing the messenger for an explaination, he gestured a V with his finge
 Maybe he just wanted some peace?
 
 ## Write-up
-Write-up coming soon!
+We know that the flags for the [Brixel CTF](https://ctf.brixel.space) are in the format `brixelCTF{<flag>}`, so we can guess that the `gwncjqHYK{uneefsfutqn}` part of the message is the flag. If we assume a Caeser cipher, we can see that *g* becomes *b* if we subtract 5 letters, and *w* becomes *r*. As the messenger gave a 'V' sign (which is 5 in Roman numerals), we can see that this is probably our solution.
+
+So we now use a Caesar cipher of 5 characters backwards over the whole message we get:
+  *the flag is brixelCTF{&lt;flag was here&gt;}*
+
+> Note: I did this conversion manually, but there are online converters such as [Cryptii](https://cryptii.com/pipes/caesar-cipher).
+
