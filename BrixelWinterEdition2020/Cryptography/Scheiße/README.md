@@ -35,11 +35,11 @@ The flag is ONE word, no spaces. do NOT translate the flag!
 ### Steps
 The fact that the description mentions German encryption during World War II, and requiring a 'special machine' to decode the message immediately suggested Enigma.
 
-At first we started to look around to see what we could learn about how Enigma worked, but it soon became apparent that there was a lot to learn if we wanted to solve it ourself, so we started to look for an emulator.
+At first we started to look around to see what we could learn about how Enigma worked, but it soon became apparent that there was a lot to learn if we wanted to solve it ourselves, so we started to look for an emulator.
 
 Early searches weren't promising as many emulators only implement limited versions (usually M3), and in most we couldn't see how to set the rotors and reflector given the above settings.
 
-As we hadn't seen it mentioned anywhere, we bagan to wonder if the model was a real model, or something to use to work out the cipher, but checking [Wikipedia](https://en.wikipedia.org/wiki/Enigma_machine), in the [Models](https://en.wikipedia.org/wiki/Enigma_machine#Models) section we can see that there is a 'G' model, though the article suggests it has four rotors. In the [Survining machines](https://en.wikipedia.org/wiki/Enigma_machine#Surviving_machines) section, there is also a bit about the G-312 machine, kept in the Bletchley Park museum, being stolen. So the above model definitely exists.
+As we hadn't seen it mentioned anywhere, we bagan to wonder if the model was a real model, or something to use to work out the cipher, but checking [Wikipedia](https://en.wikipedia.org/wiki/Enigma_machine), in the [Models](https://en.wikipedia.org/wiki/Enigma_machine#Models) section we can see that there is a 'G' model, though the article suggests it has four rotors. In the [Surviving machines](https://en.wikipedia.org/wiki/Enigma_machine#Surviving_machines) section, there is also a bit about the G-312 machine, kept in the Bletchley Park museum, being stolen. So the above model definitely exists.
 
 ### Solution
 After finding that the G-312 was a real model of Enigma machine, we finally found an emulator at [Cryptii](https://cryptii.com/pipes/enigma-machine).
