@@ -25,7 +25,7 @@ We downloaded the attached file and unzipped it. It contained a file named *evid
 
 We loaded the image into [Autopsy](https://www.sleuthkit.org/autopsy/) and looked for carved (recovered) files.
 
-> Note: [Autopsy](https://www.sleuthkit.org/autopsy/) may be a little heavyweight for this task as we only needed to recover deleted file, not analyse the whole disk, so maybe [Disk Drill](https://www.cleverfiles.com/data-recovery-software.html) would have been more appropriate for this task.
+> Note: [Autopsy](https://www.sleuthkit.org/autopsy/) may be a little heavyweight for this task as we only needed to recover deleted file, not analyse the whole disk, so maybe [Disk Drill](https://www.cleverfiles.com/data-recovery-software.html) would have been more appropriate.
 
 There were two recovered files on the disk named `f0000000.wav` and `f0016976.wav`. These were saved from [Autopsy](https://www.sleuthkit.org/autopsy/).
 
@@ -40,9 +40,9 @@ Listening to the *wav*, the file contained a recorded phone banking session. Tow
 
 We found some software for reading touch ([DTMF](https://en.wikipedia.org/wiki/Dual-tone_multi-frequency_signaling)) tones called [dtmf-decoder](https://github.com/ribt/dtmf-decoder). This converts the touch tone sounds from an audio file into the numbers pressed. Each press of the key creates two, simultaneous tones, which the software can interpret to work out which key is pressed. The table below shows the tones to determine each key:
 
-![DTMF codes](dtmf_tables.png)
+![DTMF codes](dtmf_table.png)
 
-Following the instructions on the GitHub page, we installed it and ran it against the *wav* file we had. It produced a string of of numbers:
+Following the instructions on the GitHub page, we installed [dtmf-decoder](https://github.com/ribt/dtmf-decoder) and ran it against the *wav* file we had. It produced a string of of numbers:
 ```
 > dtmf f0000000.wav
 /usr/local/bin/dtmf:26: WavFileWarning: Chunk (non-data) not understood, skipping it.
@@ -72,8 +72,9 @@ Title                           : Dorfmeister case phonetap
 Artist                          : The Feds
 Duration                        : 0:01:38
 ``` 
-Nothing useful there, so we also tried `steghide`, but that returned nothing, either, so we returned to interpreting the message inside the *wav* file. 
-The initial output above was a long string of characters, so it was difficult to determine where the message starts and ends. It also include some letters (A and D) that don't seem to fit with the rest. We ran `dtmf` again, but this time with the -v switch which shows where, in relation to the rest of the sound, each button press occurred:
+Nothing useful there, so we also tried `steghide`, but that returned nothing either, so we went back to interpreting the message inside the *wav* file. 
+
+The initial output above was a long string of characters, so it was difficult to determine where the message starts and ends. It also include some letters (A and D) that don't seem to fit with the rest. We ran `dtmf` again, but this time with the `-v` switch which shows where, in relation to the rest of the sound, each button press occurred:
 ```
 > dtmf -v f0000000.wav
 /usr/local/bin/dtmf:26: WavFileWarning: Chunk (non-data) not understood, skipping it.
@@ -201,7 +202,7 @@ We worked out the message by looking at an old [phone keypad](https://en.wikiped
 and checking what letter the number of presses on each key gave us (for example, *777* give us *r*).
 
 ### Solution
-Running the supplied pendrive image through [Autopsy](https://www.sleuthkit.org/autopsy/) gave us 2 carved (recovered) files. These two files were identical, so we just used one of the (`f0000000.wav`).
+Running the supplied pendrive image through [Autopsy](https://www.sleuthkit.org/autopsy/) gave us 2 carved (recovered) files. These two files were identical, so we just used one of them (`f0000000.wav`).
 
 Listening to the *wav* file, it was a recording of telephone banking transaction. This recording included telephone touchpad tones (or [DTMF](https://en.wikipedia.org/wiki/Dual-tone_multi-frequency_signaling) signals), part of which was a message. 
 
