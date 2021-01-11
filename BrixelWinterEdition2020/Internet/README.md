@@ -5,7 +5,7 @@ The challenges we have write-ups for in the Internet category are:
 * [Discord](Discord/README.md)
 * [Flat Earth](FlatEarth/README.md)
 * [Hidden Code](HiddenCode/README.md)
-* [Hiding in the Background](HigingInTheBackground/README.md)
+* [Hiding in the Background](HidingInTheBackground/README.md)
 * [Pathfinders #2](Pathfinders2/README.md)
 * [Readme](Readme/README.md)
 

@@ -4,11 +4,12 @@
 **Points:** 5
 
 **Description:**
+
 Join our Discord and read the rules.
 
 ## Write-up
 This was a simple solve - just join the Discord server and read the rules. The rules were:
-````
+```
 1: Enjoy yourself and don't take it too seriously.
 2: No attacking the CTF server and all of CTF related servers
 3: No spamming, flaming, or otherwise bad behaviour on the discord

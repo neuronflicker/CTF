@@ -4,6 +4,7 @@
 **Points:** 5
 
 **Description:**
+
 Something strange happens on the [brixel website](https://www.brixel.be/) when you enter the konami code
 
 flag = the character you see floating by

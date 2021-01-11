@@ -4,6 +4,7 @@
 **Points:** 10
 
 **Description:**
+
 Like our CTF homepage?
 
 There is a little secret hiding in (or rather behind) the background
