@@ -26,13 +26,15 @@ The first thing we did is look at the page's source. In there is the following c
 ```html
 <!-- Hey bozo! I left your original index file under index_backup.html so you can see how your site looked before I used my l33t skillz to deface it. -->
 ```
-We used this information to look at the old site at [http://timesink.be/dadjokes/index_backup.html]:
+We used this information to look at the old site at <http://timesink.be/dadjokes/index_backup.html>:
 
 ![Main page](main_page.png)
 
 When we go to the *Read dad jokes* page, we get a list of available jokes. If we then click on one of the jokes, we notice that it includes a text file in the PHP page: `http://timesink.be/dadjokes/jokes/read.php?file=mugged.txt`.
 
-This could be our way in. Looking at the *Submit your own jokes* page, when you enter something in the form, a filename is passed in using the *GET* method: `http://timesink.be/dadjokes/jokes/submit.php?filename=test.txt&title=test&content=A%20test%20joke`. This also has a prompt to confirm you want to submit:
+This could be our way in. Looking at the *Submit your own jokes* page, when you enter something in the form, a filename is passed in using the *GET* method: `http://timesink.be/dadjokes/jokes/submit.php?filename=test.txt&title=test&content=A%20test%20joke`. 
+
+This also give you a prompt to confirm you want to go ahead with the submit:
 
 ![Submit review](submit_prompt.png)
 
