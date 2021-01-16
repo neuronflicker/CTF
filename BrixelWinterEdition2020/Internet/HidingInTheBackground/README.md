@@ -20,7 +20,7 @@ Here we scroll to find the inclusion of the background. This then shows that whe
 
 ![Body styles](body_styles.png)
 
-Here we can change the styling and turn the background off to see what's behind it. We can also change the background colour from black to white to see any hidden text.
+Here we can change the styling and turn the background image off to see what's behind it. We can also change the background colour from black to white to see any hidden text.
 
 Neither of these things showed anything on the webpage behind the image, so we download the background image to have a closer look at that.
 
