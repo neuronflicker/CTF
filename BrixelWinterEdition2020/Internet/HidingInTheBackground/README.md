@@ -16,7 +16,7 @@ Going to the Brixel CTF [homepage](https://ctf.brixel.space/) we can see text, a
 
 We right clicked on the background, and selected *Inspect...* to open the developer tools (this was in the [Brave](https://brave.com/) browser - the same tools as in any [Chromium](https://www.chromium.org/Home) based browser).
 
-Here we scroll to find the inclusion of the background. This then shows that where we clicked, the background was inherited from body, so we clicked in the link to body, and scrolled again to find the background:
+Here we scroll to find the inclusion of the background. This then shows that where we clicked, the background was inherited from body, so we clicked on the link to the body, and scrolled again to find the background:
 
 ![Body styles](body_styles.png)
 
@@ -30,4 +30,3 @@ The image was an SVG image, so we could load it into Inkscape and look at its co
          style="fill:#000000;fill-opacity:1;stroke-width:0.264583">brixelCTF{<flag was here>}</tspan></text>
 ```
 Luckily, this gave us the flag!
- 
