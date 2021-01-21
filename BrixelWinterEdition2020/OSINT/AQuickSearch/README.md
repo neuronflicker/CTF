@@ -18,7 +18,7 @@ I remember it started with an E.
 ## Write-up
 The solution was simply a reverse image search for this image:
 
-![Image to find the name of](image.jpg =250x)
+<image src="image.jpg" alt="Image of tower" style="width: 200px;" />
 
 We went to [Google Images](https://www.google.com/imghp), clicked on the little camera icon in the search box, and uploaded the image that was downloaded from the challenge.
 
