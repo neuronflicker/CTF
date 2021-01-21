@@ -18,7 +18,7 @@ We decided to search for other social media accounts, so searched his name on [F
 
 Looking through the pictures, we found this one:
 
-![Macaroni](burnt_macaroni.jpg)
+<img src="burnt_macaroni.jpg" alt="Burnt Macaroni" width="320" />
 
 which has the description:
 > People use this to post about their food, right? I tried to make my favorite food macaroni in the microwave today. It did not go so well, but i'll enjoy it nevertheless!
