@@ -44,7 +44,7 @@ It we look at the image we were given, we can see that the building was see-thro
 
 We drew a triangle between the mines and the 'Reading between the lines' building, and added the perpendiculars to define the centre (sorry about the bad artistry!):
 
-![The triangle](the_triangle.png)
+<img src="the_triangle.png" alt="The triangle" width="350" />
 
 Zooming in to the rough centre of the triangle, we can see a couple of bridges over the river. We went onto Street View, and looked under the bridges in turn, taking Street View back to 2013. When we were under the bridge labelled *tuikabelbrug Godsheide*. When under this bridge in Street View with 2013 selected, you can see the date:
 
