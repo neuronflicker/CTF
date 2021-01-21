@@ -32,7 +32,7 @@ The furthest apart mines gave us *C-Mine Expeditie* (we discounted *Regional Lan
 
 For the third point of the triangle, we were given this image:
 
-![Misty image](IMG_1243.jpg)
+<img src="IMG_1243.jpg" alt="Mystery Image" width="600" />
 
 At first I did a reverse image search, but this just brought up lots of buildings pictured in the mist.
 
