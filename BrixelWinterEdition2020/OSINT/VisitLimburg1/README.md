@@ -26,11 +26,11 @@ To try an find an alternative, we searched *belgium cycle path nodes* in [Google
 
 Referencing the locations we found on [Google Maps](https://www.google.co.uk/maps), we zoomed into the map on the planner and found the node we thought was nearest to the start location (node 557) and clicked on it to start our planning there:
 
-![Start Node](start_node.png)
+<img src="start_node.png" alt="Start node" width="360" />
 
 We did the same with the end node (node 341) and this shows a list of all nodes passed through on that route:
 
-![End Node](end_node.png)
+<img src="end_node.png" alt="End node" width="500" />
 
 Now we can simply add up all these nodes, and we find the flag!
 
