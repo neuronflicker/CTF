@@ -22,17 +22,17 @@ Please provide the date that was written under the bridge (format #.##.## where 
 ## Write-up
 We need to find these locations to create a triangle and find the centre. First we searched for *Limburg Belgium* in [Google maps](https://www.google.com/maps/place/Limburg,+Belgium/@50.9964996,4.8852586,9z/data=!3m1!4b1!4m5!3m4!1s0x47c093293d669c7d:0x361339c2cc01dc8b!8m2!3d50.9738973!4d5.3419677). This showed an outline around Limburg:
 
-![Limburg region](limburg_region.png)
+<img src="limburg_region.png" alt="The Limburg Region" width="400" />
 
 We then clicked the *Nearby* button, and searched for *mines*. This added some points on the map:
 
-![Limburg mines](limburg_mines.png)
+<img src="limburg_mines.png" alt="Mines in Limburg" width="500" />
 
 The furthest apart mines gave us *C-Mine Expeditie* (we discounted *Regional Landscape Kempen and Maasland...* as it wasn't obviously a mine) and *Vlaams Mijnmuseum* (or *be-MINE nv*).
 
 For the third point of the triangle, we were given this image:
 
-![Misty image](IMG_1234.jpg)
+![Misty image](IMG_1243.jpg)
 
 At first I did a reverse image search, but this just brought up lots of buildings pictured in the mist.
 
