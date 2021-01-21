@@ -38,7 +38,7 @@ At first I did a reverse image search, but this just brought up lots of building
 
 I tried an image search for *building spire limburg belgium*, and the results were:
 
-![Search result](search_result.png)
+<img src="search_result.png" alt="Search Results" width="500" />
 
 It we look at the image we were given, we can see that the building was see-through, so it seems the image results seem to be the building we want. This building is called 'Reading between the lines', so we searched that in maps, and it is near Borgloon.
 
@@ -48,6 +48,6 @@ We drew a triangle between the mines and the 'Reading between the lines' buildin
 
 Zooming in to the rough centre of the triangle, we can see a couple of bridges over the river. We went onto Street View, and looked under the bridges in turn, taking Street View back to 2013. When we were under the bridge labelled *tuikabelbrug Godsheide*. When under this bridge in Street View with 2013 selected, you can see the date:
 
-![Under the bridge](under_the_bridge.png)
+<img src="under_the_bridge.png" alt="Found it!" width="500" />
 
 This can be used for the flag.
