@@ -16,11 +16,11 @@ After the previous two CTFs in the Manhunt series, we had the name Johnny Dorfme
 
 We decided to search for other social media accounts, so searched his name on [Facebook](https://www.facebook.com/), but found nothing. However, searching his name on [Instagram](https://www.instagram.com/) gave us [this account](https://www.instagram.com/johnnydorfmeister/) containing a series of pictures .
 
-Looking through the pictures, this one:
+Looking through the pictures, we found this one:
 
 ![Macaroni](burnt_macaroni.jpg)
 
-which has the descriptions:
+which has the description:
 > People use this to post about their food, right? I tried to make my favorite food macaroni in the microwave today. It did not go so well, but i'll enjoy it nevertheless!
 
 This gives us his favourite food to use as the flag.
