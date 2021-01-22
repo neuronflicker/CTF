@@ -1,7 +1,7 @@
 # The Tape
 **Category:** [Old Tech](../README.md)
 
-**Points:** 25
+**Points:** 20
 
 **Description:**
 
