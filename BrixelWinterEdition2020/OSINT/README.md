@@ -1,5 +1,5 @@
 # Brixel CTF Winter Edition 2020 - OSINT Challenges
-The challenges we have write-ups for in the Internet category are:
+The challenges we have write-ups for in the OSINT category are:
 * [A Quick Search](AQuickSearch/README.md)
 * [Manhunt #3](Manhunt3/README.md)
 * [Physical Pentest Setup](PhysicalPentestSetup/README.md)

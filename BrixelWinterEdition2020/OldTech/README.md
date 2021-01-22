@@ -1,2 +1,6 @@
 # Brixel CTF Winter Edition 2020 - Old Tech Challenges
-Write-ups coming soon!
+The challenges we have write-ups for in the Old Tech category are:
+* [Goodbye Old Friens](GoodbyeOldFriend/README.md)
+* [Punchcard](Punchcard/README.md)
+* [The Tape](TheTape/README.md)
+
