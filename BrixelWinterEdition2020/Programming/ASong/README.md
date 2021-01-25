@@ -82,8 +82,8 @@ Say Brixel and "}"
 ```
 When looking at the text we noticed that `brixelCTF{`, `blessed` and `}` were the only bits in quotes, so we tried that as the flag. It didn't work.
 
-Staring at the text for a while, we noticed that it looked a little like pseudocode. Phrases like `say` or `shout`, and `put` `X is Y` appear throughout.
+Staring at the text for a while, we noticed that it looked a little like pseudocode. Phrases like `say` or `shout`, and `put` and `X is Y` appear throughout.
 
-We searched Google for anything related to song lyrics as a programming language and found [Rockstar](https://github.com/RockstarLang/rockstar), which creates programs that are song lyrics.
+We searched Google for anything related to song lyrics as a programming language and found [Rockstar](https://github.com/RockstarLang/rockstar), which creates programs that are also song lyrics.
 
-By searching a little further, we found [this site](https://codewithrockstar.com/online) where we could copy the song text and get our flag.
+By searching a little further, we found [this site](https://codewithrockstar.com/online) where we could copy the song text into the box and get our flag.
