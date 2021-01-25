@@ -41,4 +41,23 @@ Example:
 **This flag is not in the usual format, you can enter it with or without the brixelCTF{flag} format**
 
 ## Write-up
-Write-up coming soon!
+This was simply a matter of converting the pseudocode into a program. We did this in C++:
+```cpp
+#include <iostream>
+
+int main()
+{
+  unsigned int x = 1; // X and Y are always the same, so we don't need both
+  unsigned int prev_ans = 1;
+
+  while (x<=525)
+  {
+    unsigned int answer = x * x + prev_ans + 3;
+    std::cout << answer << " = " << x << " * " << x << " + " << prev_ans << " + 3\n";
+    ++x;
+    prev_ans = answer;
+  }
+  return 0;
+}
+```
+We compiled and ran this program, and that gave us the flag.
