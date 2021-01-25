@@ -16,7 +16,7 @@ When you follow the link above, you get a page asking you to answer a question:
 
 ![Opening page](opening_page.png)
 
-Entering an answer give you this page if it's correct:
+Entering an answer gives you this page if it's correct:
 
 ![Correct answer](correct_answer.png)
 
@@ -24,7 +24,7 @@ Or this page if it's incorrect:
 
 ![Incorrect answer](incorrect_answer.png)
 
-From the incorrect answer, we can see it tells you the correct answer, and still moves to the next questions. This means we can try to scrape the answers from the page, and then go through a second time and post the correct answers in the form.
+From the incorrect page, we can see it tells you the correct answer, and still moves to the next questions. This means we can try to scrape the answers from the page, and then go through a second time and post the correct answers in the form.
 
 Let's see what `curl` give us:
 ```
@@ -120,7 +120,7 @@ $ curl -b cookie-jar.txt --data "insert_answer=five" http://timesink.be/quizbot/
 <form method="POST" action="index.php"><input type="text" name="insert_answer" id="insert_answer"><input type="submit" name="submit" value="answer"></form>
 </div>
 ```
-Great! Now we can write a script to test we can get the initial value, then answer the second wrong (with blank) and strip out the correct answer. This will show we have all the components to get the answers. The script do do this is:
+Great! Now we can write a script to test we can answer the initial question, then answer the second wrong (with blank) and strip out the correct answer. This will show we have all the components to answer the questions and get the answers. The script do do this is:
 ```bash
 #!/usr/bin/bash
 
@@ -145,7 +145,7 @@ echo Answer: $ans
 
 This script gives us:
 ```
-./get_flag.sh
+$ ./get_flag.sh
 <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 0&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div>
 <div align="center">
 <h3>Question number 1</h3>
@@ -162,7 +162,7 @@ This script gives us:
 <div align="center">Wrong Answer! The answer is: </div><div id="answer" align="center">five</div> <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 1&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div> <div align="center"> <h3>Question number 3</h3> <h4>What colour is vermilion a shade of ?</h4> <form method="POST" action="index.php"><input type="text" name="insert_answer" id="insert_answer"><input type="submit" name="submit" value="answer"></form> </div>
 Answer: five
 ```
-Now that all that seems to work, we want to save the page output in a file (so we can make sure we see any differences and capture the last page) as well as the answers and run it for 1000 questions:
+Now that all that seems to work, we want to save the page output in a file (so we can make sure we see any differences and capture the last page) as well as saving the answers, and run it for 1000 questions:
 ```bash
 #!/usr/bin/bash
 
@@ -182,7 +182,7 @@ do
   echo Done $i
 done
 ```
-After running this, the last line in the *answers.txt* file contained:
+After running this, the last line in the *output.txt* file contained:
 ```
 <div align="center">Wrong Answer! The answer is: </div><div id="answer" align="center">el greco</div> You failed to defeat the mighty QuizB0t, you can try again by refreshing the page.<br>better luck next time.
 ```
