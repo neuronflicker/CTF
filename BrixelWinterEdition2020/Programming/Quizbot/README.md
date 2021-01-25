@@ -9,6 +9,9 @@ Legend has it there's a flag at the end when you have a perfect score
 http://timesink.be/quizbot
 
 ## Write-up
+> TL;DR: The steps will describe the way we got to the answer for our own learning records. If you just want to know what the answer was, jump to the [solution](#solution)
+
+### Steps
 When you follow the link above, you get a page asking you to answer a question:
 
 ![Opening page](opening_page.png)
@@ -21,11 +24,11 @@ Or this page if it's incorrect:
 
 ![Incorrect answer](incorrect_answer.png)
 
-From the incorrect answer, we can see it tells you the correct answer, and still moves to the next questions. This means we can try to scrape the answers from the page, and then go through a second time and post the correct answers in.
+From the incorrect answer, we can see it tells you the correct answer, and still moves to the next questions. This means we can try to scrape the answers from the page, and then go through a second time and post the correct answers in the form.
 
 Let's see what `curl` give us:
 ```
-> curl http://timesink.be/quizbot/
+$ curl http://timesink.be/quizbot/
 <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 0&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div>
 <div align="center">
 <h3>Question number 1</h3>
@@ -36,7 +39,7 @@ Let's see what `curl` give us:
 
 That gives us the page. We can see the value that needs to be set as the answer is *insert_answer*, so let's answer the first question:
 ```
-> curl --data "insert_answer=beach%20boys" http://timesink.be/quizbot/
+$ curl --data "insert_answer=beach%20boys" http://timesink.be/quizbot/
 <div align="center">Correct!</div>
 <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 1&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div>
 <div align="center">
@@ -47,7 +50,7 @@ That gives us the page. We can see the value that needs to be set as the answer 
 ```
 Great! That give us the 'Correct' page. Now let's answer the second question:
 ```
-> curl --data "insert_answer=five" http://timesink.be/quizbot/
+$ curl --data "insert_answer=five" http://timesink.be/quizbot/
 <div align="center">Wrong Answer! The answer is: </div><div id="answer" align="center">beach boys</div>
 <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 0&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div>
 <div align="center">
@@ -58,7 +61,7 @@ Great! That give us the 'Correct' page. Now let's answer the second question:
 ```
 Now we see the 'Wrong answer' page, and can see the correct answer is shown in a *div* with the id of *answer*. This also means it assumes it's always the first question - there must be a cookie. Let's view the headers:
 ```
-> curl -v http://timesink.be/quizbot/
+$ curl -v http://timesink.be/quizbot/
 *   Trying 52.166.178.208:80...
 * TCP_NODELAY set
 * Connected to timesink.be (52.166.178.208) port 80 (#0)
@@ -91,7 +94,7 @@ Now we see the 'Wrong answer' page, and can see the correct answer is shown in a
 
 Yes. There's a PHP session cookie. Let's save that and try to answer two questions:
 ```
-> curl -c cookie-jar.txt http://timesink.be/quizbot/
+$ curl -c cookie-jar.txt http://timesink.be/quizbot/
 <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 0&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div>
 <div align="center">
 <h3>Question number 1</h3>
@@ -99,7 +102,7 @@ Yes. There's a PHP session cookie. Let's save that and try to answer two questio
 <form method="POST" action="index.php"><input type="text" name="insert_answer" id="insert_answer"><input type="submit" name="submit" value="answer"></form>
 </div>
 
-> curl -b cookie-jar.txt --data "insert_answer=beach%20boys" http://timesink.be/quizbot/
+$ curl -b cookie-jar.txt --data "insert_answer=beach%20boys" http://timesink.be/quizbot/
 <div align="center">Correct!</div>
 <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 1&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div>
 <div align="center">
@@ -108,8 +111,7 @@ Yes. There's a PHP session cookie. Let's save that and try to answer two questio
 <form method="POST" action="index.php"><input type="text" name="insert_answer" id="insert_answer"><input type="submit" name="submit" value="answer"></form>
 </div>
 
-> curl -b cookie-jar.txt --data "insert_answer=five" htt
-p://timesink.be/quizbot/
+$ curl -b cookie-jar.txt --data "insert_answer=five" http://timesink.be/quizbot/
 <div align="center">Correct!</div>
 <div align="center"><h1>QuizB0t!</h1><br>Can you beat the 1000 questions?<br>Score: 2&nbsp;&nbsp;&nbsp;(<a href="index.php?resetscore">Reset progress</a>)<br></div>
 <div align="center">
@@ -180,11 +182,14 @@ do
   echo Done $i
 done
 ```
-After running this, the *answers.txt* file contained:
+After running this, the last line in the *answers.txt* file contained:
 ```
 <div align="center">Wrong Answer! The answer is: </div><div id="answer" align="center">el greco</div> You failed to defeat the mighty QuizB0t, you can try again by refreshing the page.<br>better luck next time.
 ```
-So we definitely got to the end and got all the answers. Now let's add the code to read them back, put them in as the answer to each question and we should be done:
+So we definitely got to the end and got all the answers. Now let's add the code to read them back, put them in as the answer to each question and we should be done.
+
+### Solution
+After completing the tests above we were ready to write a script to solve this. The script will run through the 1000 questions, scrape the answers from each 'incorrect' page, then restart and answer the questions correctly. The final script is:
 ```bash
 #!/usr/bin/bash
 
