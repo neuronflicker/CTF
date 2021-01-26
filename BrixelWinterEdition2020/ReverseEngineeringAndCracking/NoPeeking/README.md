@@ -20,10 +20,10 @@ This doesn't help us solve this, though. To solve it we need to try to disassemb
 
 We started *dotPeek*, and opened the *noPEEKing.exe* file:
 
-<img src="dotPeek_loaded.png" alt="noPEEKing loaded into dotPeek" width="500" />
+<img src="dotPeek_loaded.png" alt="noPEEKing loaded into dotPeek" width="700" />
 
-We searched for the word 'brixelCTF', but that returned nothing. We followed that up with searching for 'flag'. This brought up the `showFlag()` function. 
+We searched for the word 'brixelCTF', but that returned nothing. We followed that up a search for the word 'flag'. This brought up the `showFlag()` function. 
 
 Double-clicking on the search result shows the content of the `showFlag()` function, which contained the flag.
 
-> Note: In the *Navigate* menu in *dotPeek*, there is a *Go to String...* option, which will enable you to successfully search for *brixelCTF* and find the flag
+> Note: In the *Navigate* menu in *dotPeek*, there is a *Go to String...* option, which will enable you to successfully search for *brixelCTF* and find the flag.
