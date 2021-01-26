@@ -44,7 +44,7 @@ We set the contents of the address to 9999999, so that we can click a cookie and
 
 > Note: The address shown above is different than earlier screenshots as it's from a different run
 
-Changing the contents of the address, and clicking a cookie showed the updated address:
+Changing the contents of the address, and clicking a cookie showed the updated score:
 
 <img src="updated_score.png" alt="Updated score" width="500" />
 
