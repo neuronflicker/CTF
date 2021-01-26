@@ -15,7 +15,7 @@ We ran the executable and it showed a window saying it hadn't been registered:
 
 ![Running program](running.png)
 
-To try to see what's going on, we tried loading the program in [Ghidra](https://ghidra-sre.org/).
+To try to see what's going on, we loaded the program into [Ghidra](https://ghidra-sre.org/).
 
 ![Load Registerme](load_registerme.png)
 
@@ -27,7 +27,7 @@ After the analysis had finished, we searched for the string *NOT REGISTERED* whi
 
 We can see the search found a function containing an `if` statement that seperated `NOT REGISTERED` from `REGISTERED`. We need to work out what this function is checking.
 
-Higher up the same function, we saw the string `activation.key`:
+Higher up in the same function, we saw the string `activation.key`:
 
 ![Activation key](activation_key.png)
 
