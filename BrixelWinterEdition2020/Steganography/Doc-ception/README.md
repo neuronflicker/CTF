@@ -20,7 +20,7 @@ Our knowledge of the format of Word Document files helped here. One way to recov
 
 > Note: If you want to use the Windows zip extractor, you have to rename the file to *loremipsum.zip*, but 7-zip enables you to unzip it without renaming
 
-During the unzip, 7-zip asked if we wanted to overwrite *loremipsum.docx* as the *docx* file contained another file named that. We clicked *Auto Rename*.
+During the unzip, 7-zip asked if we wanted to overwrite *loremipsum.docx* as the *docx* file contained another file named the same. We clicked *Auto Rename*.
 
 Looking at the result, we could find nothing containing a flag. Because the challenge was named *Doc-ception*, we wondered if we could unzip the new version of *loremipsum.docx* (now renamed *loremipsum_1.docx* by 7-zip) to go deeper inside (as is also suggested by the description). 
 
