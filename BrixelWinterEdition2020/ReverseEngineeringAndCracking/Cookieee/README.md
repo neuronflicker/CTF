@@ -40,7 +40,7 @@ Luckily, this only gave us a single address, so we added that to the address lis
 
 We set the contents of the address to 9999999, so that we can click a cookie and it will show us the flag:
 
-<img src="edited_value.png" alt="Editing the value" width="500" />
+![Edited value](edited_value.png)
 
 > Note: The address shown above is different than earlier screenshots as it's from a different run
 
