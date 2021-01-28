@@ -14,7 +14,7 @@ I need the registration number, model, and month & year of registration.
 Syntax: brixelCTF{registrationnumber+model+month(MM)+year(YY)}
 
 ## Write-up
-With this one we started looking at historic flight data on [Flight Radar 24](https://www.flightradar24.com/), watching for flights that flew over the Be-MINE hill. Most were commercial flights, but they also included an RAF military transport craft:
+With this one we started looking at historic flight data on [Flight Radar 24](https://www.flightradar24.com/), watching for flights that flew over the Be-MINE hill on the 18th December 2020. Most were commercial flights, but they also included an RAF military transport craft:
 
 <img src="red_herring.png" alt="A red herring!" width="700" />
 
