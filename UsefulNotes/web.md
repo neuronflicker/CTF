@@ -2,9 +2,10 @@
 
 - [PHP](php.md)
 - [SQL Injection](#sql-injection)
+- [XSS](web/xss.md)
 
 ## SQL Injection
-SQL makes queries into a databse with statements like:
+SQL makes queries into a database with statements like:
 ```sql
 SELECT * FROM users WHERE username='chris' AND password='letmein';
 ```
