@@ -1,6 +1,8 @@
 # Useful notes for Pwn challenges
 
 - [scanf() and read()](#scanf-and-read)
+- [ret2libc](pwn/ret2libc.md)
+- [ret2dlresolve](pwn/pwntools.md#ret2dlresolve)
 
 # scanf() and read()
 `scanf()` and `read()` both read in data from the user. While `scanf()` will read input characters until it hits a whitespace character, `read()` will read characters (whatever they are) until it has read the number of characters specified in the function call.
