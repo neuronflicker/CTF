@@ -1,10 +1,11 @@
 # Ret2libc
-
+<!-- brief: Some partial notes on performing ret2libc -->
+<!-- keywords: gadgets, checksec, buffer, overflow, pwntools -->
 These are some notes based on a challenge at DiceCTF (babyrop), so talks about a specific piece of code, but has some useful notes. We didn't finish the challenge, but this was our first enncounter with *ret2libc*, so what we did learn is here.
 
 > Note: There's a function in [pwntools](pwntools.md) that does all the heavy lifting for this CTF using *ret2dl*, not requiring leaking of *libc* addresses. We thought it still worth noting the *libc* technique in full. Jump to the [pwntools](pwntools.md) method [here](pwntools.md#ret2dl)
 
-## Notes
+## Initial investigation
 We started by disassembling the binary in [Ghidra](https://ghidra-sre.org/). The `main()` function was:
 
 ```c
@@ -36,7 +37,7 @@ $ cp /lib/x86_64-linux-gnu/libc.so.6 .
 ```
 We are going to use [pwntools](pwntools.md) to try to exploit this binary. 
 
-### Calculate the padding to overwrite return
+## Calculate the padding to overwrite return
 First we want to find the amount of overflow we need to overwrite the `return`.  We can send characters to the program using the [pwntools](pwntools.md) cyclic function. We write an initial script to do this in *gdb* so we can see the stack contents:
 ```python
 #!/usr/bin/env python3
@@ -110,7 +111,7 @@ print(p.recv())
 ```
 Now we have this script, which will just allow us to use the binary for now, we tested it and it runs against both the local executable and the remote version.
 
-### Testing with ASLR turned off
+## Testing with ASLR turned off
 We can test it first with the slightly simpler static address version. It may be that the server has ASLR turned off and we can just use this. We disable ASLR on our machine with:
 ```
 $ cat /proc/sys/kernel/randomize_va_space > old_rvs.txt
@@ -214,7 +215,7 @@ p.interactive()
 
 The above code worked locally to give us a shell, but failed on the server. We need to see if the issue is ASLR, so let's turn it back on and rewrite the code to fit.
 
-### Testing with ASLR turned on
+## Testing with ASLR turned on
 We turned the ASLR back on with:
 ```
 $ cat old_rvs.txt | sudo tee /proc/sys/kernel/randomize_va_space

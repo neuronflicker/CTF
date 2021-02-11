@@ -1,8 +1,11 @@
 # Python pwntools
+<!-- brief: Various recipes for Python pwntools -->
 This page contains some notes and code using Python [pwntools](https://github.com/Gallopsled/pwntools) to exploit binaries. Contents are:
 - [ret2dlresolve](#ret2dlresolve)
 
 ## ret2dlresolve
+<!-- brief: Perform ret2dlresolve to fool a linker into resolving a system() function -->
+<!-- keywords: dl_resolve, system, shell -->
 The [pwntools](pwntools.md) library has a function that will automatically create a payload for *ret2dlresolve* (finding and calling any function in a dynamic library, including *libc*). It does this by fooling the linker into thinking it needs to resolve the `system()` function in the PLT. The following is a solution for DiceCTF babyrop using *ret2dlresolve*:
 ```
 #!/usr/bin/env python3

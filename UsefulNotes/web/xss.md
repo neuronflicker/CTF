@@ -1,9 +1,13 @@
 # XSS
-XSS is cross-sit scripting. This page just lists some tips and snippets of code:
+<!-- brief: Some snippets of code about cross-site scripting -->
+<!-- keywords: cookie, intercept, script, attributes -->
+XSS is cross-site scripting. This page just lists some tips and snippets of code:
 - [Check for script attributes](#check-for-script-attributes)
 - [Intercept a cookie](#intercept-a-cookie)
 
 ## Check for script attributes
+<!-- brief: Just a reminder to check for attributes in a script tag -->
+<!-- keywords: xss, cross site-scripting, attributes, tag -->
 When testing whether a site is vulnerable to XSS, you may try something like:
 ```
 https://some.vuln.site?name=<script>alert(1)</script>
@@ -13,6 +17,8 @@ You can see your script code in the page, but no alert appeared. Check whether o
 http://some.vuln.site/?name=<script%20nonce=LRGWAXOY98Es0zz0QOVmag==>alert(1)</script>
 ```
 ## Intercept a cookie
+<!-- brief: Intercept a cookie sent to a webpage from another (usually 'admin') site -->
+<!-- keywords: xss, cross site-scripting, cookie, intercept -->
 In one CTF, there was an Admin server that could send a cookie to another server, and we needed to intercept that cookie.
 
 To intercept it, we set up a *netcat* listener, so we could send the cookie to it:

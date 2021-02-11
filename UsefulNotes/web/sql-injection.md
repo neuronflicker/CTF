@@ -1,4 +1,6 @@
-## SQL Injection
+# SQL Injection
+<!-- brief: Basic SQL injection -->
+<!-- keywords: username, password -->
 SQL makes queries into a database with statements like:
 ```sql
 SELECT * FROM users WHERE username='chris' AND password='letmein';
@@ -15,7 +17,7 @@ This injection first closes the single quote for the `username=''` part, then ad
 
 If the code checks that at least one row is returned, then this could give you entry to a site.
 
-### Alternative injections to try
+## Alternative injections to try
 Some MySQL databases don't treat the `--` as a single line comment. Use:
 ```
 ' OR 1=1; #
