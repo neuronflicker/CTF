@@ -18,7 +18,7 @@ These will be split into sections by type of challenge. These are organised into
 # Hello world
 <!-- brief: Describes how to write "Hello World" programs -->
 <!-- xref: pwn, re -->
-<!-- keywords: programming, c, python
+<!-- keywords: programming, c, python -->
 Article text...
 
 ## Don't index this subheading
@@ -29,7 +29,7 @@ Subsection text
 
 ### Another un-indexed heading
 ```
-- The content page will include all headings and subheadings to level 3 (three hashes).
+- The content page will include all headings and subheadings to level 3 (three hashes), whether commented or not.
 - Once your page is created, run `create-indexes.py` in the top level (CTF) directory. This will create the *index.md* and *content.md* files in the top level of *Useful Notes*, and the *README.md* files in each of the sub-directories.
 - Commit and push the resulting pages
 
