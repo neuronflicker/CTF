@@ -2,8 +2,8 @@
 This area is intended to give a list of useful notes, tool, hints and tips that we have come across while learning about and doing Capture the Flag challenges.
 
 These will be split into sections by type of challenge. These are organised into:
-- [Table of contents by category](#contents.md)
-- [Alphabetical index for searching](#index.md)
+- [Table of contents by category](contents.md)
+- [Alphabetical index for searching](index.md)
 
 ## Adding pages
 - Add pages as you feel appropriate and put your file it in one of the subdirectories.
