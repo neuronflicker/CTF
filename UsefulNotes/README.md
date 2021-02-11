@@ -30,6 +30,6 @@ Subsection text
 ### Another un-indexed heading
 ```
 - The content page will include all headings and subheadings to level 3 (three hashes).
-- Once your page is created, run `create-indexes.py` in the top level to create the *index.md* and *content.md* in the top level of *Useful Notes*, and the *README.md* files in each of the sub-directories.
+- Once your page is created, run `create-indexes.py` in the top level (CTF) directory to create the *index.md* and *content.md* in the top level of *Useful Notes*, and the *README.md* files in each of the sub-directories.
 - Commit and push the resulting pages
 
