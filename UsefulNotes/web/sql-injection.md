@@ -1,9 +1,3 @@
-# Useful notes for Web challenges
-
-- [PHP](php.md)
-- [SQL Injection](#sql-injection)
-- [XSS](web/xss.md)
-
 ## SQL Injection
 SQL makes queries into a database with statements like:
 ```sql
